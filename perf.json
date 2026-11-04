@@ -1,0 +1,114 @@
+{
+  "baseline": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+  "generated_at": 1793760815,
+  "runs": [
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760675,
+      "platform": "linux-aarch64",
+      "impl": "rust",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 35.46997029489354,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760675,
+      "platform": "linux-aarch64",
+      "impl": "rust",
+      "metric": "put_kv_s",
+      "value": 56762.00694324789,
+      "unit": "kv/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760675,
+      "platform": "linux-aarch64",
+      "impl": "rust",
+      "metric": "put_batch_s",
+      "value": 567.6200694324789,
+      "unit": "batch/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760675,
+      "platform": "linux-aarch64",
+      "impl": "rust",
+      "metric": "get_kv_s",
+      "value": 103016.18937532023,
+      "unit": "kv/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760675,
+      "platform": "linux-aarch64",
+      "impl": "rust",
+      "metric": "scan_kv_s",
+      "value": 5211431.692331665,
+      "unit": "kv/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760675,
+      "platform": "linux-aarch64",
+      "impl": "rust",
+      "metric": "scan_page_s",
+      "value": 26718.191063475322,
+      "unit": "page/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760690,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 37.89871729411722,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760690,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "put_kv_s",
+      "value": 39036.182522423296,
+      "unit": "kv/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760690,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "put_batch_s",
+      "value": 390.3618252242329,
+      "unit": "batch/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760690,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "get_kv_s",
+      "value": 60633.32925159866,
+      "unit": "kv/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760690,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "scan_kv_s",
+      "value": 3637267.0012224857,
+      "unit": "kv/s"
+    },
+    {
+      "commit": "48ed3d1d5cffea0616161c9c216f8f6c742dd8cd",
+      "date": 1793760690,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "scan_page_s",
+      "value": 17888.690679176976,
+      "unit": "page/s"
+    }
+  ]
+}
