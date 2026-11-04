@@ -1,0 +1,13 @@
+[package]
+name = "fkv_codec"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "LE / varint / XXH3 / bit flags 编解码"
+
+[dependencies]
+fkv_error = { version = "0.1.0", path = "../fkv_error" }
+xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

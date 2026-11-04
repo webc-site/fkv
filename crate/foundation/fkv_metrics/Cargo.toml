@@ -1,0 +1,17 @@
+[package]
+name = "fkv_metrics"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "计数器 / 延迟直方图 / cache / file 指标 / metered IO"
+
+[dependencies]
+fkv_error = { version = "0.1.0", path = "../fkv_error" }
+fkv_io = { version = "0.1.0", path = "../../io/fkv_io" }
+fkv_types = { version = "0.1.0", path = "../fkv_types" }
+
+[dev-dependencies]
+compio = { version = "0.19.2", features = ["macros", "fs", "io"] }
+fkv_io_mem = { path = "../../io/fkv_io_mem" }

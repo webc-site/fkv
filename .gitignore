@@ -1,0 +1,12 @@
+*.rlib
+.codegraph/
+node_modules/
+target/
+.data/
+data/
+*.db
+cpp/build/
+fixtures/generated/
+*.mote
+/fkv_bench-linux-*
+/perf-run-*.json

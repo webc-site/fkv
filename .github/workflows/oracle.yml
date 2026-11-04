@@ -1,0 +1,54 @@
+name: oracle
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 3"
+
+jobs:
+  build-oracle:
+    name: build-cpp-oracle
+    runs-on: ubuntu-26.04
+    env:
+      EKV_ELOQSTORE_PATH: ${{ github.workspace }}/eloqstore
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: read baseline
+        id: baseline
+        run: |
+          commit=$(awk '{print $3}' COMPAT_BASELINE)
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+          echo "baseline=$commit"
+
+      - uses: actions/checkout@v7
+        with:
+          repository: eloqdata/eloqstore
+          ref: ${{ steps.baseline.outputs.commit }}
+          path: eloqstore
+          submodules: recursive
+
+      - name: build oracle image
+        run: docker compose -f docker/docker-compose.yml build oracle
+
+      - name: build eloqstore
+        run: |
+          docker compose -f docker/docker-compose.yml run --rm oracle bash -lc '
+            set -e
+            bash scripts/install_dependency_ubuntu2404.sh
+            cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DSKIP_CREATE_BUCKET=ON
+            cmake --build build -j"$(nproc)"
+          '
+
+      - name: list artifacts
+        run: |
+          ls -lh eloqstore/build/benchmark/simple_bench || true
+          ls -lh eloqstore/build/tests | head || true
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: oracle-build
+          path: |
+            eloqstore/build/benchmark/simple_bench
+            eloqstore/build/tests
+          if-no-files-found: warn

@@ -1,0 +1,96 @@
+{
+  "baseline": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+  "generated_at": 1793750400,
+  "runs": [
+    {
+      "commit": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+      "date": 1792972800,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 12.4,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+      "date": 1792972900,
+      "platform": "linux-x86_64",
+      "impl": "cpp",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 11.9,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+      "date": 1793577600,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 13.1,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+      "date": 1793577700,
+      "platform": "linux-x86_64",
+      "impl": "cpp",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 12.2,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+      "date": 1792972800,
+      "platform": "linux-aarch64",
+      "impl": "rust",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 9.8,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+      "date": 1792972900,
+      "platform": "linux-aarch64",
+      "impl": "cpp",
+      "metric": "gxhash_4096B_gib_s",
+      "value": 9.4,
+      "unit": "GiB/s"
+    },
+    {
+      "commit": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+      "date": 1792972800,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "read_p99_us",
+      "value": 188,
+      "unit": "µs"
+    },
+    {
+      "commit": "82b774c62728b023b03c6e5e84e69416ffec9d74",
+      "date": 1792972900,
+      "platform": "linux-x86_64",
+      "impl": "cpp",
+      "metric": "read_p99_us",
+      "value": 172,
+      "unit": "µs"
+    },
+    {
+      "commit": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+      "date": 1793577600,
+      "platform": "linux-x86_64",
+      "impl": "rust",
+      "metric": "read_p99_us",
+      "value": 179,
+      "unit": "µs"
+    },
+    {
+      "commit": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+      "date": 1793577700,
+      "platform": "linux-x86_64",
+      "impl": "cpp",
+      "metric": "read_p99_us",
+      "value": 170,
+      "unit": "µs"
+    }
+  ]
+}

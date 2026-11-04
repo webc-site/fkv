@@ -1,0 +1,25 @@
+[package]
+name = "fkv_runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "shard OS 线程、compio Runtime、ingress"
+
+[dependencies]
+fkv_api = { version = "0.1.0", path = "../fkv_api" }
+fkv_btree = { version = "0.1.0", path = "../../core/fkv_btree" }
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+fkv_metrics = { version = "0.1.0", path = "../../foundation/fkv_metrics" }
+log = { version = "0.4.28", features = ["std"] }
+pollster = "1.0.1"
+fkv_shard = { version = "0.1.0", path = "../fkv_shard" }
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+
+[dev-dependencies]
+compio = { version = "0.19.2", features = ["runtime", "macros", "fs", "io", "time"] }
+fkv_io_compio = { path = "../../io/fkv_io_compio" }
+fkv_store = { path = "../fkv_store" }
+pollster = "1.0.1"
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

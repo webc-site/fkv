@@ -1,0 +1,102 @@
+name: perf
+
+# 由 release 构建完成后触发；不 checkout 仓库，只下载 release 二进制。
+# 性能数据只更新 gh-pages 上的 perf.json，站点资源无需重建。
+on:
+  workflow_run:
+    workflows: ["release"]
+    types: [completed]
+  workflow_dispatch:
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    name: bench-${{ matrix.arch }}
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: blacksmith-2vcpu-ubuntu-2604
+          - arch: aarch64
+            runner: blacksmith-2vcpu-ubuntu-2604-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: download release binary
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+        run: |
+          mkdir -p bin
+          gh release download perf-latest \
+            --pattern "fkv_bench-linux-${{ matrix.arch }}" \
+            --pattern commit.txt --dir bin --clobber
+          chmod +x "bin/fkv_bench-linux-${{ matrix.arch }}"
+      - name: machine info
+        run: |
+          uname -a
+          lsblk -d -o NAME,ROTA,MODEL,SIZE || true
+          df -h .
+      - name: bench
+        env:
+          BENCH_ROOT: ${{ vars.PERF_BENCH_ROOT }}
+        run: |
+          ROOT_ARGS=()
+          if [ -n "${BENCH_ROOT:-}" ]; then ROOT_ARGS=(--root "$BENCH_ROOT"); fi
+          "bin/fkv_bench-linux-${{ matrix.arch }}" \
+            "${ROOT_ARGS[@]}" \
+            --impl rust \
+            --commit "$(cat bin/commit.txt)" \
+            --rows 20000 --batch-size 100 \
+            --history "perf-${{ matrix.arch }}.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: perf-json-${{ matrix.arch }}
+          path: perf-${{ matrix.arch }}.json
+          retention-days: 7
+
+  publish:
+    name: publish-pages-data
+    needs: bench
+    runs-on: blacksmith-2vcpu-ubuntu-2604
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: perf-artifacts
+      - name: fetch merge script and history
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+        run: |
+          REPO="${{ github.repository }}"
+          gh api "repos/$REPO/contents/web/scripts/merge.mjs?ref=main" \
+            -H "Accept: application/vnd.github.raw" > merge.mjs
+          if META=$(gh api "repos/$REPO/contents/perf.json?ref=gh-pages" 2>/dev/null); then
+            printf '%s' "$META" | jq -r .content | base64 -d > perf.json
+            printf 'SHA=%s\n' "$(printf '%s' "$META" | jq -r .sha)" >> "$GITHUB_ENV"
+          else
+            printf '{"baseline":"","generated_at":0,"runs":[]}\n' > perf.json
+          fi
+          node merge.mjs perf.json perf-artifacts
+      - name: update gh-pages perf.json
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+        run: |
+          REPO="${{ github.repository }}"
+          CONTENT=$(base64 -w0 perf.json)
+          ARGS=(
+            -f "message=perf: ${{ github.event.workflow_run.head_sha || github.sha }}"
+            -f "content=$CONTENT"
+            -f branch=gh-pages
+          )
+          if [ -n "${SHA:-}" ]; then ARGS+=(-f "sha=$SHA"); fi
+          gh api -X PUT "repos/$REPO/contents/perf.json" "${ARGS[@]}"

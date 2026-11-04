@@ -1,0 +1,15 @@
+FROM ubuntu:26.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake ninja-build git curl ca-certificates pkg-config \
+    libboost-all-dev libjsoncpp-dev libzstd-dev libssl-dev libaio-dev \
+    liburing-dev clang rsync unzip python3 sudo \
+ && rm -rf /var/lib/apt/lists/*
+
+# eloqstore 以只读 volume 挂到 /src/eloqstore；首次构建：
+#   cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DSKIP_CREATE_BUCKET=ON
+#   cmake --build build -j$(nproc)
+WORKDIR /src/eloqstore
+CMD ["sleep", "infinity"]

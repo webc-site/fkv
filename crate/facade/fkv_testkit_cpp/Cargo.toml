@@ -1,0 +1,13 @@
+[package]
+name = "fkv_testkit_cpp"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "C++ 对照实现：夹具、临时目录、crash harness（仅差分验证）"
+
+[dependencies]
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。
+
+# Crubit 绑定与 cpp/shim 在此接入；默认不进入生产依赖图。

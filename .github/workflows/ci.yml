@@ -1,0 +1,76 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: test-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-26.04
+          - ubuntu-26.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo nextest run --workspace --all-features --exclude fkv_ledger --no-tests=pass
+      - run: cargo check -p fkv_ledger
+
+  compose:
+    name: compose-config
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker compose -f docker/docker-compose.yml config
+
+  s3:
+    name: s3-rustfs-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-26.04
+          - ubuntu-26.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      - name: Start RustFS
+        run: |
+          docker compose -f docker/docker-compose.yml up -d rustfs
+          docker compose -f docker/docker-compose.yml run --rm rustfs-init
+      - name: S3 integration tests
+        env:
+          EKV_S3_ENDPOINT: http://127.0.0.1:9900
+          EKV_S3_BUCKET: fkv-test
+          EKV_S3_ACCESS_KEY: minioadmin
+          EKV_S3_SECRET_KEY: minioadmin
+        run: cargo nextest run -p fkv_cloud -p fkv_object_s3 --all-features --no-tests=pass
+      - name: Stop RustFS
+        if: always()
+        run: docker compose -f docker/docker-compose.yml down -v
+
+  web:
+    name: web-build
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: cd web && bun install --frozen-lockfile && bun run build

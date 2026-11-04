@@ -1,0 +1,21 @@
+[package]
+name = "fkv_standby"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "Standby master / replica、远端 list、manifest stage、rsync / ssh"
+
+[dependencies]
+fkv_config = { version = "0.1.0", path = "../../foundation/fkv_config" }
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+fkv_manifest = { version = "0.1.0", path = "../../format/fkv_manifest" }
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+
+[dev-dependencies]
+compio = { version = "0.19.2", features = ["fs", "io", "macros"] }
+fkv_btree = { path = "../../core/fkv_btree" }
+fkv_io_compio = { path = "../fkv_io_compio" }
+fkv_store = { path = "../../engine/fkv_store" }
+pollster = "1.0.1"

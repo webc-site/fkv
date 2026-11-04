@@ -1,0 +1,196 @@
+@import "./_/reset.styl"
+@import "./_/form.styl"
+@import "./_/keyframe.styl"
+@import "./_/button.styl"
+@import "./_/card.styl"
+@import "./_/btn.styl"
+@import "./_/kv.styl"
+
+body
+  background #f5f5f7
+  color #1d1d1f
+  font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif
+  min-height 100vh
+
+.Wrap
+  margin 0 auto
+  max-width 1120px
+  padding 36px 20px 80px
+
+.Top
+  align-items flex-start
+  display flex
+  gap 24px
+  justify-content space-between
+
+  h1
+    font-size 30px
+    font-weight 650
+    letter-spacing -0.02em
+    margin 0
+
+  p
+    color #6e6e73
+    margin 8px 0 0
+
+.Lang
+  display flex
+  gap 8px
+
+  .Btn
+    height 36px
+    min-height 36px
+    padding 0 14px
+    font-size 13px
+
+.Meta
+  display flex
+  flex-wrap wrap
+  gap 8px
+  margin 18px 0 22px
+
+.Badge
+  background #ffffffb3
+  border 1px solid #00000012
+  border-radius 999px
+  color #6e6e73
+  font-size 12px
+  padding 5px 10px
+
+.Grid
+  display grid
+  gap 14px
+  grid-template-columns repeat(4, minmax(0, 1fr))
+  margin-bottom 18px
+
+  @media (max-width 860px)
+    grid-template-columns repeat(2, minmax(0, 1fr))
+
+  @media (max-width 520px)
+    grid-template-columns 1fr
+
+  .Card
+    cursor default
+
+    b
+      font-size 24px
+      font-weight 650
+      letter-spacing -0.02em
+
+    i
+      color #6e6e73
+      font-size 12px
+      font-style normal
+
+.Panel
+  background #ffffffcc
+  border 1px solid #00000010
+  border-radius 16px
+  box-shadow 0 8px 30px #00000006
+  margin-top 16px
+  padding 20px
+
+  h2
+    font-size 16px
+    font-weight 600
+    margin 0 0 14px
+
+.PanelHead
+  align-items center
+  display flex
+  gap 16px
+  justify-content space-between
+
+  h2
+    margin 0
+
+.Selects
+  display flex
+  flex-wrap wrap
+  gap 12px
+
+  label
+    color #6e6e73
+    display flex
+    flex-direction column
+    font-size 11px
+    gap 4px
+
+  select
+    background #fff
+    border 1px solid #00000018
+    border-radius 8px
+    color #1d1d1f
+    font-size 13px
+    padding 7px 10px
+
+svg
+  display block
+  height auto
+  margin-top 14px
+  width 100%
+
+.GridLine
+  stroke #00000010
+  stroke-width 1
+
+.Axis
+  fill #8e8e93
+  font-size 10px
+
+.Line
+  fill none
+  stroke-linecap round
+  stroke-linejoin round
+  stroke-width 2.5
+
+.Rust
+  color #0071e3
+
+  &.Line, &.Dot
+    stroke #0071e3
+
+.Cpp
+  color #ff9f0a
+
+  &.Line, &.Dot
+    stroke #ff9f0a
+
+.Dot
+  fill #fff
+  stroke-width 2
+
+.Legend
+  color #6e6e73
+  display flex
+  font-size 12px
+  gap 16px
+  margin-top 10px
+
+  .Rust, .Cpp
+    font-weight 600
+
+.Empty
+  color #8e8e93
+  padding 40px 0
+  text-align center
+
+table
+  border-collapse collapse
+  font-size 13px
+  width 100%
+
+  th, td
+    border-bottom 1px solid #0000000d
+    padding 9px 8px
+    text-align left
+
+  th
+    color #8e8e93
+    font-size 11px
+    font-weight 500
+
+  code
+    background #00000008
+    border-radius 5px
+    padding 2px 5px

@@ -1,0 +1,24 @@
+[package]
+name = "fkv_shard"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "work loop、admission、写队列、定时器"
+
+[dependencies]
+compio = { version = "0.19.2", features = ["fs", "io", "macros", "time"] }
+crossfire = "3.1.22"
+fkv_api = { version = "0.1.0", path = "../fkv_api" }
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+fkv_io = { version = "0.1.0", path = "../../io/fkv_io" }
+fkv_io_compio = { version = "0.1.0", path = "../../io/fkv_io_compio" }
+fkv_large = { version = "0.1.0", path = "../../core/fkv_large" }
+fkv_metrics = { version = "0.1.0", path = "../../foundation/fkv_metrics" }
+log = { version = "0.4.28", features = ["std"] }
+fkv_store = { version = "0.1.0", path = "../fkv_store" }
+fkv_task_reopen = { version = "0.1.0", path = "../fkv_task_reopen" }
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+futures-channel = "0.3.34"
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

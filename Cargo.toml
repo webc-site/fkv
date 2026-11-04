@@ -1,0 +1,29 @@
+[workspace]
+resolver = "3"
+members = ["crate/*/*", "tool/fkv_ledger"]
+# 迁移账本依赖 motedb，默认不构建。
+default-members = ["crate/*/*"]
+exclude = ["fuzz", "cpp/build", ".data"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+rust-version = "1.89"
+publish = false
+# 统一在此锁定版本；各 crate 用 cargo add 添加依赖后指向 workspace。
+# 版本清单见 ./todo.md 的技术选型表。未使用的 workspace 依赖会触发 cargo 警告，
+# 因此等对应 crate 开始实现时再逐项启用。
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
+overflow-checks = false
+
+[profile.bench]
+opt-level = 3
+lto = "fat"
+codegen-units = 1

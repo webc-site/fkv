@@ -1,0 +1,13 @@
+[package]
+name = "fkv_types_cpp"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "C++ 对照实现：ID 新类型、TableIdent、StoreMode、常量（仅差分验证）"
+
+[dependencies]
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。
+
+# Crubit 绑定与 cpp/shim 在此接入；默认不进入生产依赖图。
