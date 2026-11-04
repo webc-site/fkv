@@ -9,6 +9,7 @@ description = "BatchWrite / Truncate / Drop / TTL"
 
 [dependencies]
 fkv_btree = { version = "0.1.0", path = "../../core/fkv_btree" }
+fkv_compress = { version = "0.1.0", path = "../../format/fkv_compress" }
 fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
 fkv_io = { version = "0.1.0", path = "../../io/fkv_io" }
 fkv_mapping = { version = "0.1.0", path = "../../core/fkv_mapping" }

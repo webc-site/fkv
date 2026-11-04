@@ -76,27 +76,45 @@ fn older_timestamp_is_skipped() {
   assert_eq!(iter.value(), b"a");
 }
 
-/// 写路径压缩：值超过阈值且压后更小才标记 Standalone，读路径能还原。
+/// 有字典时 100B~10MiB 的值走 Dictionary，读路径用同一字典还原。
 #[test]
-fn compression_marks_standalone_and_roundtrips() {
+fn dictionary_compression_roundtrips() {
+  let mut dict = DictCompression::new(3);
+  dict.load_dictionary(vec![b'x'; 512]).unwrap();
   let value = vec![b'x'; 400];
   let batch = [BatchEntry::upsert(b"k".to_vec(), value.clone(), 1)];
-  let page_li = merge_data_pages_with_compression(&[], &batch, 4096, 16, Some(&DictCompression::new(3))).unwrap();
+  let page_li = merge_data_pages_with_compression(&[], &batch, 4096, 16, Some(&dict)).unwrap();
   let mut iter = DataPageIter::new(&page_li[0]).unwrap();
   assert!(iter.advance().unwrap());
-  assert_eq!(iter.compression(), CompressionType::Standalone);
+  assert_eq!(iter.compression(), CompressionType::Dictionary);
   assert!(iter.value().len() < value.len());
   assert_eq!(
-    decompress_value(iter.value(), iter.compression(), None).unwrap(),
+    decompress_value(iter.value(), iter.compression(), Some(&dict)).unwrap(),
     value
   );
+}
+
+/// 无字典时 100B~10MiB 的值不压缩（对齐 C++ `Prepare`），按原值落页。
+#[test]
+fn no_dictionary_skips_mid_size_values() {
+  let value = vec![b'x'; 400];
+  let batch = [BatchEntry::upsert(b"k".to_vec(), value.clone(), 1)];
+  let page_li =
+    merge_data_pages_with_compression(&[], &batch, 4096, 16, Some(&DictCompression::new(3)))
+      .unwrap();
+  let mut iter = DataPageIter::new(&page_li[0]).unwrap();
+  assert!(iter.advance().unwrap());
+  assert_eq!(iter.compression(), CompressionType::None);
+  assert_eq!(iter.value(), value);
 }
 
 /// 短值不压缩，保持 None。
 #[test]
 fn short_value_is_not_compressed() {
   let batch = [BatchEntry::upsert(b"k".to_vec(), b"tiny".to_vec(), 1)];
-  let page_li = merge_data_pages_with_compression(&[], &batch, 4096, 16, Some(&DictCompression::new(3))).unwrap();
+  let page_li =
+    merge_data_pages_with_compression(&[], &batch, 4096, 16, Some(&DictCompression::new(3)))
+      .unwrap();
   let mut iter = DataPageIter::new(&page_li[0]).unwrap();
   assert!(iter.advance().unwrap());
   assert_eq!(iter.compression(), CompressionType::None);
@@ -106,22 +124,24 @@ fn short_value_is_not_compressed() {
 /// 再合并已压缩页时不得二次压缩：`from_page` 直接透传原字节与标记。
 #[test]
 fn remerge_does_not_double_compress() {
+  let mut dict = DictCompression::new(3);
+  dict.load_dictionary(vec![b'y'; 512]).unwrap();
   let value = vec![b'y'; 400];
   let page_li = merge_data_pages_with_compression(
     &[],
     &[BatchEntry::upsert(b"k".to_vec(), value.clone(), 1)],
     4096,
     16,
-    Some(&DictCompression::new(3)),
+    Some(&dict),
   )
   .unwrap();
   let first = page_li[0].clone();
-  let remerged = merge_data_pages_with_compression(&[&first], &[], 4096, 16, Some(&DictCompression::new(3))).unwrap();
+  let remerged = merge_data_pages_with_compression(&[&first], &[], 4096, 16, Some(&dict)).unwrap();
   let mut iter = DataPageIter::new(&remerged[0]).unwrap();
   assert!(iter.advance().unwrap());
-  assert_eq!(iter.compression(), CompressionType::Standalone);
+  assert_eq!(iter.compression(), CompressionType::Dictionary);
   assert_eq!(
-    decompress_value(iter.value(), iter.compression(), None).unwrap(),
+    decompress_value(iter.value(), iter.compression(), Some(&dict)).unwrap(),
     value
   );
 }

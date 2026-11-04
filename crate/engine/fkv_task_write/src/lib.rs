@@ -5,6 +5,7 @@
 use std::collections::BTreeMap;
 
 use fkv_btree::{BatchEntry, merge_data_pages_with_compression};
+use fkv_compress::DictCompression;
 use fkv_error::{KvError, Result};
 use fkv_io::PageIo;
 use fkv_mapping::PageMapper;
@@ -40,7 +41,7 @@ struct PageLayout<'a> {
   dict: Option<&'a DictCompression>,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy)]
 struct IndexLayout<'a> {
   page: PageLayout<'a>,
   leaf: bool,
@@ -151,7 +152,7 @@ async fn find_data_page<I: PageIo>(
   Err(KvError::Corrupted)
 }
 
-async fn upsert_group<I: PageIo>(
+async fn upsert_group<'a, I: PageIo>(
   io: &I,
   tbl: &TableIdent,
   root_id: PageId,
@@ -249,7 +250,7 @@ async fn descend_to_data<I: PageIo>(
   }
 }
 
-async fn rewrite_data_page<I: PageIo>(
+async fn rewrite_data_page<'a, I: PageIo>(
   io: &I,
   tbl: &TableIdent,
   mapper: &mut PageMapper,
@@ -326,7 +327,7 @@ async fn rewrite_data_page<I: PageIo>(
   Ok(child_li)
 }
 
-async fn write_new_data_page<I: PageIo>(
+async fn write_new_data_page<'a, I: PageIo>(
   io: &I,
   tbl: &TableIdent,
   mapper: &mut PageMapper,
@@ -413,7 +414,7 @@ async fn collect_tree_pages<I: PageIo>(
   })
 }
 
-async fn rebuild_index_all<I: PageIo>(
+async fn rebuild_index_all<'a, I: PageIo>(
   io: &I,
   tbl: &TableIdent,
   mapper: &mut PageMapper,
@@ -490,14 +491,14 @@ fn replace_child(children: &mut Vec<Child>, idx: usize, new_child_li: Vec<Child>
   }
 }
 
-async fn build_index_pages<I: PageIo>(
+async fn build_index_pages<'a, I: PageIo>(
   io: &I,
   tbl: &TableIdent,
   mapper: &mut PageMapper,
   old_page_id: PageId,
   first_key: &[u8],
   children: &[Child],
-  layout: IndexLayout,
+  layout: IndexLayout<'a>,
 ) -> Result<Vec<Child>> {
   if children.is_empty() {
     mapper.free_page(old_page_id)?;
@@ -527,12 +528,12 @@ async fn build_index_pages<I: PageIo>(
   Ok(out_li)
 }
 
-async fn build_new_index<I: PageIo>(
+async fn build_new_index<'a, I: PageIo>(
   io: &I,
   tbl: &TableIdent,
   mapper: &mut PageMapper,
   child_li: &[Child],
-  mut layout: IndexLayout,
+  mut layout: IndexLayout<'a>,
 ) -> Result<PageId> {
   if child_li.is_empty() {
     return Ok(PageId::MAX);
@@ -560,10 +561,10 @@ async fn build_new_index<I: PageIo>(
   }
 }
 
-fn build_index_page_li(
+fn build_index_page_li<'a>(
   first_key: &[u8],
   children: &[Child],
-  layout: IndexLayout,
+  layout: IndexLayout<'a>,
 ) -> Result<Vec<(Vec<u8>, Vec<u8>)>> {
   let mut out_li = Vec::new();
   let mut builder = IndexPageBuilder::new(

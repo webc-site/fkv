@@ -108,3 +108,31 @@ async fn compression_off_stores_raw_and_still_reads() {
   assert_eq!(store.read(&tbl, b"k").await.unwrap(), value);
   let _ = remove_dir_all(&root);
 }
+
+/// 字典压缩端到端：写入按字典压缩，manifest 持久化字典，reopen 自动恢复可读。
+#[compio::test]
+async fn dictionary_compression_end_to_end_reopen() {
+  let root = temp_root("dict");
+  let tbl = TableIdent::new("demo", 1).unwrap();
+  let dict = vec![b'd'; 1024];
+  let value = vec![b'd'; 600];
+  {
+    let io = CompioStore::new(root.clone(), 4096, 18);
+    let mut store = Store::new(io, 4096, 16).with_compression_level(3);
+    store.set_dictionary(&tbl, dict.clone()).unwrap();
+    store
+      .put(&tbl, &[BatchEntry::upsert(b"k".to_vec(), value.clone(), 1)])
+      .await
+      .unwrap();
+    assert_eq!(store.read(&tbl, b"k").await.unwrap(), value);
+  }
+  {
+    // 重开时不显式设置字典，靠 manifest 恢复。
+    let io = CompioStore::new(root.clone(), 4096, 18);
+    let mut store = Store::new(io, 4096, 16);
+    store.reopen(&tbl).await.unwrap();
+    assert!(store.has_dictionary(&tbl));
+    assert_eq!(store.read(&tbl, b"k").await.unwrap(), value);
+  }
+  let _ = remove_dir_all(&root);
+}

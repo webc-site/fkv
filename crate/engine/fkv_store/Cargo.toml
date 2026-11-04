@@ -11,6 +11,7 @@ description = "Store 生命周期、模式派生、路由、fanout"
 fkv_btree = { version = "0.1.0", path = "../../core/fkv_btree" }
 fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
 fkv_codec = { version = "0.1.0", path = "../../foundation/fkv_codec" }
+fkv_compress = { version = "0.1.0", path = "../../format/fkv_compress" }
 fkv_io = { version = "0.1.0", path = "../../io/fkv_io" }
 fkv_large = { version = "0.1.0", path = "../../core/fkv_large" }
 fkv_manifest = { version = "0.1.0", path = "../../format/fkv_manifest" }

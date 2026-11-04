@@ -5,6 +5,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use fkv_btree::BatchEntry;
 use fkv_codec::{append_varint32, append_varint64};
+use fkv_compress::DictCompression;
 use fkv_error::{KvError, Result};
 use fkv_io::{FileIo, FixedBuffer, FixedSegmentIo, ManifestIo, PageIo, SegmentIo, TermIo};
 use fkv_large::{
@@ -121,6 +122,7 @@ pub struct Store<I> {
   ttl_read_filter: bool,
   ttl_next_map: HashMap<TableIdent, u64>,
   compression_level: Option<i32>,
+  compression_map: HashMap<TableIdent, DictCompression>,
 }
 
 impl<I: PageIo> Store<I> {
@@ -147,6 +149,7 @@ impl<I: PageIo> Store<I> {
       ttl_read_filter: true,
       ttl_next_map: HashMap::default(),
       compression_level: None,
+      compression_map: HashMap::default(),
     }
   }
 
@@ -169,6 +172,35 @@ impl<I: PageIo> Store<I> {
   pub fn with_compression_level(mut self, level: i32) -> Self {
     self.compression_level = Some(level);
     self
+  }
+
+  /// 该表当前字典字节；未启用压缩或无字典返回空。
+  fn dict_bytes(&self, tbl: &TableIdent) -> &[u8] {
+    self
+      .compression_map
+      .get(tbl)
+      .map_or(&[], DictCompression::dictionary_bytes)
+  }
+
+  /// 为表装载已有 zstd 字典；之后该表的写入按字典压缩，manifest 会持久化
+  /// 字典字节，reopen 时自动恢复。
+  pub fn set_dictionary(&mut self, tbl: &TableIdent, dict: Vec<u8>) -> Result<()> {
+    let level = self.compression_level.unwrap_or_default();
+    let mut compression = self
+      .compression_map
+      .remove(tbl)
+      .unwrap_or_else(|| DictCompression::new(level));
+    compression.load_dictionary(dict)?;
+    self.compression_map.insert(tbl.clone(), compression);
+    Ok(())
+  }
+
+  /// 该表是否已装载字典（写入会走 Dictionary 压缩）。
+  pub fn has_dictionary(&self, tbl: &TableIdent) -> bool {
+    self
+      .compression_map
+      .get(tbl)
+      .is_some_and(DictCompression::has_dictionary)
   }
 
   /// 让后端预加载 table 目录的 file id -> path 索引，返回索引文件数。
@@ -225,7 +257,16 @@ impl<I: PageIo> Store<I> {
     let Some(mapper) = self.mapper_map.get(tbl) else {
       return Ok(None);
     };
-    let Some(entry) = read_entry(&self.io, tbl, root_id, mapper, key, self.page_size, None).await?
+    let Some(entry) = read_entry(
+      &self.io,
+      tbl,
+      root_id,
+      mapper,
+      key,
+      self.page_size,
+      self.compression_map.get(tbl),
+    )
+    .await?
     else {
       return Ok(None);
     };
@@ -342,7 +383,7 @@ impl<I: PageIo> Store<I> {
           end,
           page_size: self.page_size,
           max_entries: 0,
-          dict: None,
+          dict: self.compression_map.get(tbl),
         },
         fkv_task_scan::ScanOptions {
           begin_inclusive: cursor_inclusive,
@@ -418,7 +459,7 @@ impl<I: PageIo> Store<I> {
         end,
         page_size: self.page_size,
         max_entries: 0,
-        dict: None,
+        dict: self.compression_map.get(tbl),
       },
       options,
     )
@@ -487,7 +528,7 @@ impl<I: PageIo> Store<I> {
       root_id,
       ttl_root: ttl_root_id,
       max_fp_id: max_fp_id.unwrap_or(mapper_max_fp),
-      dict_bytes: b"",
+      dict_bytes: self.dict_bytes(tbl),
       mapping_value_li,
       branch_metadata,
       segment_value_li,
@@ -635,6 +676,13 @@ impl<I: PageIo + ManifestIo> Store<I> {
     if live_li.is_empty() && ttl_li.is_empty() {
       return Ok(());
     }
+    // 启用压缩时，首次写为该表建立 DictCompression（无字典，standalone 路径）。
+    if let Some(level) = self.compression_level {
+      self
+        .compression_map
+        .entry(tbl.clone())
+        .or_insert_with(|| DictCompression::new(level));
+    }
     let root_id = self.root_map.get(tbl).copied().unwrap_or(PageId::MAX);
     let ttl_root_id = self.ttl_root_map.get(tbl).copied().unwrap_or(PageId::MAX);
     let branch_mode = self.manifest_file.is_some();
@@ -663,7 +711,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
             batch: &live_li,
             page_size: self.page_size,
             restart_interval: self.restart_interval,
-            compression_level: self.compression_level,
+            dict: self.compression_map.get(tbl),
           },
         )
         .await?
@@ -680,7 +728,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
             batch: &ttl_li,
             page_size: self.page_size,
             restart_interval: self.restart_interval,
-            compression_level: self.compression_level,
+            dict: self.compression_map.get(tbl),
           },
         )
         .await?
@@ -717,7 +765,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
           root_id: new_root,
           ttl_root: new_ttl_root,
           max_fp_id: mapper.max_fp_id(),
-          dict_bytes: b"",
+          dict_bytes: self.dict_bytes(tbl),
           mapping_value_li: mapper.tbl().value_li(),
           branch_metadata: &branch,
           segment_value_li,
@@ -827,7 +875,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
           root_id,
           ttl_root: ttl_root_id,
           max_fp_id: mapper.max_fp_id(),
-          dict_bytes: b"",
+          dict_bytes: self.dict_bytes(tbl),
           mapping_value_li: mapper.tbl().value_li(),
           branch_metadata: &branch,
           segment_value_li,
@@ -1005,6 +1053,14 @@ impl<I: PageIo + ManifestIo> Store<I> {
   ) {
     let mapper = PageMapper::with_tbl(state.mapping_tbl, AllocMode::Append, state.max_fp_id);
     self.mapper_map.insert(tbl.clone(), mapper);
+    // 恢复字典：即便当前未启用压缩，也要能读回旧盘面里字典压缩的页。
+    if !state.dict_bytes.is_empty() {
+      let level = self.compression_level.unwrap_or_default();
+      let mut dict = DictCompression::new(level);
+      if dict.load_dictionary(state.dict_bytes.clone()).is_ok() {
+        self.compression_map.insert(tbl.clone(), dict);
+      }
+    }
     if !state.segment_mapping.is_empty() || state.max_segment_fp_id > 0 {
       self.segment_mapper_map.insert(
         tbl.clone(),
@@ -1029,6 +1085,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
   /// 避免重启后逻辑 id 与旧文件冲突。
   pub async fn truncate(&mut self, tbl: &TableIdent) -> Result<()> {
     let branch = self.branch_metadata(tbl);
+    let dict_bytes = self.dict_bytes(tbl).to_vec();
     let Some(mapper) = self.mapper_map.get_mut(tbl) else {
       self.ttl_next_map.remove(tbl);
       return Ok(());
@@ -1062,7 +1119,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
         root_id: PageId::MAX,
         ttl_root: PageId::MAX,
         max_fp_id: mapper.max_fp_id(),
-        dict_bytes: b"",
+        dict_bytes: &dict_bytes,
         mapping_value_li: mapper.tbl().value_li(),
         branch_metadata: &branch,
         segment_value_li,
@@ -1107,7 +1164,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
         end: &[],
         page_size: self.page_size,
         max_entries: 0,
-        dict: None,
+        dict: self.compression_map.get(tbl),
       },
       ScanOptions {
         reject_large_value: false,
@@ -1156,7 +1213,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
           end: &[],
           page_size: self.page_size,
           max_entries: 0,
-          dict: None,
+          dict: self.compression_map.get(tbl),
         },
       )
       .await?
@@ -1218,7 +1275,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
             batch: &data_delete_li,
             page_size: self.page_size,
             restart_interval: self.restart_interval,
-            compression_level: self.compression_level,
+            dict: self.compression_map.get(tbl),
           },
         )
         .await?
@@ -1232,7 +1289,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
           batch: &ttl_delete_li,
           page_size: self.page_size,
           restart_interval: self.restart_interval,
-          compression_level: self.compression_level,
+          dict: self.compression_map.get(tbl),
         },
       )
       .await?;
@@ -1567,7 +1624,16 @@ impl<I: PageIo + FixedSegmentIo> Store<I> {
     let Some(mapper) = self.mapper_map.get(tbl) else {
       return Ok(None);
     };
-    let Some(entry) = read_entry(&self.io, tbl, root_id, mapper, key, self.page_size, None).await?
+    let Some(entry) = read_entry(
+      &self.io,
+      tbl,
+      root_id,
+      mapper,
+      key,
+      self.page_size,
+      self.compression_map.get(tbl),
+    )
+    .await?
     else {
       return Ok(None);
     };
@@ -1608,8 +1674,16 @@ impl<I: PageIo + SegmentIo> Store<I> {
     let Some(mapper) = self.mapper_map.get(tbl) else {
       return Err(KvError::NotFound);
     };
-    let Some(entry) =
-      read_floor_entry(&self.io, tbl, root_id, mapper, key, self.page_size, None).await?
+    let Some(entry) = read_floor_entry(
+      &self.io,
+      tbl,
+      root_id,
+      mapper,
+      key,
+      self.page_size,
+      self.compression_map.get(tbl),
+    )
+    .await?
     else {
       return Err(KvError::NotFound);
     };
@@ -1653,7 +1727,16 @@ impl<I: PageIo + SegmentIo> Store<I> {
     let Some(mapper) = self.mapper_map.get(tbl) else {
       return Ok(None);
     };
-    let Some(entry) = read_entry(&self.io, tbl, root_id, mapper, key, self.page_size, None).await?
+    let Some(entry) = read_entry(
+      &self.io,
+      tbl,
+      root_id,
+      mapper,
+      key,
+      self.page_size,
+      self.compression_map.get(tbl),
+    )
+    .await?
     else {
       return Ok(None);
     };

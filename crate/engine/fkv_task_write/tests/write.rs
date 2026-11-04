@@ -27,7 +27,7 @@ fn write_read_scan() {
         batch: &batch,
         page_size: 512,
         restart_interval: 16,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -68,7 +68,7 @@ fn write_read_scan() {
         batch: &batch,
         page_size: 512,
         restart_interval: 16,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -111,7 +111,7 @@ fn multi_page_cow() {
         batch: &batch,
         page_size: 128,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -146,7 +146,7 @@ fn multi_page_cow() {
         batch: &batch,
         page_size: 128,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -255,7 +255,7 @@ fn cow_writes_only_affected_pages() {
         batch: &batch,
         page_size: 128,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -273,7 +273,7 @@ fn cow_writes_only_affected_pages() {
         batch: &batch,
         page_size: 128,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -309,7 +309,7 @@ fn batch_same_page_one_cow() {
         batch: &batch,
         page_size: 512,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -328,7 +328,7 @@ fn batch_same_page_one_cow() {
         batch: &batch,
         page_size: 512,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -367,7 +367,7 @@ fn delete_many_rebalances_index() {
         batch: &batch,
         page_size: 128,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await
@@ -384,7 +384,7 @@ fn delete_many_rebalances_index() {
         batch: &batch,
         page_size: 128,
         restart_interval: 8,
-        compression_level: None,
+        dict: None,
       },
     )
     .await

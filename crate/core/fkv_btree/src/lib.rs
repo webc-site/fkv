@@ -116,10 +116,12 @@ fn merged_value<'a>(
   // 短值、大值 standalone、其余走字典；和 C++ `Prepare` 一致。
   let prepared = dict.prepare(&entry.entry.value);
   let kind = match prepared.kind {
-    CompressKind::None => return (
-      Cow::Borrowed(entry.entry.value.as_slice()),
-      CompressionType::None,
-    ),
+    CompressKind::None => {
+      return (
+        Cow::Borrowed(entry.entry.value.as_slice()),
+        CompressionType::None,
+      );
+    }
     CompressKind::Standalone => CompressionType::Standalone,
     CompressKind::Dictionary => CompressionType::Dictionary,
   };

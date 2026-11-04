@@ -146,6 +146,10 @@ impl DictCompression {
     self.prepared.is_some()
   }
 
+  pub fn level(&self) -> i32 {
+    self.level
+  }
+
   pub fn dictionary_bytes(&self) -> &[u8] {
     &self.dict
   }
