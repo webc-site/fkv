@@ -187,12 +187,15 @@ fn serve(mut stream: TcpStream, state: &State) {
   };
   let reply = (state.script)(&path, index);
 
-  // 统计并发峰值：从读完请求到写完响应之间算作飞行中。
+  // 统计并发峰值：从读完请求到开始写响应之间算作飞行中。响应写回不计入，
+  // 否则客户端可能已收到响应并派发下一条请求，而服务端还没执行 fetch_sub，
+  // 造成 peak 多 1 的假阳性。
   let live = state.live.fetch_add(1, Ordering::SeqCst) + 1;
   state.peak.fetch_max(live, Ordering::SeqCst);
   if !reply.delay.is_zero() {
     thread::sleep(reply.delay);
   }
+  state.live.fetch_sub(1, Ordering::SeqCst);
   let raw = format!(
     "HTTP/1.1 {} {}\r\ncontent-length: {}\r\netag: \"etag-{index}\"\r\nconnection: close\r\n\r\n{}",
     reply.status,
@@ -202,7 +205,6 @@ fn serve(mut stream: TcpStream, state: &State) {
   );
   let _ = stream.write_all(raw.as_bytes());
   let _ = stream.flush();
-  state.live.fetch_sub(1, Ordering::SeqCst);
 }
 
 /// 在带 IO 驱动的单线程 runtime 上执行（reqwest 需要 reactor）。
