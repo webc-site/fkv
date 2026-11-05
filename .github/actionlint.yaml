@@ -1,5 +1,0 @@
-self-hosted-runner:
-  # Blacksmith 托管 runner 的自定义标签；actionlint 默认不认识。
-  labels:
-    - blacksmith-4vcpu-ubuntu-2604
-    - blacksmith-4vcpu-ubuntu-2604-arm

@@ -30,10 +30,8 @@ docker 缺失时通过 `brew install --cask orbstack` + `orb start` 启动。
 
 ## CI
 
-- `ci.yml`：fmt / clippy 在 `ubuntu-latest` 跑；x86_64 / aarch64 测试先由
-  GitHub 托管 runner 构建 `nextest archive`，再由 Blacksmith runner 下载并执行，
-  避免把有限的 Blacksmith 分钟用于编译；macOS 与 RustFS S3 集成测试仍在各自原生
-  runner 上编译运行。
+- `ci.yml`：fmt / clippy / 全量测试 / RustFS S3 集成测试，全部在 GitHub 托管
+  runner 上原生执行；测试二进制不再打包成 artifact 或转交 Blacksmith。
 - `linux-test.yml`：夜间与手动的 Ubuntu 24.04 LTS 回归，断言 4 KiB 页。
 - `release.yml`：仅在推送 `v*` tag（或手动 dispatch）时构建 `fkv_bench`
   x86_64 / aarch64，上传滚动的 `perf-latest` release。

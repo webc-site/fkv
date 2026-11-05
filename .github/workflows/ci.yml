@@ -5,14 +5,11 @@ on:
   pull_request:
   workflow_dispatch:
 
-# 成本拆分：编译在 GitHub 托管 runner 上完成，Blacksmith 只下载 nextest
-# archive 并执行测试，避免把有限的 Blacksmith 分钟花在编译上。
+# 所有编译与测试都在 GitHub 托管 runner 上原生执行。
 #
-# - lint: fmt / clippy / orphan（ubuntu-latest）
-# - build-*: cargo nextest archive（ubuntu-latest / ubuntu-24.04-arm）
-# - test-*: 下载 archive，cargo nextest run --archive-file（Blacksmith）
-# - test-macos: macOS 无法跨平台复用 archive，保留原生的 build+test
-# - s3-*: RustFS 集成测试需要本机编译，留在 GitHub 托管 runner
+# 不把测试二进制作为 artifact 传给 Blacksmith：全量 nextest archive 约 4.9 GB，
+# 上传/下载比测试本身还慢，也会消耗 Blacksmith 分钟。Blacksmith 仅在需要更快
+# 的交互式运行时通过 workflow_dispatch / 自定义 workflow 使用。
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -27,19 +24,20 @@ jobs:
       - run: cargo clippy --workspace --all-targets -- -D warnings
       - run: ./tool/orphan.sh
 
-  build:
-    name: build-${{ matrix.arch }}
+  test:
+    name: test-${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - arch: x86_64
-            runner: ubuntu-latest
-          - arch: aarch64
-            runner: ubuntu-24.04-arm
-    runs-on: ${{ matrix.runner }}
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          # macOS 专属 buffered IO / OS 页大小 16 KiB 路径需要独立回归。
+          - macos-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
+      # 幂等安装 Linux 构建依赖（clang/cmake/liburing 等）；非 Linux 自动 skip。
       - run: bash scripts/ci/install.sh
       - uses: dtolnay/rust-toolchain@nightly
       - uses: Swatinem/rust-cache@v2
@@ -48,62 +46,6 @@ jobs:
           tool: nextest
       # rust-cache 只按 Cargo.lock 复用 target；这两个包的测试对 manifest 对齐
       # 敏感，强制从当前源码重建，避免缓存里旧对象造成跨机器结果不一致。
-      - run: cargo clean -p fkv_manifest -p fkv_task_reopen
-      - name: build nextest archive
-        run: |
-          cargo nextest archive --workspace --all-features \
-            --archive-file "fkv-tests-${{ matrix.arch }}.tar.zst"
-      - uses: actions/upload-artifact@v7
-        with:
-          name: fkv-tests-${{ matrix.arch }}
-          path: fkv-tests-${{ matrix.arch }}.tar.zst
-          retention-days: 1
-
-  test:
-    name: test-${{ matrix.arch }}
-    needs: build
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: x86_64
-            runner: blacksmith-4vcpu-ubuntu-2604
-          - arch: aarch64
-            runner: blacksmith-4vcpu-ubuntu-2604-arm
-    runs-on: ${{ matrix.runner }}
-    steps:
-      - uses: actions/checkout@v7
-      - uses: dtolnay/rust-toolchain@nightly
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: nextest
-      - uses: actions/download-artifact@v7
-        with:
-          name: fkv-tests-${{ matrix.arch }}
-          path: .
-      - name: run nextest archive
-        run: |
-          # Blacksmith 的 /tmp 较小，archive 解压到 workspace 所在磁盘。
-          mkdir -p "${{ github.workspace }}/.nextest-archive"
-          cargo nextest run \
-            --archive-file "fkv-tests-${{ matrix.arch }}.tar.zst" \
-            --workspace-remap "${{ github.workspace }}" \
-            --extract-to "${{ github.workspace }}/.nextest-archive" \
-            --extract-overwrite \
-            --no-fail-fast --no-tests=pass
-
-  test-macos:
-    name: test-macos-latest
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: dtolnay/rust-toolchain@nightly
-        with:
-          components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: nextest
       - run: cargo clean -p fkv_manifest -p fkv_task_reopen
       - run: cargo nextest run --workspace --all-features --no-tests=pass
 
