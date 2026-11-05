@@ -83,9 +83,13 @@ jobs:
           path: .
       - name: run nextest archive
         run: |
+          # Blacksmith 的 /tmp 较小，archive 解压到 workspace 所在磁盘。
+          mkdir -p "${{ github.workspace }}/.nextest-archive"
           cargo nextest run \
             --archive-file "fkv-tests-${{ matrix.arch }}.tar.zst" \
             --workspace-remap "${{ github.workspace }}" \
+            --extract-to "${{ github.workspace }}/.nextest-archive" \
+            --extract-overwrite \
             --no-fail-fast --no-tests=pass
 
   test-macos:
