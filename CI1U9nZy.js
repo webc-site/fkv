@@ -1,0 +1,1 @@
+var e={README:`fkv`,architecture:`ສະຖາປັດຕະຍະກໍາ`,crates:`Crate`,testing:`ການທົດສອບ`,performance:`ປະສິດທິພາບ`};export{e as default};

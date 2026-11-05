@@ -1,0 +1,1 @@
+var e={},t=[`ipakita ang pamagat dito`,`Pure style component, nagbibigay ng text gradient at shadow effect`];export{e as js,t as pug};

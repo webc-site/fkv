@@ -1,0 +1,1 @@
+var e={},t=[`Titel hier anzeigen`,`Reine Stilkomponente, die Textverlaufs- und Schatteneffekte bietet`];export{e as js,t as pug};

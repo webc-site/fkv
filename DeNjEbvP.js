@@ -1,0 +1,1 @@
+var e={README:`fkv`,architecture:`Építészet`,crates:`Crate`,testing:`teszt`,performance:`Teljesítmény`};export{e as default};

@@ -1,0 +1,1 @@
+var e=[`簡單彈出層`,`彈出框，基於 html5 dialog 實現`,`確定`],t=[`點我彈出 Box`];export{e as js,t as pug};

@@ -1,0 +1,1 @@
+var e={},t=[`mostra el títol aquí`,`Component d'estil pur, que proporciona efectes de degradat i ombra de text`];export{e as js,t as pug};

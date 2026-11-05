@@ -1,0 +1,1 @@
+var e={},t=[`mostra il titolo qui`,`Componente di puro stile, che fornisce sfumature di testo ed effetti ombra`];export{e as js,t as pug};

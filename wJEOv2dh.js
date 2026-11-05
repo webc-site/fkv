@@ -1,0 +1,1 @@
+var e=[{"":`Home`,doc:`Document`,blog:`Blog`}],t=[`Links are displayed tiled on the desktop and folded into icon buttons on the mobile`,`Desktop`,`Tile display`,`Mobile terminal`,`Collapse into icon button, click to slide out the side menu`];export{e as js,t as pug};

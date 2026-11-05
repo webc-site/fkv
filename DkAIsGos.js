@@ -1,0 +1,1 @@
+var e={},t=[`zobraziť názov tu`,`Komponent čistého štýlu, ktorý poskytuje prechod textu a efekty tieňov`];export{e as js,t as pug};

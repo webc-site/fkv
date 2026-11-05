@@ -1,0 +1,1 @@
+var e={},t=[`parādīt virsrakstu šeit`,`Tīra stila sastāvdaļa, kas nodrošina teksta gradientu un ēnu efektus`];export{e as js,t as pug};

@@ -1,0 +1,1 @@
+var e={},t=[`weisen Titel hei`,`Pure Stilkomponent, bitt Textgradient a Schatteneffekter`];export{e as js,t as pug};

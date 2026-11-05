@@ -1,0 +1,1 @@
+var e={},t=[`onyesha kichwa hapa`,`Sehemu ya mtindo safi, kutoa gradient ya maandishi na athari za kivuli`];export{e as js,t as pug};

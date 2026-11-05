@@ -1,0 +1,1 @@
+var e={},t=[`版本`,`1.0.0`,`协议`,`MIT`,`状态`,`正常`];export{e as js,t as pug};

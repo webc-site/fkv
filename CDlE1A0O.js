@@ -1,0 +1,1 @@
+var e={},t=[`Apple`,`Banana`,`Tangerine`,`Apple is a common fruit that is rich in nutrients.`,`Banana is a delicious fruit widely grown in tropical areas.`,`Oranges are bright in color, juicy and sweet, and rich in vitamin C.`];export{e as js,t as pug};

@@ -1,0 +1,1 @@
+var e={},t=[`zobrazit název zde`,`Komponenta čistého stylu, která poskytuje přechody textu a efekty stínů`];export{e as js,t as pug};

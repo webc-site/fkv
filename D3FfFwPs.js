@@ -1,0 +1,1 @@
+var e={},t=[`mostrar o título aquí`,`Compoñente de estilo puro, que proporciona efectos de sombra e degradado de texto`];export{e as js,t as pug};

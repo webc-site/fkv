@@ -1,0 +1,1 @@
+var e={},t=[`başlığı burada göstərin`,`Mətn qradiyenti və kölgə effektlərini təmin edən təmiz üslub komponenti`];export{e as js,t as pug};

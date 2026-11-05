@@ -1,0 +1,1 @@
+var e={},t=[`hiển thị tiêu đề ở đây`,`Thành phần kiểu thuần túy, cung cấp hiệu ứng đổ bóng và chuyển màu văn bản`];export{e as js,t as pug};

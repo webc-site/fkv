@@ -1,0 +1,1 @@
+var e={},t=[`wys titel hier`,`Suiwer stylkomponent, wat teksgradiënt en skadu-effekte verskaf`];export{e as js,t as pug};

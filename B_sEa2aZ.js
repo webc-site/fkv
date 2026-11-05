@@ -1,0 +1,1 @@
+var e={},t=[`Default card`,`Click to jump to the details page`,`Activate card`,`The card corresponding to the current page`];export{e as js,t as pug};

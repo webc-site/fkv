@@ -1,0 +1,1 @@
+var e=[`This is a general reminder message`,`Operation failed, please try again`],t=[`Disappearance time (seconds)`,`General tips`,`Error message`];export{e as js,t as pug};

@@ -1,0 +1,1 @@
+import{a as e}from"./Bvsd10oH.js";var t=t=>{let n,r,i=new Set;return e(async e=>{r=e,n=await t(e),i.forEach(t=>t(n,e))}),e=>(i.add(e),n&&e(n,r),()=>{i.delete(e)})};export{t};

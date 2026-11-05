@@ -1,0 +1,1 @@
+var e={},t=[`水平虛擬捲軸`,`垂直虛擬捲軸`];export{e as js,t as pug};

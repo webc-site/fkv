@@ -1,0 +1,1 @@
+var e={},t=[`itt mutatják a címet`,`Tiszta stíluselem, amely szöveg színátmenetet és árnyékhatást biztosít`];export{e as js,t as pug};

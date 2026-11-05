@@ -1,0 +1,1 @@
+var e={},t=[`rodyti pavadinimą čia`,`Grynas stiliaus komponentas, suteikiantis teksto gradiento ir šešėlių efektus`];export{e as js,t as pug};

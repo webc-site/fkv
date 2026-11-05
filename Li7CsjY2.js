@@ -1,0 +1,1 @@
+var e=(e,t)=>{let n=Object.entries(t);return n.forEach(([t,n])=>e.addEventListener(t,n)),()=>{n.forEach(([t,n])=>e.removeEventListener(t,n))}};export{e as t};

@@ -1,0 +1,1 @@
+var e={},t=[`pokaż tutaj tytuł`,`Komponent czystego stylu, zapewniający efekty gradientu i cienia tekstu`];export{e as js,t as pug};

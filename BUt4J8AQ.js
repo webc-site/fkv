@@ -1,0 +1,1 @@
+var e={},t=[`başlığı burada göster`,`Metin degradesi ve gölge efektleri sağlayan saf stil bileşeni`];export{e as js,t as pug};

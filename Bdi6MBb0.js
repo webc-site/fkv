@@ -1,0 +1,1 @@
+var e={},t=[`tunjukkan tajuk di sini`,`Komponen gaya tulen, memberikan kesan kecerunan teks dan bayangan`];export{e as js,t as pug};

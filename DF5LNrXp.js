@@ -1,0 +1,1 @@
+var e={},t=[`選項 1`,`選項 2`,`選項 3`,`提交`];export{e as js,t as pug};

@@ -1,0 +1,1 @@
+var e={},t=[`uri t-titlu hawn`,`Komponent ta 'stil pur, li jipprovdi effetti ta' gradjent tat-test u dell`];export{e as js,t as pug};

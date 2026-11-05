@@ -1,0 +1,1 @@
+var e=[`Add to`],t=[`Default button`,`Main Button`,`Link Button`,`Icon Button (.BtnC)`];export{e as js,t as pug};

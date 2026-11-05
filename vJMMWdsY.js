@@ -1,0 +1,1 @@
+var e={README:`fkv`,architecture:`Seni bina`,crates:`Crate`,testing:`ujian`,performance:`Prestasi`};export{e as default};

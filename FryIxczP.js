@@ -1,0 +1,1 @@
+var e={README:`fkv`,architecture:`आर्किटेक्चर`,crates:`Crate`,testing:`चाचणी`,performance:`कामगिरी`};export{e as default};

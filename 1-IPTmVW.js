@@ -1,0 +1,1 @@
+var e={},t=[`tampilkan judul di sini`,`Komponen gaya murni, memberikan gradien teks dan efek bayangan`];export{e as js,t as pug};

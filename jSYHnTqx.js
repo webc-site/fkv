@@ -1,0 +1,1 @@
+var e={README:`fkv`,architecture:`架構`,crates:`Crate`,testing:`測試`,performance:`效能`};export{e as default};

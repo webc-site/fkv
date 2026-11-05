@@ -1,0 +1,1 @@
+var e={},t=[`ipakita ang titulo dinhi`,`Ang sangkap nga putli nga istilo, naghatag mga gradient sa teksto ug mga epekto sa anino`];export{e as js,t as pug};

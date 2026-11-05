@@ -1,0 +1,1 @@
+var e={},t=[`toon hier de titel`,`Pure stijlcomponent, die tekstverloop- en schaduweffecten biedt`];export{e as js,t as pug};

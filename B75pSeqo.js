@@ -1,0 +1,1 @@
+var e={},t=[`这是一段通过 rel 指定复制的文本`,`默认复制的前置文本`];export{e as js,t as pug};

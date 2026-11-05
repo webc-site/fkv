@@ -1,0 +1,1 @@
+var e=[`Simple popup layer`,`Pop-up box, implemented based on html5 dialog`,`Sure`],t=[`Click me to pop up Box`];export{e as js,t as pug};

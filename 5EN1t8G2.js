@@ -1,0 +1,1 @@
+var e={},t=[`Website Name`,`Link one`,`Link two`,`Please scroll the page up and down to observe the automatic collapse and display effect of the top navigation bar.`];export{e as js,t as pug};

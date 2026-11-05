@@ -1,0 +1,1 @@
+var e={},t=[`bu yerda sarlavhani ko'rsating`,`Matn gradienti va soya effektlarini ta'minlovchi sof uslub komponenti`];export{e as js,t as pug};

@@ -1,0 +1,1 @@
+var e={},t=[`自动`,`这是一个气泡提示`,`左`,`右`,`下`,`上`,`长文本`,`包含长文本和长链接自动折行：https://github.com/webc-site/webc.site/blob/main/src/webc/Pophover.js`];export{e as js,t as pug};

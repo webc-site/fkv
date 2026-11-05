@@ -1,0 +1,1 @@
+var e={},t=[`dangos teitl yma`,`Cydran arddull pur, gan ddarparu graddiant testun ac effeithiau cysgodol`];export{e as js,t as pug};

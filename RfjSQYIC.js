@@ -1,0 +1,1 @@
+var e={},t=[`arată titlul aici`,`Componentă de stil pur, oferind efecte de gradient de text și umbră`];export{e as js,t as pug};

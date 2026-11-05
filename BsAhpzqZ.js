@@ -1,0 +1,1 @@
+var e={},t=[`prikaži naslov ovdje`,`Komponenta čistog stila, pružajući tekstualni gradijent i efekte sjene`];export{e as js,t as pug};

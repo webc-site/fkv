@@ -1,0 +1,1 @@
+var e={},t=[`vis tittel her`,`Ren stilkomponent som gir tekstgradient og skyggeeffekter`];export{e as js,t as pug};

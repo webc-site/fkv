@@ -1,0 +1,1 @@
+var e=[`添加`],t=[`默认按钮`,`主要按钮`,`链接按钮`,`图标按钮 (.BtnC)`];export{e as js,t as pug};

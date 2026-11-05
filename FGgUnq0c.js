@@ -1,0 +1,1 @@
+var e={},t=[`prikaži naslov tukaj`,`Komponenta čistega sloga, ki zagotavlja preliv besedila in učinke sence`];export{e as js,t as pug};

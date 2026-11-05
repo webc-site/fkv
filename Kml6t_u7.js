@@ -1,0 +1,1 @@
+var e={},t=[`näita pealkirja siin`,`Puhas stiilikomponent, mis pakub teksti gradiendi ja varjuefekte`];export{e as js,t as pug};

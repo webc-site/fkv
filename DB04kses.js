@@ -1,0 +1,1 @@
+var e={},t=[`nuduhake judhul kene`,`Komponen gaya murni, nyedhiyakake efek gradien teks lan bayangan`];export{e as js,t as pug};

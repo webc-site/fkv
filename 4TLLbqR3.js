@@ -1,0 +1,1 @@
+var e=[`Enter username`,`Enter password`],t=[`Independent loading (.Ing)`,`Form submission loading mask (.Ing)`,`Account login`,`Username`,`Password`,`Log in`];export{e as js,t as pug};

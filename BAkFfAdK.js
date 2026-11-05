@@ -1,0 +1,1 @@
+var e={},t=[`sýningarheiti hér`,`Hreinn stílhluti, sem gefur textahalla og skuggaáhrif`];export{e as js,t as pug};

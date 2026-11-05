@@ -1,0 +1,1 @@
+var e={},t=[`Näytä otsikko tässä`,`Puhdas tyylikomponentti, joka tarjoaa tekstin kaltevuus- ja varjotehosteita`];export{e as js,t as pug};

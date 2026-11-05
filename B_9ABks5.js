@@ -1,0 +1,1 @@
+var e={},t=[`tregoni titullin këtu`,`Komponent i pastër i stilit, duke siguruar gradient teksti dhe efekte hije`];export{e as js,t as pug};

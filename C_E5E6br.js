@@ -1,0 +1,1 @@
+var e={README:`fkv`,architecture:`ගෘහ නිර්මාණ ශිල්පය`,crates:`Crate`,testing:`පරීක්ෂණය`,performance:`කාර්ය සාධනය`};export{e as default};

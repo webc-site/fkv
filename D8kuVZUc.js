@@ -1,0 +1,1 @@
+var e={},t=[`Automatic`,`This is a bubble tip`,`Left`,`Right`,`Down`,`Superior`,`Long Text`,`Automatically wrap long text and long links: https://github.com/webc-site/webc.site/blob/main/src/webc/Pophover.js`];export{e as js,t as pug};

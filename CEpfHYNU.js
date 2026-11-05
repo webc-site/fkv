@@ -1,0 +1,4 @@
+var e={},t=[`Extreme minimalism`,`WebC.site focuses on building pure, lightweight front-end components with no runtime burden.
+Relying on modern js and css features, it presents infinite possibilities with refined code.`,`A new paradigm for front-end development in the AI ​​era`,`Fully embrace artificial intelligence, a development flow designed for automated coding.
+Code rules are refined over time, allowing the large language model to reduce costs and increase efficiency for you.`,`Elegant visual norms`,`The visual aesthetic design incorporates exquisite micro-motion effects and frosted glass texture.
+White base, simple and pure, helping you create a high-quality application interaction experience.`];export{e as js,t as pug};

@@ -1,0 +1,1 @@
+var e={},t=[`erakutsi izenburua hemen`,`Estilo hutsaren osagaia, testu-gradientea eta itzal-efektuak eskaintzen ditu`];export{e as js,t as pug};
