@@ -112,38 +112,36 @@ fn device_is_4k_local_ssd() {
   let _ = remove_dir_all(&root);
 }
 
-#[test]
-fn engine_smoke_on_nvme() {
+#[compio::test]
+async fn engine_smoke_on_nvme() {
   let root = root("roundtrip");
   if !ensure_nvme(&root) {
     return;
   }
-  pollster::block_on(async {
-    let tbl = TableIdent::new("nvme", 1).unwrap();
-    let io = CompioStore::new(root.clone(), PAGE_SIZE, DEFAULT_PAGES_PER_FILE_SHIFT);
-    let mut store = Store::new(io, PAGE_SIZE, RESTART_INTERVAL);
-    let batch = (0..256)
-      .map(|index| {
-        BatchEntry::upsert(
-          format!("k{index:04}").into_bytes(),
-          vec![b'v'; PAGE_SIZE],
-          1,
-        )
-      })
-      .collect::<Vec<_>>();
-    store.put(&tbl, &batch).await.unwrap();
-    assert_eq!(
-      store.get(&tbl, b"k0128").await.unwrap(),
-      Some(vec![b'v'; PAGE_SIZE])
-    );
-    assert_eq!(store.scan(&tbl, b"", b"", 0).await.unwrap().len(), 256);
+  let tbl = TableIdent::new("nvme", 1).unwrap();
+  let io = CompioStore::new(root.clone(), PAGE_SIZE, DEFAULT_PAGES_PER_FILE_SHIFT);
+  let mut store = Store::new(io, PAGE_SIZE, RESTART_INTERVAL);
+  let batch = (0..256)
+    .map(|index| {
+      BatchEntry::upsert(
+        format!("k{index:04}").into_bytes(),
+        vec![b'v'; PAGE_SIZE],
+        1,
+      )
+    })
+    .collect::<Vec<_>>();
+  store.put(&tbl, &batch).await.unwrap();
+  assert_eq!(
+    store.get(&tbl, b"k0128").await.unwrap(),
+    Some(vec![b'v'; PAGE_SIZE])
+  );
+  assert_eq!(store.scan(&tbl, b"", b"", 0).await.unwrap().len(), 256);
 
-    store.reopen(&tbl).await.unwrap();
-    assert_eq!(
-      store.get(&tbl, b"k0000").await.unwrap(),
-      Some(vec![b'v'; PAGE_SIZE])
-    );
-    assert_eq!(store.scan(&tbl, b"", b"", 0).await.unwrap().len(), 256);
-  });
+  store.reopen(&tbl).await.unwrap();
+  assert_eq!(
+    store.get(&tbl, b"k0000").await.unwrap(),
+    Some(vec![b'v'; PAGE_SIZE])
+  );
+  assert_eq!(store.scan(&tbl, b"", b"", 0).await.unwrap().len(), 256);
   remove_dir_all(&root).unwrap();
 }
