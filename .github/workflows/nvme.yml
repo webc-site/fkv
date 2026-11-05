@@ -11,7 +11,7 @@ on:
     - cron: "0 3 * * 1"
   push:
     paths:
-      - "crate/test/fkv_nvme_tests/**"
+      - "crate/test/fkv_nvme_test/**"
       - ".github/workflows/nvme.yml"
 
 permissions:
