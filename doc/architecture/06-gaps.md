@@ -20,6 +20,11 @@
 
 ## 恢复
 
+- V5 崩溃恢复已有确定性闭环（详见 `05-persistence-and-recovery.md`）：
+  `fkv_io_sim` 穷举每条 op log 的逻辑 op 边界，真实 compio 后端穷举命名
+  kill point × 命中序号；失败信息含 `seed` / `kill_point` / `op_index` 与
+  复现命令，前缀检查器另有反向验证。未覆盖 24h 持续 fuzz、指令级随机 kill
+  point、sim 目录项语义与 `CloudManifest:Put`。
 - 撕裂尾覆盖与 GetMapper 分配器重建按当前实现语义处理，不承诺与其它实现
   完全等价。
 - StandbyReplica 懒打开会先 `sync_standby_partition` 追一次 master；这是有意

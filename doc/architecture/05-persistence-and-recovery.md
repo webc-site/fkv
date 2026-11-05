@@ -68,8 +68,39 @@ main 与 branch manifest 的 torn tail 在本地后端都会按最后一个完�
 `restart()` 只保留 durable 视图，并可记录完整操作日志。
 
 当前已有针对 torn tail、compact/truncate/clean-expired 提交失败、OOM 回滚、
-term 栅栏的回归测试；**尚无**完整的 24h / crash fuzz / 随机 kill point 闭环。
-`mapping` / `store` 类 fixture 也没有 C++ 字节实现，两者都不能算 V5/V2 已闭环。
+term 栅栏的回归测试。V5 的确定性闭环已落地（gap-04）：
+
+- **op 边界穷举**：`fkv_io_sim/tests/op_log_replay.rs` 对 6 条固定 op log
+  （纯写、写删、TTL、truncate、archive+branch、reopen 交错）在每个逻辑 op
+  索引 `kill_point = 0..=len` 处 `crash() + restart()`，重开后与同前缀干净
+  运行的规范化 dump 逐字节比较；branch 场景还逐边界校验 `open_branch` 内容。
+- **intra-op 命名 kill point**：`fkv_store/tests/crash_failpoint_invariants.rs`
+  在真实 compio 后端用子进程对 7 个 kill 名字 × 命中序号（`name@N!kill`，
+  默认 `N <= 6`，`FKV_CRASH_HIT_MAX` 可调）逐个 `abort()`；父进程 reopen 后
+  校验可见状态等于某个干净前缀，并确认 attach 清掉了残留 `*.tmp`。另有
+  `SyncData` / `WriteSegments` / `WriteFile:SyncFail` 三个 fail-only 点作为
+  反向哨兵，断言它们不会被 `!kill` 误触发。
+- **失败可复现**：两条用例的失败信息都包含 `seed`、`kill_point`（注入名 +
+  命中序号）、`op_index`；intra-op 用例还打印可直接粘贴的子进程复现命令
+  （`FKV_CRASH_SEED` / `FKV_CRASH_ROOT` / `FKV_CRASH_PREFIX` /
+  `FKV_FAILPOINT`）与整条用例的 nextest 复现命令。默认 seed 固定，
+  `FKV_CRASH_SEED` 可覆盖并实际改变写入 value 的字节。
+- **反向验证**：`crash_clean_prefix_checker_rejects_bad_state` 把测试内构造的
+  半值、值尾多字节、缺键、多键、顺序颠倒等坏 KV 喂给生产路径真正使用的
+  `check_clean_prefix`，断言其返回 `Err`；同时用合法前缀做正向对照，证明
+  检查器既不是恒真也不是恒错，不依赖任何伪造的生产缺陷。
+
+仍未闭环的边界：
+
+- 没有 24h 持续 fuzz，也没有指令级随机 kill point：覆盖集合仍是**命名**
+  kill point × 命中序号，intra-op 默认只枚举到第 6 次命中。
+- sim 无目录项持久化，`SyncDir` / `AtomicWriteFile:SyncDir` /
+  `AppendManifest:SyncFail` 在 sim 侧结构性不可达；`CloudStore` 的
+  `CloudManifest:Put` 未纳入本闭环。
+- 进程 `abort()` 不模拟内核页缓存丢失或真实掉电，撕裂与目录项回退仍由后端
+  实现语义约束。
+- 引擎级 V3（Rust/C++ 同 op log 差分）未执行，`mapping` / `store` 类 fixture
+  也没有 C++ 字节实现，因此 V5 闭环不等于 V5/V2 与 C++ 完全等价。
 
 ## term
 
