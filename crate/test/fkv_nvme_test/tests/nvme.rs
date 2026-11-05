@@ -83,6 +83,10 @@ fn ensure_nvme(root: &Path) -> bool {
         let rotational = command_stdout("cat", &[&format!("/sys/block/{dev}/queue/rotational")]);
         match rotational.as_deref() {
           Some("0") => {}
+          // Blacksmith / 云 VM 的 virtio 盘常把 rotational 报成 1，但底层是
+          // 本地 SSD。功能测试接受 vd*/xvd*，性能门槛（perf_gate.sh）仍要求
+          // rotational=0，不会把虚拟盘当成性能基线。
+          Some("1") if dev.starts_with("vd") || dev.starts_with("xvd") => {}
           Some(other) => reason = Some(format!("{dev} rotational={other}")),
           None => reason = Some(format!("无法读取 {dev} 的 rotational")),
         }

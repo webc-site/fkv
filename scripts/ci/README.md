@@ -12,7 +12,9 @@ CI 与本地共用的原生依赖 / RustFS 脚本，不依赖 Docker。
 
 runner 要求与变量：
 
-- 4 KiB 页、本地非 rotational 磁盘；测试目录默认 `$GITHUB_WORKSPACE/.nvme-data`。
+- 4 KiB 页、本地磁盘；Blacksmith 等 VM 的 `vd*`/`xvd*` 即使 `rotational=1`
+  也按本地 SSD 接受（仅功能测试；性能门槛仍要求 `rotational=0`）。
+  测试目录默认 `$GITHUB_WORKSPACE/.nvme-data`。
 - 自托管 / 其他标签：设置仓库变量 `FKV_NVME_RUNNER` 覆盖
   `blacksmith-4vcpu-ubuntu-2604`，设置 `FKV_NVME_ROOT` 指定挂载点。
 - workflow 固定 `FKV_REQUIRE_NVME=1`：设备不符会失败，不会把 skip 当通过。
