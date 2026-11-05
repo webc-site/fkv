@@ -31,7 +31,7 @@ jobs:
           tool: nextest
       # nextest archive 输出 .tar.zst（zstd），比 zip/gzip 快且体积小。
       - run: |
-          cargo nextest archive -p fkv_nvme_tests \
+          cargo nextest archive -p fkv_nvme_test \
             --archive-file fkv-nvme-tests.tar.zst
       - uses: actions/upload-artifact@v7
         with:

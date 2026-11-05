@@ -1084,7 +1084,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fkv_nvme_tests"
+name = "fkv_nvme_test"
 version = "0.1.0"
 dependencies = [
  "fkv_btree",

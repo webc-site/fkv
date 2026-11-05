@@ -4,3 +4,4 @@
 # fkv_runtime 及其生产依赖 fkv_cloud / fkv_task_prewarm / fkv_object_s3 /
 # fkv_io_mem 已从顶层交付物可达，对应白名单行随之删除。
 fkv_io_sim	故障注入后端
+fkv_nvme_test	仅 NVMe 隔离测试（publish=false，不参与生产依赖图）
