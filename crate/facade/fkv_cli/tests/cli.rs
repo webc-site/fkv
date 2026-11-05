@@ -1,13 +1,21 @@
 use std::{
   fs::write,
-  path::Path,
+  path::{Path, PathBuf},
   process::{Command, Output},
 };
 
 use fkv_testkit::TempRoot;
 
+/// `cargo nextest archive` 在另一台机器上执行时，`CARGO_BIN_EXE_*` 里的
+/// 构建机绝对路径不可用；nextest 会额外注入 `NEXTEST_BIN_EXE_*`，优先使用它。
+fn fkv_bin() -> PathBuf {
+  std::env::var_os("NEXTEST_BIN_EXE_fkv")
+    .map(PathBuf::from)
+    .unwrap_or_else(|| PathBuf::from(env!("CARGO_BIN_EXE_fkv")))
+}
+
 fn run(root: &Path, args: &[&str]) -> Output {
-  Command::new(env!("CARGO_BIN_EXE_fkv"))
+  Command::new(fkv_bin())
     .arg("--root")
     .arg(root)
     .args(args)
