@@ -41,4 +41,4 @@ jobs:
           test "$page" = 4096
 
       - name: nextest（workspace）
-        run: cargo nextest run --failure-output immediate --no-tests=pass
+        run: cargo nextest run --exclude fkv_nvme_tests --failure-output immediate --no-tests=pass

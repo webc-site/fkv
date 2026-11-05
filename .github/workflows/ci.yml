@@ -47,7 +47,8 @@ jobs:
       # rust-cache 只按 Cargo.lock 复用 target；这两个包的测试对 manifest 对齐
       # 敏感，强制从当前源码重建，避免缓存里旧对象造成跨机器结果不一致。
       - run: cargo clean -p fkv_manifest -p fkv_task_reopen
-      - run: cargo nextest run --workspace --all-features --no-tests=pass
+      # NVMe 专用测试由 nvme.yml 单独构建/运行，避免重复执行。
+      - run: cargo nextest run --workspace --exclude fkv_nvme_tests --all-features --no-tests=pass
 
   s3:
     name: s3-rustfs-${{ matrix.os }}

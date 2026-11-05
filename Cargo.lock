@@ -1084,6 +1084,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "fkv_nvme_tests"
+version = "0.1.0"
+dependencies = [
+ "fkv_btree",
+ "fkv_io_compio",
+ "fkv_store",
+ "fkv_types",
+ "pollster",
+]
+
+[[package]]
 name = "fkv_object"
 version = "0.1.0"
 dependencies = [
