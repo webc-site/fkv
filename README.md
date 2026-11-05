@@ -35,7 +35,8 @@ docker 缺失时通过 `brew install --cask orbstack` + `orb start` 启动。
   避免把有限的 Blacksmith 分钟用于编译；macOS 与 RustFS S3 集成测试仍在各自原生
   runner 上编译运行。
 - `linux-test.yml`：夜间与手动的 Ubuntu 24.04 LTS 回归，断言 4 KiB 页。
-- `release.yml`：main 变更后构建 `fkv_bench` x86_64 / aarch64，上传滚动的 `perf-latest` release。
+- `release.yml`：仅在推送 `v*` tag（或手动 dispatch）时构建 `fkv_bench`
+  x86_64 / aarch64，上传滚动的 `perf-latest` release。
 - `web.yml`：构建并发布多语言文档站点。
 
 CI 全程原生执行，不依赖 Docker。依赖安装与 RustFS 生命周期由

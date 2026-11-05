@@ -2,14 +2,8 @@ name: release
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "crate/**"
-      - "Cargo.toml"
-      - "Cargo.lock"
-      - "rust-toolchain.toml"
-      - ".github/workflows/release.yml"
+    tags:
+      - "v*"
   workflow_dispatch:
 
 concurrency:
