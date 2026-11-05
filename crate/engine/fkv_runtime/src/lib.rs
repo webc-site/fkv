@@ -4227,7 +4227,7 @@ mod attach_view_tests {
           runtime.shutdown().await.unwrap();
           return;
         }
-        let _ = fut.await;
+        drop(fut);
         runtime.shutdown().await.unwrap();
       }
       panic!("detach 在 32 次尝试内都同步完成，无法构造在途回执");
@@ -4377,7 +4377,7 @@ mod attach_view_tests {
           runtime.shutdown().await.unwrap();
           return;
         }
-        let _ = fut.await;
+        drop(fut);
         runtime.shutdown().await.unwrap();
       }
       panic!("请求在 32 次尝试内都同步完成，无法构造在途回执");
