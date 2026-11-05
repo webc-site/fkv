@@ -5,6 +5,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 # 所有编译与测试都在 GitHub 托管 runner 上原生执行。
 #
 # 不把测试二进制作为 artifact 传给 Blacksmith：全量 nextest archive 约 4.9 GB，

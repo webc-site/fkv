@@ -14,6 +14,10 @@ on:
       - "crate/test/fkv_nvme_test/**"
       - ".github/workflows/nvme.yml"
 
+concurrency:
+  group: nvme-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
