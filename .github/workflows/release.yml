@@ -1,0 +1,66 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "crate/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - ".github/workflows/release.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: build-${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: blacksmith-4vcpu-ubuntu-2604
+            target: x86_64-unknown-linux-gnu
+          - arch: aarch64
+            runner: blacksmith-4vcpu-ubuntu-2604-arm
+            target: aarch64-unknown-linux-gnu
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - name: build bench
+        run: cargo build --release -p fkv_bench --target ${{ matrix.target }}
+      - name: package
+        run: |
+          strip "target/${{ matrix.target }}/release/fkv_bench"
+          cp "target/${{ matrix.target }}/release/fkv_bench" "fkv_bench-linux-${{ matrix.arch }}"
+          printf '%s\n' "${{ github.sha }}" > commit.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: fkv-bench-${{ matrix.arch }}
+          path: fkv_bench-linux-${{ matrix.arch }}
+          retention-days: 7
+      - name: upload rolling release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+        run: |
+          gh release view perf-latest >/dev/null 2>&1 ||
+            gh release create perf-latest --title "perf-latest" \
+              --notes "Rolling benchmark binaries from main" --latest=false || true
+          gh release upload perf-latest "fkv_bench-linux-${{ matrix.arch }}" --clobber
+          # commit.txt 是共享资产：只由一个架构上传，避免两个 matrix job 并发
+          # 创建同名 asset 触发 HTTP 422 `ReleaseAsset.name already exists`。
+          if [ "${{ matrix.arch }}" = "x86_64" ]; then
+            gh release upload perf-latest commit.txt --clobber
+          fi

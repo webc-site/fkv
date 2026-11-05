@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/hr/README.md) : Komponenta posta na blogu
+[BoxX](../../src/webc/BoxX/i18n/hr/README.md) : Stvorite i prikažite skočni sloj s gumbom za zatvaranje
+[Code](../../src/webc/Code/i18n/hr/README.md) : gumb koda
+[Copy](../../src/webc/Copy/i18n/hr/README.md) : Kopiraj tekst u međuspremnik
+[Edit](../../src/webc/Edit/i18n/hr/README.md) : gumb za uređivanje
+[HtmDemo](../../src/webc/HtmDemo/i18n/hr/README.md) : Otklanjanje pogrešaka u HTML i JS kodu na mreži
+[I18n](../../src/webc/I18n/i18n/hr/README.md) : Gumbi i skočni prozori za promjenu jezika sučelja
+[Nav](../../src/webc/Nav/i18n/hr/README.md) : Gornja navigacijska traka koja se automatski sažima ili proširuje kada se stranica pomiče
+[NavL](../../src/webc/NavL/i18n/hr/README.md) : Automatski promijeni navigacijski izbornik i gumb za povratak
+[NavMenu](../../src/webc/NavMenu/i18n/hr/README.md) : Navigacijski izbornik prilagođen različitim veličinama zaslona
+[SelectBtn](../../src/webc/SelectBtn/i18n/hr/README.md) : Kombinacija padajućeg okvira za odabir i gumba
+[Side](../../src/webc/Side/i18n/hr/README.md) : Ploče ladice koje klize sa strane
+[TabSelect](../../src/webc/TabSelect/i18n/hr/README.md) : Kartica s odabirom s padajućeg izbornika
+[Toc](../../src/webc/Toc/i18n/hr/README.md) : Komponenta navigacije imenika
+[Btn](../../src/webc/Btn/i18n/hr/README.md) : Obični gumb i gumb s okruglom ikonom
+[Card](../../src/webc/Card/i18n/hr/README.md) : Kartica kapsule sa strelicom desno prikazanom u ovjesu
+[H1Txt](../../src/webc/H1Txt/i18n/hr/README.md) : Naslov i opis teksture
+[Ing](../../src/webc/Ing/i18n/hr/README.md) : Indikator statusa učitavanja ili obrade
+[Kv](../../src/webc/Kv/i18n/hr/README.md) : par ključeva vrijednosti
+[Lg](../../src/webc/Lg/i18n/hr/README.md) : Pozadina od mat stakla i efekt isticanja rubova
+[MdCss](../../src/webc/MdCss/i18n/hr/README.md) : Stilovi tipografije optimizirani za iskustvo čitanja
+[NavALi](../../src/webc/NavALi/i18n/hr/README.md) : Stil popisa veza navigacijske trake
+[O](../../src/webc/O/i18n/hr/README.md) : Nacrtajte logotip šuplje točke ispred elementa
+[Toast](../../src/webc/Toast/i18n/hr/README.md) : Promptni skočni prozor na rubu stranice
+[404](../../src/webc/404/i18n/hr/README.md) : Put ne postoji stranica s porukom o pogrešci
+[Back](../../src/webc/Back/i18n/hr/README.md) : gumb za povratak
+[Box](../../src/webc/Box/i18n/hr/README.md) : Stvorite i prikažite skočni sloj
+[CardLi](../../src/webc/CardLi/i18n/hr/README.md) : Asinkrono učitavanje i prikaz popisa kartica
+[Md](../../src/webc/Md/i18n/hr/README.md) : Sigurno raščlanite i renderirajte Markdown tekst u HTML.
+[Pophover](../../src/webc/Pophover/i18n/hr/README.md) : plutajući oblačić prompt
+[Scroll](../../src/webc/Scroll/i18n/hr/README.md) : virtualna traka za pomicanje
+[Select](../../src/webc/Select/i18n/hr/README.md) : Padajući odabir, širina se prilagođava trenutnoj stavci
+[Tab](../../src/webc/Tab/i18n/hr/README.md) : Kartice koje se mogu mijenjati
+[fkv](../hr/doc/README.md)
+[Arhitektura](../hr/doc/architecture.md)
+[Crate](../hr/doc/crates.md)
+[test](../hr/doc/testing.md)
+[Performanse](../hr/doc/performance.md)

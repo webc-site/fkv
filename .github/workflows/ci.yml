@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: test-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          # macOS 专属 buffered IO / OS 页大小 16 KiB 路径需要独立回归。
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      # 幂等安装 Linux 构建依赖（clang/cmake/liburing 等）；非 Linux 自动 skip。
+      - run: bash scripts/ci/install.sh
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: ./tool/orphan.sh
+      # rust-cache 只按 Cargo.lock 复用 target；这两个包的测试对 manifest 对齐
+      # 敏感，强制从当前源码重建，避免缓存里旧对象造成跨机器结果不一致。
+      - run: cargo clean -p fkv_manifest -p fkv_task_reopen
+      - run: cargo nextest run --workspace --all-features --no-tests=pass
+
+  s3:
+    name: s3-rustfs-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      # 原生依赖 + 原生 RustFS；脚本负责下载、启动，并把 EKV_S3_* 写入 $GITHUB_ENV。
+      - run: bash scripts/ci/install.sh
+      - run: bash scripts/ci/s3.sh start
+      - name: S3 integration tests
+        run: cargo nextest run -p fkv_cloud -p fkv_object_s3 -p fkv_runtime --all-features --no-tests=pass
+      - name: Stop RustFS
+        if: always()
+        run: bash scripts/ci/s3.sh stop

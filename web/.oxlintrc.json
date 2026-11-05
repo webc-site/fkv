@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": ["**/I18N.js"],
+      "rules": {
+        "unicorn/no-empty-file": "off"
+      }
+    }
+  ]
+}

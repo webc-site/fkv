@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/ceb/README.md) : Ang bahin sa post sa blog
+[BoxX](../../src/webc/BoxX/i18n/ceb/README.md) : Paghimo ug pagpakita og popup layer nga adunay close button
+[Code](../../src/webc/Code/i18n/ceb/README.md) : buton sa code
+[Copy](../../src/webc/Copy/i18n/ceb/README.md) : Kopyaha ang teksto sa clipboard
+[Edit](../../src/webc/Edit/i18n/ceb/README.md) : buton sa pag-edit
+[HtmDemo](../../src/webc/HtmDemo/i18n/ceb/README.md) : Pag-debug sa HTML ug JS code online
+[I18n](../../src/webc/I18n/i18n/ceb/README.md) : Mga buton ug mga pop-up nga bintana para sa pagbalhin sa mga pinulongan sa interface
+[Nav](../../src/webc/Nav/i18n/ceb/README.md) : Ibabaw nga navigation bar nga awtomatik nga mo-collapse o molapad kung mag-scroll ang panid
+[NavL](../../src/webc/NavL/i18n/ceb/README.md) : Awtomatikong ibalhin ang menu sa nabigasyon ug buton sa pagbalik
+[NavMenu](../../src/webc/NavMenu/i18n/ceb/README.md) : Ang menu sa nabigasyon gipahiangay sa lainlaing gidak-on sa screen
+[SelectBtn](../../src/webc/SelectBtn/i18n/ceb/README.md) : Kombinasyon sa drop-down nga kahon sa pagpili ug buton
+[Side](../../src/webc/Side/i18n/ceb/README.md) : Mga panel sa drawer nga nag-slide gikan sa kilid
+[TabSelect](../../src/webc/TabSelect/i18n/ceb/README.md) : Tab page nga adunay drop-down nga pagpili
+[Toc](../../src/webc/Toc/i18n/ceb/README.md) : Direktoryo nga Navigation Component
+[Btn](../../src/webc/Btn/i18n/ceb/README.md) : Ordinaryo nga buton ug lingin nga buton sa icon
+[Card](../../src/webc/Card/i18n/ceb/README.md) : Capsule card nga adunay tuo nga pana nga gipakita sa suspension
+[H1Txt](../../src/webc/H1Txt/i18n/ceb/README.md) : Titulo ug deskripsyon sa texture
+[Ing](../../src/webc/Ing/i18n/ceb/README.md) : Timailhan sa loading o pagproseso sa kahimtang
+[Kv](../../src/webc/Kv/i18n/ceb/README.md) : key nga pares nga bili
+[Lg](../../src/webc/Lg/i18n/ceb/README.md) : Frosted glass nga background ug edge highlight effect
+[MdCss](../../src/webc/MdCss/i18n/ceb/README.md) : Ang mga istilo sa typography na-optimize alang sa kasinatian sa pagbasa
+[NavALi](../../src/webc/NavALi/i18n/ceb/README.md) : Estilo sa listahan sa link sa navigation bar
+[O](../../src/webc/O/i18n/ceb/README.md) : Pagdrowing og hollow dot logo atubangan sa elemento
+[Toast](../../src/webc/Toast/i18n/ceb/README.md) : Pag-aghat sa pop-up nga bintana sa kilid sa panid
+[404](../../src/webc/404/i18n/ceb/README.md) : Ang dalan wala maglungtad nga panid sa mensahe sa sayup
+[Back](../../src/webc/Back/i18n/ceb/README.md) : back button
+[Box](../../src/webc/Box/i18n/ceb/README.md) : Paghimo ug ipakita ang popup layer
+[CardLi](../../src/webc/CardLi/i18n/ceb/README.md) : I-load ug ipakita ang lista sa kard nga asynchronous
+[Md](../../src/webc/Md/i18n/ceb/README.md) : Luwas nga i-parse ug i-render ang Markdown nga teksto sa HTML.
+[Pophover](../../src/webc/Pophover/i18n/ceb/README.md) : naglutaw nga bubble prompt
+[Scroll](../../src/webc/Scroll/i18n/ceb/README.md) : virtual nga scroll bar
+[Select](../../src/webc/Select/i18n/ceb/README.md) : Ang pagpili sa drop-down, ang gilapdon mohaum sa kasamtangan nga butang
+[Tab](../../src/webc/Tab/i18n/ceb/README.md) : Mabalhin nga mga tab
+[fkv](../ceb/doc/README.md)
+[Arkitektura](../ceb/doc/architecture.md)
+[Crate](../ceb/doc/crates.md)
+[pagsulay](../ceb/doc/testing.md)
+[Performance](../ceb/doc/performance.md)

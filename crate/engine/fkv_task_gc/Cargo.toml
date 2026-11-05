@@ -1,0 +1,26 @@
+[package]
+name = "fkv_task_gc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "FileGc / LocalGc 任务编排"
+
+[dependencies]
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+fkv_io = { version = "0.1.0", path = "../../io/fkv_io" }
+fkv_task_reopen = { version = "0.1.0", path = "../fkv_task_reopen" }
+fkv_mapping = { version = "0.1.0", path = "../../core/fkv_mapping" }
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+gxhash = "3.5.0"
+fkv_task_read = { version = "0.1.0", path = "../fkv_task_read" }
+
+[dev-dependencies]
+compio = { version = "0.19.2", features = ["fs", "io", "macros", "time"] }
+fkv_io_compio = { path = "../../io/fkv_io_compio" }
+fkv_io_mem = { path = "../../io/fkv_io_mem" }
+fkv_manifest = { path = "../../format/fkv_manifest" }
+fkv_testkit = { path = "../../facade/fkv_testkit" }
+pollster = "1.0.1"
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

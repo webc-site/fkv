@@ -1,0 +1,168 @@
+main.demo.Lg
+  button.Btn.Main.open-btn
+  c-side
+    div.menu-panel
+      div.user-profile
+        div.avatar
+        div.info
+          h4
+            c-t userName
+          p
+            c-t userTitle
+      div.stats-card
+        div.stat-item
+          span.num 2.4k
+          span.txt
+            c-t statFollowers
+        div.stat-item
+          span.num 186
+          span.txt
+            c-t statFollowing
+        div.stat-item
+          span.num 42
+          span.txt
+            c-t statProjects
+      div.group-title
+        c-t groupCore
+      nav.nav-list
+        a.nav-item.home(href="#")
+          span.icon
+          span.label
+            c-t navHome
+        a.nav-item.profile.active(href="#")
+          span.icon
+          span.label
+            c-t navProfile
+        a.nav-item.messages(href="#")
+          span.icon
+          span.label
+            c-t navMessages
+        a.nav-item.notifications(href="#")
+          span.icon
+          span.label
+            c-t navNotifications
+      div.group-title
+        c-t groupData
+      nav.nav-list
+        a.nav-item.analytics(href="#")
+          span.icon
+          span.label
+            c-t navAnalytics
+        a.nav-item.cloud(href="#")
+          span.icon
+          span.label
+            c-t navCloud
+      div.group-title
+        c-t groupCollaboration
+      nav.nav-list
+        a.nav-item.team(href="#")
+          span.icon
+          span.label
+            c-t navTeam
+        a.nav-item.tasks(href="#")
+          span.icon
+          span.label
+            c-t navTasks
+      div.group-title
+        c-t groupSystem
+      nav.nav-list
+        a.nav-item.settings(href="#")
+          span.icon
+          span.label
+            c-t navSettings
+        a.nav-item.privacy(href="#")
+          span.icon
+          span.label
+            c-t navPrivacy
+        a.nav-item.help(href="#")
+          span.icon
+          span.label
+            c-t navHelp
+      div.widget-card
+        div.widget-header
+          span.w-title
+            c-t widgetTitle
+          span.w-val 65%
+        div.progress-bar
+          div.progress-fill
+      div.widget-card.tasks-widget
+        div.widget-header
+          span.w-title
+            c-t widgetTasks
+        div.task-list
+          label.task-item
+            input(type="checkbox", checked)
+            span.task-text
+              c-t task1
+          label.task-item
+            input(type="checkbox", checked)
+            span.task-text
+              c-t task2
+          label.task-item
+            input(type="checkbox")
+            span.task-text
+              c-t task3
+          label.task-item
+            input(type="checkbox")
+            span.task-text
+              c-t task4
+          label.task-item
+            input(type="checkbox")
+            span.task-text
+              c-t task5
+      div.widget-card.online-widget
+        div.widget-header
+          span.w-title
+            c-t widgetOnline
+        div.member-list
+          div.member-item
+            div.member-info
+              span.name
+                c-t member1
+              span.status.online
+                c-t statusOnline
+            span.member-tag.design
+              c-t tagDesign
+          div.member-item
+            div.member-info
+              span.name
+                c-t member2
+              span.status.busy
+                c-t statusBusy
+            span.member-tag.dev
+              c-t tagDev
+          div.member-item
+            div.member-info
+              span.name
+                c-t member3
+              span.status.offline
+                c-t statusOffline
+            span.member-tag.pm
+              c-t tagPm
+      div.widget-card.files-widget
+        div.widget-header
+          span.w-title
+            c-t widgetFiles
+        div.file-list
+          a.file-item(href="#")
+            span.file-icon.pdf
+            span.file-name
+              c-t file1
+          a.file-item(href="#")
+            span.file-icon.doc
+            span.file-name
+              c-t file2
+          a.file-item(href="#")
+            span.file-icon.video
+            span.file-name
+              c-t file3
+      div.widget-card.upgrade-card
+        div.upgrade-title
+          c-t upgradeTitle
+        div.upgrade-desc
+          c-t upgradeDesc
+        button.upgrade-link-btn
+          c-t upgradeBtn
+      div.menu-footer
+        button.Btn.logout-btn
+          c-t logout

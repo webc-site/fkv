@@ -1,0 +1,9 @@
+css: puhdas tyyli
+base: Peruskomponentit
+webc: Komposiittikomponentti
+js: Skriptikirjasto
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: ponnahdusikkuna
+  ^Nav(?![a-z]): navigointi
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kortti

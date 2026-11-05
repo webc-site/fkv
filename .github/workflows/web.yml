@@ -1,0 +1,56 @@
+name: web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - ".github/workflows/web.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: deploy-pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: build
+        run: |
+          cd web
+          bun install
+          CDN=/fkv/ bun run build
+
+      - name: publish gh-pages
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+        run: |
+          set -e
+          REPO="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$REPO" gh-pages >/dev/null 2>&1; then
+            git clone --branch gh-pages --depth 1 "$REPO" site
+          else
+            mkdir site
+            git -C site init
+            git -C site remote add origin "$REPO"
+            git -C site checkout -b gh-pages
+          fi
+          rm -rf site/assets site/index.html site/404.html site/_.css site/WebC.site.js
+          cp -r web/dist/dist/. site/
+          touch site/.nojekyll
+          git -C site add -A
+          if git -C site diff --cached --quiet; then
+            echo "web 资源无变化"
+            exit 0
+          fi
+          git -C site -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "web: rebuild site"
+          git -C site push origin HEAD:gh-pages

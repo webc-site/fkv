@@ -1,0 +1,427 @@
+@layer
+  .Md
+    text-autospace normal
+    padding-left 22px
+    display flex
+    flex-direction column
+    font-variation-settings 'wght' 360
+    font-weight 360
+    gap 12px
+    align-items flex-start
+    word-wrap break-word
+    transition opacity 0.15s
+
+    &.Ing
+      opacity 0.4
+      pointer-events none
+
+    p
+      margin 0
+
+    h1
+      font-size 28px
+      line-height 1.3
+      text-align center
+      width 100%
+
+    h2, h3, h4, h5
+      align-items center
+      display flex
+      gap 6px
+
+      &:before
+        background currentColor
+        content ''
+        display inline-block
+        flex-shrink 0
+        mask-image url('./svg/h.svg')
+        mask-position center
+        mask-repeat no-repeat
+        mask-size contain
+        opacity 0.8
+        transition all 0.25s cubic-bezier(0.4, 0, 0.2, 1)
+
+      &:has(a:hover):before, a:hover > &:before
+        opacity 1
+        transform scale(1.2)
+
+    h2
+      font-size 24px
+      line-height 1.35
+      margin-left -22px
+
+      &:before
+        height 16px
+        width 16px
+
+    h3
+      font-size 20px
+      line-height 1.4
+      margin-left -20px
+
+      &:before
+        height 14px
+        width 14px
+
+    h4
+      font-size 18px
+      line-height 1.4
+      margin-left -18px
+
+      &:before
+        height 12px
+        width 12px
+
+    h5
+      font-size 16px
+      margin-left -16px
+
+      &:before
+        height 10px
+        width 10px
+
+    h6
+      font-size 14px
+
+    a
+      color inherit
+      font-variation-settings 'wght' 400
+      font-weight 400
+      position relative
+      text-decoration none
+      transition all 0.2s ease
+      z-index 1
+
+      &::after
+        background currentColor
+        bottom -4px
+        content ''
+        height 1px
+        left 0
+        mask-image url('./svg/line.svg')
+        mask-size 100% 100%
+        position absolute
+        transition all 0.25s ease
+        width 100%
+        z-index -1
+
+      &:hover
+        color #06f
+        font-variation-settings 'wght' 600
+        font-weight 600
+
+        &::after
+          background #ffe00099
+          bottom -8px
+          height 12px
+          mask-image none
+
+    ul, ol
+      margin 0
+      position relative
+
+      ul, ol
+        margin 4px 0 0
+
+    ol
+      margin-left 0
+
+    ul
+      margin-left 20px
+
+    ul>li, ol>li
+      display block
+      margin 8px 0 0
+      position relative
+
+    li > ol
+      margin-left 24px
+
+    ul>li>ul, ol>li>ul, ul>li>ol, ol>li>ol
+      width 100%
+
+    ul>li
+      &:before
+        background currentColor
+        content ''
+        height 12px
+        left -21px
+        mask-image url('./svg/arrow.svg')
+        mask-position center
+        mask-repeat no-repeat
+        mask-size contain
+        opacity 0.6
+        position absolute
+        top 8px
+        width 12px
+
+      &:has(>input[type='checkbox']):before
+        display none
+
+      &>input[type='checkbox']
+        left -25px
+        margin 0
+        position absolute
+        top 5px
+
+    ol
+      counter-reset index
+
+      &>li:before
+        align-items center
+        background #00000008
+        border 1px solid #00000014
+        border-radius 10px
+        content counters(index, '.')
+        counter-increment index
+        display inline-block
+        font-size 9px
+        font-weight 600
+        height 18px
+        margin-right 10px
+        min-width 18px
+        opacity 0.8
+        padding 0 5px
+        text-align center
+        vertical-align 3px
+        white-space nowrap
+
+    img
+      box-shadow 0 0 3px #00000014 inset
+      display block
+      margin 6px auto
+      max-width 100%
+
+    code
+      background linear-gradient(180deg, #f5f5f5 0, #fff 100%)
+      border 1px solid #ccc
+      border-radius 6px
+      box-shadow inset 0 1px 2px #0000000f
+      color #222
+      font-size 15px
+      margin 0 4px
+      padding 3px 6px
+      vertical-align 0
+
+      &:first-child
+        margin-left 0
+
+    hr
+      background url('./svg/hline.svg') repeat-x left center / 512px
+      width 100%
+      border none
+      height 1px
+      margin 16px 0
+      opacity 0.5
+
+      + h1, + h2, + h3, + h4, + h5, + h6
+        margin-top 0
+
+    h1, h2, h3, h4, h5, h6
+      color #111
+      font-variation-settings 'wght' 250
+      font-weight 250
+      margin-top 8px
+      text-shadow 0 -0.5px 0.5px #0002
+      background linear-gradient(45deg, #333 0, #666 100%)
+      background-clip text
+
+      a
+        color inherit
+        font-variation-settings inherit
+        font-weight inherit
+
+        &::after
+          display none
+
+      &+p
+        margin-top 8px
+
+    pre
+      background linear-gradient(180deg, #fdfdfd 0, #f6f8fa 100%)
+      border 1px solid #0000000f
+      border-radius 12px
+      box-shadow 0 4px 20px -5px #00000005, inset 0 1px 2px #fffc
+      box-sizing border-box
+      margin 8px 0 0
+      overflow auto
+      padding 16px 20px
+      position relative
+
+      code
+        background transparent
+        border 0
+        box-shadow none
+        color inherit
+        display block
+        line-height 1.5
+        margin 0
+        padding 0
+        vertical-align baseline
+
+    table
+      backdrop-filter blur(10px)
+      background #fffd
+      border 1px solid #0000000f
+      border-collapse separate
+      border-radius 12px
+      border-spacing 0
+      box-shadow 0 4px 30px #00000008
+      margin 0
+      overflow hidden
+      width 100%
+
+      th, td
+        border-bottom 1px solid #eee
+        border-right 1px solid #eee
+        padding 14px 18px
+        text-align left
+        transition background-color 0.2s ease
+
+        @media (max-width 600px)
+          font-size 12px
+
+      tbody tr:hover td
+        background-color #00000005
+
+      th
+        background-color #00000005
+        color #333
+        font-weight 600
+
+      th.center, td.center
+        text-align center
+
+      th.right, td.right
+        text-align right
+
+      th.left, td.left
+        text-align left
+
+      th:last-child, td:last-child
+        border-right none
+
+      tr:last-child td
+        border-bottom none
+
+      thead
+        background linear-gradient(180deg, #00000001, #00000004)
+
+    blockquote
+      margin 0
+      position relative
+
+      &:not(.q)
+        padding 4px 0 4px 32px
+
+        p
+          line-height 1.6
+          margin 4px 0
+
+        &:before
+          background url('./svg/quote.svg') no-repeat left center / contain
+          content ''
+          height 20px
+          left 0
+          position absolute
+          top 6px
+          width 20px
+
+      &.q
+        backdrop-filter blur(20px) saturate(180%)
+        border-radius 12px
+        box-shadow 0 4px 20px -2px #00000005
+        padding 16px 20px 16px 48px
+
+        .qt
+          font-size 0
+          left 18px
+          margin 0
+          padding 0
+          position absolute
+          top 21px
+
+          .qi
+            display block
+            flex-shrink 0
+            height 20px
+            mask-position center
+            mask-repeat no-repeat
+            mask-size contain
+            width 20px
+
+        p
+          margin 0
+
+          &:not(:last-child)
+            margin-bottom 8px
+
+        &.note
+          background #3b82f60a
+          border 1px solid #3b82f626
+
+          .qi
+            background #3b82f6
+            mask-image url('./svg/note.svg')
+
+        &.tip
+          background #10b98108
+          border 1px solid #10b98126
+
+          .qi
+            background #10b981
+            mask-image url('./svg/tip.svg')
+
+        &.important
+          background #f59e0b0a
+          border 1px solid #f59e0b33
+          box-shadow 0 4px 20px -2px #00000005, inset 0 1.5px 6px #f59e0b14
+
+          .qi
+            background #f59e0b
+            mask-image url('./svg/important.svg')
+
+        &.warning
+          background #ea580c0d
+          border 1px solid #ea580c33
+          box-shadow 0 4px 20px -2px #00000005, inset 0 1.5px 6px #ea580c1a
+
+          .qi
+            background #ea580c
+            mask-image url('./svg/warning.svg')
+
+        &.caution
+          background #dc26260d
+          border 1px solid #dc262633
+          box-shadow 0 4px 20px -2px #00000005, inset 0 1.5px 6px #dc26261a
+
+          .qi
+            background #dc2626
+            mask-image url('./svg/caution.svg')
+
+    input[type='checkbox']
+      appearance none
+      background url('./svg/todo.svg') no-repeat center / contain
+      cursor default
+      flex-shrink 0
+      height 18px
+      margin-right 8px
+      margin-top 4px
+      outline none
+      width 18px
+      border 0
+
+      &:checked
+        background url('./svg/done.svg') no-repeat center / contain
+
+    th, b, strong
+      color #111
+      font-variation-settings 'wght' 600
+      font-weight 600
+
+    tr, th, pre, code
+      white-space pre-wrap
+      word-break break-word
+
+    >:first-child
+      margin-top 0

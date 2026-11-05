@@ -1,0 +1,9 @@
+css: خالص انداز
+base: بنیادی اجزاء
+webc: جامع جزو
+js: اسکرپٹ لائبریری
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: پاپ اپ پرت
+  ^Nav(?![a-z]): نیویگیشن
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): کارڈ

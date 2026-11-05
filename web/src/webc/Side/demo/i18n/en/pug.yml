@@ -1,0 +1,46 @@
+open: Open sidebar
+userName: Geek Walker
+userTitle: Senior web designer
+statFollowers: Subscriber
+statFollowing: Focus On
+statProjects: Project
+groupCore: Core functions
+groupSystem: System management
+groupData: Data Analysis
+groupCollaboration: Teamwork
+widgetTitle: Storage space usage
+widgetTasks: My to-do tasks
+task1: Complete Side interactive development
+task2: Design Liquid visual aesthetics
+task3: Optimize component usability and details
+navHome: Dashboard Home Page
+navProfile: Personal Center
+navSettings: System settings
+navMessages: Site news
+navNotifications: Notification reminder
+navPrivacy: Privacy and security
+navHelp: Help and feedback
+navAnalytics: Analysis Report
+navCloud: Cloud storage space
+navTeam: Team Member
+navTasks: Task coordination
+logout: Log out
+upgradeTitle: Upgrade to Professional Edition
+upgradeDesc: Unlock unlimited cloud storage and advanced collaboration
+upgradeBtn: Upgrade now
+task4: Review PR commits and merge branches
+task5: Write a new version release log of WebC
+widgetOnline: Online team members
+member1: Lisa
+member2: David
+member3: Anna
+statusOnline: Online
+statusOffline: Offline
+statusBusy: Busy
+widgetFiles: Recent Files
+file1: Product Design Specification v2.4.pdf
+file2: 2026 Q3 Draft Plan.Docx
+file3: Component animation demonstration.mp4
+tagDesign: Design
+tagDev: Develop
+tagPm: Product

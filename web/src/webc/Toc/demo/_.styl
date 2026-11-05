@@ -1,0 +1,36 @@
+main.demo.Lg
+  align-items flex-start
+  box-sizing border-box
+  container-type inline-size
+  container-name demo
+  display flex
+  flex-direction row
+  gap 24px
+  max-width 1300px
+  padding 24px
+  width 100%
+  align-self center
+  transform translate(0)
+
+  c-toc
+    top 24px
+    width 350px
+
+    @container demo (max-width: 1150px)
+      width 280px
+
+    @container demo (max-width: 1000px)
+      width 220px
+
+    @container demo (max-width: 900px)
+      width 0
+      height 0
+      padding 0
+      border 0
+      box-shadow none
+      background transparent
+
+  c-md
+    flex 1
+    min-height 200px
+    min-width 0

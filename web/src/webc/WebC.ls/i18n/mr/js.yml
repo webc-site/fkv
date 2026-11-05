@@ -1,0 +1,9 @@
+css: शुद्ध शैली
+base: मूलभूत घटक
+webc: संमिश्र घटक
+js: स्क्रिप्ट लायब्ररी
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: पॉपअप स्तर
+  ^Nav(?![a-z]): नेव्हिगेशन
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): कार्ड

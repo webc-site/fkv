@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/lv/README.md) : Emuāra ziņas sastāvdaļa
+[BoxX](../../src/webc/BoxX/i18n/lv/README.md) : Izveidojiet un parādiet uznirstošo slāni ar aizvēršanas pogu
+[Code](../../src/webc/Code/i18n/lv/README.md) : koda poga
+[Copy](../../src/webc/Copy/i18n/lv/README.md) : Kopējiet tekstu starpliktuvē
+[Edit](../../src/webc/Edit/i18n/lv/README.md) : rediģēšanas poga
+[HtmDemo](../../src/webc/HtmDemo/i18n/lv/README.md) : HTML un JS koda atkļūdošana tiešsaistē
+[I18n](../../src/webc/I18n/i18n/lv/README.md) : Pogas un uznirstošie logi interfeisa valodu pārslēgšanai
+[Nav](../../src/webc/Nav/i18n/lv/README.md) : Augšējā navigācijas josla, kas automātiski sakļaujas vai izvēršas, ritinot lapu
+[NavL](../../src/webc/NavL/i18n/lv/README.md) : Automātiski pārslēdziet navigācijas izvēlni un atgriešanas pogu
+[NavMenu](../../src/webc/NavMenu/i18n/lv/README.md) : Navigācijas izvēlne pielāgota dažādiem ekrāna izmēriem
+[SelectBtn](../../src/webc/SelectBtn/i18n/lv/README.md) : Nolaižamā izvēles lodziņa un pogas kombinācija
+[Side](../../src/webc/Side/i18n/lv/README.md) : No sāniem izbīdāmi atvilktņu paneļi
+[TabSelect](../../src/webc/TabSelect/i18n/lv/README.md) : Cilnes lapa ar nolaižamo izvēlni
+[Toc](../../src/webc/Toc/i18n/lv/README.md) : Direktoriju navigācijas komponents
+[Btn](../../src/webc/Btn/i18n/lv/README.md) : Parasta poga un apaļa ikonas poga
+[Card](../../src/webc/Card/i18n/lv/README.md) : Kapsulas karte ar suspensijā attēlotu labo bultiņu
+[H1Txt](../../src/webc/H1Txt/i18n/lv/README.md) : Tekstūras nosaukums un apraksts
+[Ing](../../src/webc/Ing/i18n/lv/README.md) : Iekraušanas vai apstrādes statusa indikators
+[Kv](../../src/webc/Kv/i18n/lv/README.md) : atslēgu vērtību pāris
+[Lg](../../src/webc/Lg/i18n/lv/README.md) : Matēta stikla fons un malu izcelšanas efekts
+[MdCss](../../src/webc/MdCss/i18n/lv/README.md) : Tipogrāfijas stili, kas optimizēti lasīšanas pieredzei
+[NavALi](../../src/webc/NavALi/i18n/lv/README.md) : Navigācijas joslas saišu saraksta stils
+[O](../../src/webc/O/i18n/lv/README.md) : Elementa priekšā uzzīmējiet dobu punktu logotipu
+[Toast](../../src/webc/Toast/i18n/lv/README.md) : Uzvednes uznirstošais logs lapas malā
+[404](../../src/webc/404/i18n/lv/README.md) : Ceļš nepastāv kļūdas ziņojuma lapa
+[Back](../../src/webc/Back/i18n/lv/README.md) : poga atpakaļ
+[Box](../../src/webc/Box/i18n/lv/README.md) : Izveidojiet un parādiet uznirstošo slāni
+[CardLi](../../src/webc/CardLi/i18n/lv/README.md) : Asinhroni ielādējiet un parādiet karšu sarakstu
+[Md](../../src/webc/Md/i18n/lv/README.md) : Droši parsējiet un renderējiet Markdown tekstu HTML formātā.
+[Pophover](../../src/webc/Pophover/i18n/lv/README.md) : peldoša burbuļa uzvedne
+[Scroll](../../src/webc/Scroll/i18n/lv/README.md) : virtuālā ritjosla
+[Select](../../src/webc/Select/i18n/lv/README.md) : Nolaižamā izvēle, platums pielāgojas pašreizējam vienumam
+[Tab](../../src/webc/Tab/i18n/lv/README.md) : Pārslēdzamas cilnes
+[fkv](../lv/doc/README.md)
+[Arhitektūra](../lv/doc/architecture.md)
+[Crate](../lv/doc/crates.md)
+[pārbaudi](../lv/doc/testing.md)
+[Veiktspēja](../lv/doc/performance.md)

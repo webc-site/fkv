@@ -1,0 +1,5 @@
+tran:
+  from: zh
+  to_li: "*"
+dir:
+  - doc

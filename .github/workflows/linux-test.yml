@@ -1,0 +1,44 @@
+name: linux-test
+
+# 独立夜间 + 手动 —— Ubuntu 24.04 LTS，并断言 4 KiB 页。
+#
+# 触发方式：手动 + 每天 18:00 UTC。不挂在 push / PR 上，避免与 ci.yml 重复计费。
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 18 * * *"
+
+jobs:
+  nextest:
+    name: nextest-${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            arch: x86_64
+          - runner: ubuntu-24.04-arm
+            arch: aarch64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+
+      # 复用统一依赖安装脚本；非 Linux 自动 skip。
+      - name: 安装构建依赖
+        run: bash scripts/ci/install.sh
+
+      - name: 断言 4 KiB 页
+        run: |
+          page=$(getconf PAGESIZE)
+          echo "arch=${{ matrix.arch }} pagesize=$page"
+          test "$page" = 4096
+
+      - name: nextest（workspace）
+        run: cargo nextest run --failure-output immediate --no-tests=pass

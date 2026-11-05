@@ -1,0 +1,420 @@
+main.demo
+  min-height 100px
+  justify-content center
+
+  .menu-panel
+    background transparent
+    box-sizing border-box
+    display flex
+    flex-direction column
+    height 100%
+    padding 24px
+
+  .user-profile
+    align-items center
+    display flex
+    gap 16px
+    margin-bottom 24px
+
+    .avatar
+      background-image url('./svg/avatar.svg')
+      background-position center
+      background-size cover
+      border-radius 50%
+      box-shadow inset 0 0 4px #00000026
+      height 48px
+      width 48px
+
+    .info
+      h4
+        color #0f172a
+        font-size 16px
+        font-weight 600
+        margin 0 0 2px
+
+      p
+        color #64748b
+        font-size 11px
+        margin 0
+
+  .stats-card
+    background #00000005
+    border 1px solid #00000008
+    border-radius 16px
+    box-shadow inset 0 0 4px #00000014
+    display flex
+    justify-content space-between
+    margin-bottom 24px
+    padding 16px 12px
+
+    .stat-item
+      align-items center
+      display flex
+      flex 1
+      flex-direction column
+
+      .num
+        color #0f172a
+        font-size 15px
+        font-weight 700
+
+      .txt
+        color #64748b
+        font-size 10px
+        margin-top 4px
+
+  .group-title
+    color #94a3b8
+    font-size 10px
+    font-weight 700
+    letter-spacing 2px
+    margin-bottom 12px
+    padding-left 8px
+    text-transform uppercase
+
+  .nav-list
+    display flex
+    flex-direction column
+    gap 6px
+    margin-bottom 24px
+
+    .nav-item
+      align-items center
+      border-radius 12px
+      color #475569
+      display flex
+      font-size 13px
+      font-weight 600
+      gap 12px
+      padding 10px 14px
+      text-decoration none
+      transition all 0.2s ease
+
+      .icon
+        background-position center
+        background-repeat no-repeat
+        background-size contain
+        display inline-block
+        height 18px
+        transition transform 0.2s ease
+        width 18px
+
+      &.home .icon
+        background-image url('./svg/home.svg')
+
+      &.profile .icon
+        background-image url('./svg/profile.svg')
+
+      &.settings .icon
+        background-image url('./svg/settings.svg')
+
+      &.messages .icon
+        background-image url('./svg/messages.svg')
+
+      &.notifications .icon
+        background-image url('./svg/notifications.svg')
+
+      &.privacy .icon
+        background-image url('./svg/privacy.svg')
+
+      &.help .icon
+        background-image url('./svg/help.svg')
+
+      &.analytics .icon
+        background-image url('./svg/analytics.svg')
+
+      &.cloud .icon
+        background-image url('./svg/cloud.svg')
+
+      &.team .icon
+        background-image url('./svg/team.svg')
+
+      &.tasks .icon
+        background-image url('./svg/tasks.svg')
+
+      &:hover
+        background-color #00000008
+        color #0f172a
+
+        .icon
+          transform scale(1.05)
+
+      &.active
+        background #0a84ff0f
+        border-radius 0 12px 12px 0
+        color #0a84ff
+        position relative
+
+        &::before
+          background-color #0a84ff
+          border-radius 1.5px
+          bottom 10px
+          content ''
+          left 0
+          position absolute
+          top 10px
+          width 3px
+
+        .icon
+          filter invert(38%) sepia(85%) saturate(2243%) hue-rotate(200deg) brightness(101%) contrast(101%)
+
+  .widget-card
+    background #00000005
+    border 1px solid #00000008
+    border-radius 16px
+    box-shadow inset 0 0 4px #00000014
+    margin-bottom 24px
+    padding 16px 14px
+
+    .widget-header
+      color #475569
+      display flex
+      font-size 11px
+      font-weight 600
+      justify-content space-between
+      margin-bottom 8px
+
+    .progress-bar
+      background #0002
+      border-radius 1.5px
+      height 3px
+      overflow hidden
+
+      .progress-fill
+        background #94a3b8
+        border-radius 1.5px
+        height 100%
+        width 65%
+
+  .tasks-widget
+    .task-list
+      display flex
+      flex-direction column
+      gap 10px
+      margin-top 12px
+
+    .task-item
+      align-items center
+      color #475569
+      cursor pointer
+      display flex
+      font-size 12px
+      gap 10px
+
+      input[type='checkbox']
+        accent-color #0a84ff
+        cursor pointer
+        height 14px
+        margin 0
+        width 14px
+
+      .task-text
+        flex 1
+        transition color 0.2s ease
+
+      input[type='checkbox']:checked + .task-text
+        color #94a3b8
+        text-decoration line-through
+
+  .online-widget
+    margin-bottom 24px
+
+    .member-list
+      display flex
+      flex-direction column
+      gap 10px
+      margin-top 12px
+
+    .member-item
+      align-items center
+      border-radius 10px
+      display flex
+      justify-content space-between
+      padding 6px 10px
+      transition all 0.2s ease
+
+      &:hover
+        background-color #00000004
+
+      .member-info
+        display flex
+        flex-direction column
+
+        .name
+          color #334155
+          font-size 12px
+          font-weight 600
+
+        .status
+          align-items center
+          color #64748b
+          display flex
+          font-size 9px
+          gap 4px
+          margin-top 1px
+
+          &::before
+            border-radius 50%
+            content ''
+            display inline-block
+            height 5px
+            width 5px
+
+          &.online::before
+            background-color #22c55e
+
+          &.busy::before
+            background-color #f97316
+
+          &.offline::before
+            background-color #94a3b8
+
+      .member-tag
+        border-radius 6px
+        font-size 10px
+        font-weight 600
+        padding 2px 6px
+
+        &.design
+          background #ec489914
+          color #db2777
+
+        &.dev
+          background #0ea5e914
+          color #0284c7
+
+        &.pm
+          background #8b5cf614
+          color #7c3aed
+
+  .files-widget
+    margin-bottom 24px
+
+    .file-list
+      display flex
+      flex-direction column
+      gap 8px
+      margin-top 12px
+
+    .file-item
+      align-items center
+      border-radius 8px
+      display flex
+      gap 10px
+      padding 6px 8px
+      text-decoration none
+      transition background-color 0.2s ease
+
+      &:hover
+        background-color #00000008
+
+      .file-icon
+        align-items center
+        border-radius 4px
+        display flex
+        font-size 8px
+        font-weight 800
+        height 20px
+        justify-content center
+        width 20px
+
+        &.pdf
+          background #ef44441a
+          color #ef4444
+
+          &::after
+            content 'PDF'
+
+        &.doc
+          background #3b82f61a
+          color #3b82f6
+
+          &::after
+            content 'DOC'
+
+        &.video
+          background #8b5cf61a
+          color #8b5cf6
+
+          &::after
+            content 'VID'
+
+      .file-name
+        color #475569
+        flex 1
+        font-size 12px
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+
+  .upgrade-card
+    background #0a84ff0a
+    border 1px solid #0a84ff1f
+    border-radius 16px
+    display flex
+    flex-direction column
+    gap 12px
+    margin-bottom 24px
+    padding 20px 18px
+    text-align center
+
+    .upgrade-title
+      color #0f172a
+      font-size 15px
+      font-weight 700
+
+    .upgrade-desc
+      color #64748b
+      font-size 11px
+      line-height 1.6
+
+    .upgrade-link-btn
+      background #0a84ff
+      border none
+      border-radius 12px
+      color #fff
+      cursor pointer
+      font-size 12px
+      font-weight 600
+      margin-top 6px
+      outline none
+      padding 10px 0
+      transition all 0.2s ease
+      width 100%
+
+      &:hover
+        background #0070e0
+        box-shadow 0 4px 12px #0a84ff40
+        transform translateY(-1px)
+
+      &:active
+        background #005cb8
+        transform translateY(0)
+
+  .menu-footer
+    margin-top auto
+
+    .logout-btn
+      border none
+      border-radius 12px
+      box-shadow none
+      color #94a3b8
+      font-weight 600
+      padding 10px 0
+      transition all 0.25s ease
+      width 100%
+
+      &::before
+        background transparent
+        box-shadow none
+
+      &:hover
+        box-shadow none
+        color #ef4444
+
+        &::before
+          background #ef444414
+
+      &:active
+        &::before
+          background #ef444426

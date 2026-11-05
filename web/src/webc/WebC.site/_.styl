@@ -1,0 +1,81 @@
+body
+  margin 0
+  overflow hidden
+
+c-webc-site
+  display flex
+  height 100dvh
+  inset 0
+  position absolute
+  width 100%
+
+  > c-vs
+    > *
+      max-width 1648px
+
+    > c-nav
+      align-self center
+      width 100%
+
+    > main
+      display flex
+      flex-direction column
+      margin auto
+      width 100%
+
+    > main.doc
+      --mx 24px
+      align-items flex-start
+      box-sizing border-box
+      display flex
+      flex-direction row
+      margin 0 var(--mx) 64px
+      max-width calc(100% - var(--mx) * 2)
+      padding 5px 0
+
+      @media (min-width: 901px)
+        gap 32px
+
+      @media (max-width: 900px)
+        --mx 16px
+
+      c-toc
+        top 24px
+        width 320px
+
+        @media (max-width: 1150px)
+          width 260px
+
+        @media (max-width: 1000px)
+          width 220px
+
+        @media (max-width: 900px)
+          backdrop-filter none
+          background transparent
+          border 0
+          box-shadow none
+          height 0
+          padding 0
+          width 0
+
+      c-md
+        box-sizing border-box
+        flex 1
+        margin 0 auto
+        max-width 900px
+        min-width 0
+
+      @media (max-width: 900px)
+        padding 0
+
+pre.err
+  background-color #fff5f5
+  border 1px solid #feb2b2
+  border-radius 16px
+  color #c53030
+  font-size 14px
+  margin 32px auto
+  max-width 600px
+  padding 24px
+  white-space pre-wrap
+  word-break break-all

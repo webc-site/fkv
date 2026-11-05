@@ -1,0 +1,15 @@
+[package]
+name = "fkv_types"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "ID 新类型、TableIdent、StoreMode、常量"
+
+[dependencies]
+coarsetime = "0.1.38"
+fkv_error = { version = "0.1.0", path = "../fkv_error" }
+itoa = "1"
+libc = "0.2"
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

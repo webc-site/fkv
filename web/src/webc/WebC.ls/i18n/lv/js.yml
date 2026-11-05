@@ -1,0 +1,9 @@
+css: tīrs stils
+base: Pamatkomponenti
+webc: Saliktā sastāvdaļa
+js: Skriptu bibliotēka
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: uznirstošais slānis
+  ^Nav(?![a-z]): navigācija
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): karti

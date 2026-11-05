@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/lo/README.md) : ອົງປະກອບຕອບ blog
+[BoxX](../../src/webc/BoxX/i18n/lo/README.md) : ສ້າງ ແລະສະແດງຊັ້ນຂໍ້ມູນປັອບອັບດ້ວຍປຸ່ມປິດ
+[Code](../../src/webc/Code/i18n/lo/README.md) : ປຸ່ມລະຫັດ
+[Copy](../../src/webc/Copy/i18n/lo/README.md) : ສຳເນົາຂໍ້ຄວາມໃສ່ຄລິບບອດ
+[Edit](../../src/webc/Edit/i18n/lo/README.md) : ປຸ່ມແກ້ໄຂ
+[HtmDemo](../../src/webc/HtmDemo/i18n/lo/README.md) : ການດີບັກ HTML ແລະລະຫັດ JS ອອນລາຍ
+[I18n](../../src/webc/I18n/i18n/lo/README.md) : ປຸ່ມ ແລະໜ້າຕ່າງປັອບອັບສຳລັບການປ່ຽນພາສາໃນການໂຕ້ຕອບ
+[Nav](../../src/webc/Nav/i18n/lo/README.md) : ແຖບນໍາທາງເທິງສຸດທີ່ຫຍໍ້ລົງ ຫຼືຂະຫຍາຍໂດຍອັດຕະໂນມັດເມື່ອໜ້າເລື່ອນ
+[NavL](../../src/webc/NavL/i18n/lo/README.md) : ສະຫຼັບເມນູນຳທາງ ແລະປຸ່ມກັບຄືນໂດຍອັດຕະໂນມັດ
+[NavMenu](../../src/webc/NavMenu/i18n/lo/README.md) : ເມນູນໍາທາງທີ່ປັບໃຫ້ເຫມາະສົມກັບຂະຫນາດຫນ້າຈໍທີ່ແຕກຕ່າງກັນ
+[SelectBtn](../../src/webc/SelectBtn/i18n/lo/README.md) : ການປະສົມປະສານຂອງກ່ອງເລືອກແບບເລື່ອນລົງແລະປຸ່ມ
+[Side](../../src/webc/Side/i18n/lo/README.md) : ແຖບລິ້ນຊັກທີ່ເລື່ອນອອກມາຈາກດ້ານຂ້າງ
+[TabSelect](../../src/webc/TabSelect/i18n/lo/README.md) : ໜ້າແຖບທີ່ມີການເລືອກແບບເລື່ອນລົງ
+[Toc](../../src/webc/Toc/i18n/lo/README.md) : Directory Navigation Component
+[Btn](../../src/webc/Btn/i18n/lo/README.md) : ປຸ່ມປົກກະຕິແລະປຸ່ມຮູບສັນຍາລັກມົນ
+[Card](../../src/webc/Card/i18n/lo/README.md) : ບັດແຄບຊູນທີ່ມີລູກສອນຂວາສະແດງຢູ່ໃນ suspension
+[H1Txt](../../src/webc/H1Txt/i18n/lo/README.md) : ຫົວຂໍ້ໂຄງສ້າງແລະຄໍາອະທິບາຍ
+[Ing](../../src/webc/Ing/i18n/lo/README.md) : ຕົວຊີ້ວັດສະຖານະການໂຫຼດ ຫຼືການປະມວນຜົນ
+[Kv](../../src/webc/Kv/i18n/lo/README.md) : ຄູ່ມູນຄ່າທີ່ສໍາຄັນ
+[Lg](../../src/webc/Lg/i18n/lo/README.md) : ພື້ນຫຼັງແກ້ວມີອາກາດໜາວ ແລະ ເອັບເຟັກຂອບຂອບ
+[MdCss](../../src/webc/MdCss/i18n/lo/README.md) : ຮູບແບບການພິມຖືກປັບໃຫ້ເໝາະສົມສຳລັບປະສົບການການອ່ານ
+[NavALi](../../src/webc/NavALi/i18n/lo/README.md) : ຮູບແບບລາຍຊື່ລິ້ງແຖບນໍາທາງ
+[O](../../src/webc/O/i18n/lo/README.md) : ແຕ້ມໂລໂກ້ຈຸດເປັນຮູຢູ່ທາງໜ້າຂອງອົງປະກອບ
+[Toast](../../src/webc/Toast/i18n/lo/README.md) : ກະຕຸ້ນປ່ອງຢ້ຽມປັອບອັບຢູ່ຂອບຂອງໜ້າ
+[404](../../src/webc/404/i18n/lo/README.md) : ເສັ້ນທາງບໍ່ມີຫນ້າຂໍ້ຄວາມສະແດງຂໍ້ຜິດພາດ
+[Back](../../src/webc/Back/i18n/lo/README.md) : ປຸ່ມກັບຄືນ
+[Box](../../src/webc/Box/i18n/lo/README.md) : ສ້າງ ແລະສະແດງຊັ້ນຂໍ້ມູນປັອບອັບ
+[CardLi](../../src/webc/CardLi/i18n/lo/README.md) : ໂຫຼດ ແລະສະແດງລາຍການບັດແບບບໍ່ກົງກັນ
+[Md](../../src/webc/Md/i18n/lo/README.md) : ແຍກວິເຄາະຢ່າງປອດໄພ ແລະສະແດງຂໍ້ຄວາມ Markdown ເປັນ HTML.
+[Pophover](../../src/webc/Pophover/i18n/lo/README.md) : ກະຕຸ້ນຟອງລອຍ
+[Scroll](../../src/webc/Scroll/i18n/lo/README.md) : ແຖບເລື່ອນ virtual
+[Select](../../src/webc/Select/i18n/lo/README.md) : ການເລືອກແບບເລື່ອນລົງ, ຄວາມກວ້າງປັບຕົວເຂົ້າກັບລາຍການປະຈຸບັນ
+[Tab](../../src/webc/Tab/i18n/lo/README.md) : ແຖບປ່ຽນໄດ້
+[fkv](../lo/doc/README.md)
+[ສະຖາປັດຕະຍະກໍາ](../lo/doc/architecture.md)
+[Crate](../lo/doc/crates.md)
+[ການທົດສອບ](../lo/doc/testing.md)
+[ປະສິດທິພາບ](../lo/doc/performance.md)

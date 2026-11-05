@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/gl/README.md) : Compoñente de publicación de blog
+[BoxX](../../src/webc/BoxX/i18n/gl/README.md) : Crea e mostra unha capa emerxente cun botón de pechar
+[Code](../../src/webc/Code/i18n/gl/README.md) : botón de código
+[Copy](../../src/webc/Copy/i18n/gl/README.md) : Copiar texto no portapapeis
+[Edit](../../src/webc/Edit/i18n/gl/README.md) : botón editar
+[HtmDemo](../../src/webc/HtmDemo/i18n/gl/README.md) : Depuración de código HTML e JS en liña
+[I18n](../../src/webc/I18n/i18n/gl/README.md) : Botóns e ventás emerxentes para cambiar o idioma da interface
+[Nav](../../src/webc/Nav/i18n/gl/README.md) : Barra de navegación superior que se contrae ou se expande automaticamente cando se despraza a páxina
+[NavL](../../src/webc/NavL/i18n/gl/README.md) : Cambia automaticamente o menú de navegación e o botón de retorno
+[NavMenu](../../src/webc/NavMenu/i18n/gl/README.md) : Menú de navegación adaptado a diferentes tamaños de pantalla
+[SelectBtn](../../src/webc/SelectBtn/i18n/gl/README.md) : Combinación de caixa de selección despregable e botón
+[Side](../../src/webc/Side/i18n/gl/README.md) : Paneis de caixóns que se deslizan cara a fóra do lado
+[TabSelect](../../src/webc/TabSelect/i18n/gl/README.md) : Páxina de pestanas con selección despregable
+[Toc](../../src/webc/Toc/i18n/gl/README.md) : Compoñente de navegación do directorio
+[Btn](../../src/webc/Btn/i18n/gl/README.md) : Botón ordinario e botón de icona redonda
+[Card](../../src/webc/Card/i18n/gl/README.md) : Tarxeta da cápsula coa frecha cara á dereita mostrada en suspensión
+[H1Txt](../../src/webc/H1Txt/i18n/gl/README.md) : Título e descrición da textura
+[Ing](../../src/webc/Ing/i18n/gl/README.md) : Indicador de estado de carga ou procesamento
+[Kv](../../src/webc/Kv/i18n/gl/README.md) : par valor clave
+[Lg](../../src/webc/Lg/i18n/gl/README.md) : Fondo de vidro esmerilado e efecto de resaltado de bordo
+[MdCss](../../src/webc/MdCss/i18n/gl/README.md) : Estilos tipográficos optimizados para a experiencia lectora
+[NavALi](../../src/webc/NavALi/i18n/gl/README.md) : Estilo de lista de ligazóns da barra de navegación
+[O](../../src/webc/O/i18n/gl/README.md) : Debuxa un logotipo de punto oco diante do elemento
+[Toast](../../src/webc/Toast/i18n/gl/README.md) : Solicita unha ventá emerxente no bordo da páxina
+[404](../../src/webc/404/i18n/gl/README.md) : O camiño non existe páxina de mensaxes de erro
+[Back](../../src/webc/Back/i18n/gl/README.md) : botón atrás
+[Box](../../src/webc/Box/i18n/gl/README.md) : Crear e mostrar unha capa emerxente
+[CardLi](../../src/webc/CardLi/i18n/gl/README.md) : Cargar e mostrar a lista de tarxetas de forma asíncrona
+[Md](../../src/webc/Md/i18n/gl/README.md) : Analiza e renderiza de forma segura o texto de Markdown en HTML.
+[Pophover](../../src/webc/Pophover/i18n/gl/README.md) : aviso de burbulla flotante
+[Scroll](../../src/webc/Scroll/i18n/gl/README.md) : barra de desprazamento virtual
+[Select](../../src/webc/Select/i18n/gl/README.md) : Selección despregable, o ancho adáptase ao elemento actual
+[Tab](../../src/webc/Tab/i18n/gl/README.md) : Pestanas conmutables
+[fkv](../gl/doc/README.md)
+[Arquitectura](../gl/doc/architecture.md)
+[Crate](../gl/doc/crates.md)
+[proba](../gl/doc/testing.md)
+[Rendemento](../gl/doc/performance.md)

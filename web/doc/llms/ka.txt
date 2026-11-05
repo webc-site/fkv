@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/ka/README.md) : ბლოგის პოსტის კომპონენტი
+[BoxX](../../src/webc/BoxX/i18n/ka/README.md) : შექმენით და აჩვენეთ ამომხტარი ფენა დახურვის ღილაკით
+[Code](../../src/webc/Code/i18n/ka/README.md) : კოდის ღილაკი
+[Copy](../../src/webc/Copy/i18n/ka/README.md) : ტექსტის კოპირება ბუფერში
+[Edit](../../src/webc/Edit/i18n/ka/README.md) : რედაქტირების ღილაკი
+[HtmDemo](../../src/webc/HtmDemo/i18n/ka/README.md) : HTML და JS კოდის გამართვა ონლაინ
+[I18n](../../src/webc/I18n/i18n/ka/README.md) : ღილაკები და ამომხტარი ფანჯრები ინტერფეისის ენების გადართვისთვის
+[Nav](../../src/webc/Nav/i18n/ka/README.md) : ზედა ნავიგაციის ზოლი, რომელიც ავტომატურად იშლება ან ფართოვდება გვერდის გადახვევისას
+[NavL](../../src/webc/NavL/i18n/ka/README.md) : ნავიგაციის მენიუს და დაბრუნების ღილაკის ავტომატური გადართვა
+[NavMenu](../../src/webc/NavMenu/i18n/ka/README.md) : ნავიგაციის მენიუ ადაპტირებულია ეკრანის სხვადასხვა ზომებზე
+[SelectBtn](../../src/webc/SelectBtn/i18n/ka/README.md) : ჩამოსაშლელი შერჩევის ველისა და ღილაკის კომბინაცია
+[Side](../../src/webc/Side/i18n/ka/README.md) : უჯრის პანელები, რომლებიც სრიალებს გვერდიდან
+[TabSelect](../../src/webc/TabSelect/i18n/ka/README.md) : ჩანართის გვერდი ჩამოსაშლელი შერჩევით
+[Toc](../../src/webc/Toc/i18n/ka/README.md) : დირექტორია ნავიგაციის კომპონენტი
+[Btn](../../src/webc/Btn/i18n/ka/README.md) : ჩვეულებრივი ღილაკი და მრგვალი ხატის ღილაკი
+[Card](../../src/webc/Card/i18n/ka/README.md) : კაფსულის ბარათი მარჯვენა ისრით ნაჩვენებია შეჩერებით
+[H1Txt](../../src/webc/H1Txt/i18n/ka/README.md) : ტექსტურის სათაური და აღწერა
+[Ing](../../src/webc/Ing/i18n/ka/README.md) : ჩატვირთვის ან დამუშავების სტატუსის მაჩვენებელი
+[Kv](../../src/webc/Kv/i18n/ka/README.md) : გასაღების მნიშვნელობის წყვილი
+[Lg](../../src/webc/Lg/i18n/ka/README.md) : ყინვაგამძლე მინის ფონი და კიდეების ხაზგასმის ეფექტი
+[MdCss](../../src/webc/MdCss/i18n/ka/README.md) : ტიპოგრაფიის სტილები ოპტიმიზირებულია კითხვის გამოცდილებისთვის
+[NavALi](../../src/webc/NavALi/i18n/ka/README.md) : ნავიგაციის ზოლის ბმულების სიის სტილი
+[O](../../src/webc/O/i18n/ka/README.md) : დახაზეთ ღრუ წერტილის ლოგო ელემენტის წინ
+[Toast](../../src/webc/Toast/i18n/ka/README.md) : მოთხოვნის ამომხტარი ფანჯარა გვერდის კიდეზე
+[404](../../src/webc/404/i18n/ka/README.md) : გზა არ არსებობს შეცდომის შეტყობინების გვერდი
+[Back](../../src/webc/Back/i18n/ka/README.md) : უკან ღილაკი
+[Box](../../src/webc/Box/i18n/ka/README.md) : შექმენით და აჩვენეთ ამომხტარი ფენა
+[CardLi](../../src/webc/CardLi/i18n/ka/README.md) : ჩატვირთეთ და აჩვენეთ ბარათების სია ასინქრონულად
+[Md](../../src/webc/Md/i18n/ka/README.md) : უსაფრთხოდ გააანალიზეთ და გადაიტანეთ Markdown ტექსტი HTML-ში.
+[Pophover](../../src/webc/Pophover/i18n/ka/README.md) : მცურავი ბუშტის მოთხოვნა
+[Scroll](../../src/webc/Scroll/i18n/ka/README.md) : ვირტუალური გადახვევის ზოლი
+[Select](../../src/webc/Select/i18n/ka/README.md) : ჩამოსაშლელი არჩევანი, სიგანე ადაპტირდება მიმდინარე ელემენტთან
+[Tab](../../src/webc/Tab/i18n/ka/README.md) : შესაცვლელი ჩანართები
+[fkv](../ka/doc/README.md)
+[არქიტექტურა](../ka/doc/architecture.md)
+[Crate](../ka/doc/crates.md)
+[ტესტი](../ka/doc/testing.md)
+[წარმადობა](../ka/doc/performance.md)

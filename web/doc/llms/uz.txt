@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/uz/README.md) : Blog post komponenti
+[BoxX](../../src/webc/BoxX/i18n/uz/README.md) : Yopish tugmasi bilan qalqib chiquvchi qatlamni yarating va ko'rsating
+[Code](../../src/webc/Code/i18n/uz/README.md) : kod tugmasi
+[Copy](../../src/webc/Copy/i18n/uz/README.md) : Matnni vaqtinchalik xotiraga nusxalash
+[Edit](../../src/webc/Edit/i18n/uz/README.md) : tahrirlash tugmasi
+[HtmDemo](../../src/webc/HtmDemo/i18n/uz/README.md) : HTML va JS kodini onlayn tuzatish
+[I18n](../../src/webc/I18n/i18n/uz/README.md) : Interfeys tillarini almashtirish uchun tugmalar va qalqib chiquvchi oynalar
+[Nav](../../src/webc/Nav/i18n/uz/README.md) : Sahifani aylantirganda avtomatik ravishda yiqilib yoki kengaytiriladigan yuqori navigatsiya paneli
+[NavL](../../src/webc/NavL/i18n/uz/README.md) : Navigatsiya menyusini va qaytish tugmasini avtomatik ravishda almashtirish
+[NavMenu](../../src/webc/NavMenu/i18n/uz/README.md) : Turli xil ekran o'lchamlariga moslashtirilgan navigatsiya menyusi
+[SelectBtn](../../src/webc/SelectBtn/i18n/uz/README.md) : Ochiladigan tanlash oynasi va tugma birikmasi
+[Side](../../src/webc/Side/i18n/uz/README.md) : Yon tomondan chiqib ketadigan tortma panellari
+[TabSelect](../../src/webc/TabSelect/i18n/uz/README.md) : Ochiladigan tanlovga ega tab sahifasi
+[Toc](../../src/webc/Toc/i18n/uz/README.md) : Katalog navigatsiya komponenti
+[Btn](../../src/webc/Btn/i18n/uz/README.md) : Oddiy tugma va dumaloq belgi tugmasi
+[Card](../../src/webc/Card/i18n/uz/README.md) : O'ngga strelkali kapsula kartasi suspenziyada ko'rsatilgan
+[H1Txt](../../src/webc/H1Txt/i18n/uz/README.md) : Tekstura nomi va tavsifi
+[Ing](../../src/webc/Ing/i18n/uz/README.md) : Yuklash yoki ishlov berish holati ko'rsatkichi
+[Kv](../../src/webc/Kv/i18n/uz/README.md) : kalit qiymat juftligi
+[Lg](../../src/webc/Lg/i18n/uz/README.md) : Muzli shisha fon va chekka ta'kidlash effekti
+[MdCss](../../src/webc/MdCss/i18n/uz/README.md) : O'qish tajribasi uchun optimallashtirilgan tipografiya uslublari
+[NavALi](../../src/webc/NavALi/i18n/uz/README.md) : Navigatsiya paneli havolalar roʻyxati uslubi
+[O](../../src/webc/O/i18n/uz/README.md) : Element oldida ichi bo'sh nuqta logotipini chizing
+[Toast](../../src/webc/Toast/i18n/uz/README.md) : Sahifaning chetida qalqib chiquvchi oyna
+[404](../../src/webc/404/i18n/uz/README.md) : Yo‘l xato xabari sahifasi mavjud emas
+[Back](../../src/webc/Back/i18n/uz/README.md) : orqaga tugmasi
+[Box](../../src/webc/Box/i18n/uz/README.md) : Qalqib chiquvchi qatlamni yarating va ko'rsating
+[CardLi](../../src/webc/CardLi/i18n/uz/README.md) : Karta ro'yxatini asinxron tarzda yuklang va ko'rsating
+[Md](../../src/webc/Md/i18n/uz/README.md) : Markdown matnini HTMLga xavfsiz tahlil qiling va ko'rsating.
+[Pophover](../../src/webc/Pophover/i18n/uz/README.md) : suzuvchi pufak so'rovi
+[Scroll](../../src/webc/Scroll/i18n/uz/README.md) : virtual aylantirish paneli
+[Select](../../src/webc/Select/i18n/uz/README.md) : Ochiladigan tanlov, kenglik joriy elementga moslashadi
+[Tab](../../src/webc/Tab/i18n/uz/README.md) : O'zgaruvchan yorliqlar
+[fkv](../uz/doc/README.md)
+[Arxitektura](../uz/doc/architecture.md)
+[Crate](../uz/doc/crates.md)
+[sinov](../uz/doc/testing.md)
+[Unumdorlik](../uz/doc/performance.md)

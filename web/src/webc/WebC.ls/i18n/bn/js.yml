@@ -1,0 +1,9 @@
+css: বিশুদ্ধ শৈলী
+base: মৌলিক উপাদান
+webc: যৌগিক উপাদান
+js: স্ক্রিপ্ট লাইব্রেরি
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: পপআপ স্তর
+  ^Nav(?![a-z]): নেভিগেশন
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): কার্ড

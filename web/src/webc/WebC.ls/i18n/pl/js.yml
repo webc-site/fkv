@@ -1,0 +1,9 @@
+css: czysty styl
+base: Podstawowe komponenty
+webc: Komponent kompozytowy
+js: Biblioteka skryptów
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: warstwa wyskakująca
+  ^Nav(?![a-z]): nawigacja
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): karta

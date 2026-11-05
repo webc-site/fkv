@@ -1,0 +1,5 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": ["**/*.yml", "**/*.md", "src/_/*.js"],
+  "trailingComma": "none"
+}

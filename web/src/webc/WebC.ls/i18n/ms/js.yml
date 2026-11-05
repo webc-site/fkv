@@ -1,0 +1,9 @@
+css: gaya tulen
+base: Komponen asas
+webc: Komponen komposit
+js: Pustaka skrip
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: lapisan pop timbul
+  ^Nav(?![a-z]): navigasi
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kad

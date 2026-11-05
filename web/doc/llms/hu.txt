@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/hu/README.md) : Blogbejegyzés komponens
+[BoxX](../../src/webc/BoxX/i18n/hu/README.md) : Hozzon létre és jelenítsen meg egy felugró réteget a bezárás gombbal
+[Code](../../src/webc/Code/i18n/hu/README.md) : kód gomb
+[Copy](../../src/webc/Copy/i18n/hu/README.md) : Szöveg másolása a vágólapra
+[Edit](../../src/webc/Edit/i18n/hu/README.md) : szerkesztés gomb
+[HtmDemo](../../src/webc/HtmDemo/i18n/hu/README.md) : HTML és JS kód hibakeresése online
+[I18n](../../src/webc/I18n/i18n/hu/README.md) : Gombok és felugró ablakok az interfész nyelvének váltásához
+[Nav](../../src/webc/Nav/i18n/hu/README.md) : Felső navigációs sáv, amely automatikusan összecsukódik vagy kinyílik, amikor az oldal görget
+[NavL](../../src/webc/NavL/i18n/hu/README.md) : A navigációs menü és a visszatérés gomb automatikus váltása
+[NavMenu](../../src/webc/NavMenu/i18n/hu/README.md) : Különböző képernyőméretekhez igazított navigációs menü
+[SelectBtn](../../src/webc/SelectBtn/i18n/hu/README.md) : A legördülő választódoboz és a gomb kombinációja
+[Side](../../src/webc/Side/i18n/hu/README.md) : Oldalról kicsúsztatható fiókpanelek
+[TabSelect](../../src/webc/TabSelect/i18n/hu/README.md) : Lapoldal legördülő menüvel
+[Toc](../../src/webc/Toc/i18n/hu/README.md) : Címtárnavigációs komponens
+[Btn](../../src/webc/Btn/i18n/hu/README.md) : Közönséges gomb és kerek ikon gomb
+[Card](../../src/webc/Card/i18n/hu/README.md) : Kapszula kártya jobbra nyíllal, felfüggesztve
+[H1Txt](../../src/webc/H1Txt/i18n/hu/README.md) : Textúra címe és leírása
+[Ing](../../src/webc/Ing/i18n/hu/README.md) : Betöltési vagy feldolgozási állapot jelzője
+[Kv](../../src/webc/Kv/i18n/hu/README.md) : kulcsérték pár
+[Lg](../../src/webc/Lg/i18n/hu/README.md) : Tetüveg háttér és élkiemelés hatása
+[MdCss](../../src/webc/MdCss/i18n/hu/README.md) : Az olvasási élményhez optimalizált tipográfiai stílusok
+[NavALi](../../src/webc/NavALi/i18n/hu/README.md) : Navigációs sáv hivatkozáslista stílusa
+[O](../../src/webc/O/i18n/hu/README.md) : Rajzolj egy üreges pont logót az elem elé
+[Toast](../../src/webc/Toast/i18n/hu/README.md) : Felugró ablak az oldal szélén
+[404](../../src/webc/404/i18n/hu/README.md) : Az elérési út nem létezik hibaüzenet oldal
+[Back](../../src/webc/Back/i18n/hu/README.md) : vissza gomb
+[Box](../../src/webc/Box/i18n/hu/README.md) : Előugró réteg létrehozása és megjelenítése
+[CardLi](../../src/webc/CardLi/i18n/hu/README.md) : A kártyalista aszinkron betöltése és megjelenítése
+[Md](../../src/webc/Md/i18n/hu/README.md) : A Markdown szöveg biztonságos elemzése és renderelése HTML-be.
+[Pophover](../../src/webc/Pophover/i18n/hu/README.md) : lebegő buborék prompt
+[Scroll](../../src/webc/Scroll/i18n/hu/README.md) : virtuális görgetősáv
+[Select](../../src/webc/Select/i18n/hu/README.md) : Legördülő menü, a szélesség az aktuális tételhez igazodik
+[Tab](../../src/webc/Tab/i18n/hu/README.md) : Váltható lapok
+[fkv](../hu/doc/README.md)
+[Építészet](../hu/doc/architecture.md)
+[Crate](../hu/doc/crates.md)
+[teszt](../hu/doc/testing.md)
+[Teljesítmény](../hu/doc/performance.md)

@@ -1,0 +1,9 @@
+css: saf stil
+base: Temel bileşenler
+webc: Kompozit bileşen
+js: Komut dosyası kitaplığı
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: açılır katman
+  ^Nav(?![a-z]): navigasyon
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kart

@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/fi/README.md) : Blogiviestikomponentti
+[BoxX](../../src/webc/BoxX/i18n/fi/README.md) : Luo ja näytä ponnahdusikkuna taso sulkemispainikkeella
+[Code](../../src/webc/Code/i18n/fi/README.md) : koodipainike
+[Copy](../../src/webc/Copy/i18n/fi/README.md) : Kopioi teksti leikepöydälle
+[Edit](../../src/webc/Edit/i18n/fi/README.md) : muokkauspainiketta
+[HtmDemo](../../src/webc/HtmDemo/i18n/fi/README.md) : HTML- ja JS-koodin virheenkorjaus verkossa
+[I18n](../../src/webc/I18n/i18n/fi/README.md) : Painikkeet ja ponnahdusikkunat käyttöliittymän kielten vaihtamiseen
+[Nav](../../src/webc/Nav/i18n/fi/README.md) : Ylänavigointipalkki, joka kutistuu tai laajenee automaattisesti, kun sivua vieritetään
+[NavL](../../src/webc/NavL/i18n/fi/README.md) : Vaihda automaattisesti navigointivalikkoa ja paluupainiketta
+[NavMenu](../../src/webc/NavMenu/i18n/fi/README.md) : Navigointivalikko mukautettu eri näyttökokoihin
+[SelectBtn](../../src/webc/SelectBtn/i18n/fi/README.md) : Pudotusvalikon valintaruudun ja painikkeen yhdistelmä
+[Side](../../src/webc/Side/i18n/fi/README.md) : Sivulta ulos liukuvat laatikostopaneelit
+[TabSelect](../../src/webc/TabSelect/i18n/fi/README.md) : Välilehti, jossa on avattava valinta
+[Toc](../../src/webc/Toc/i18n/fi/README.md) : Hakemiston navigointikomponentti
+[Btn](../../src/webc/Btn/i18n/fi/README.md) : Tavallinen painike ja pyöreä kuvakepainike
+[Card](../../src/webc/Card/i18n/fi/README.md) : Kapselikortti, jossa on oikea nuoli suspensiossa
+[H1Txt](../../src/webc/H1Txt/i18n/fi/README.md) : Tekstuurin otsikko ja kuvaus
+[Ing](../../src/webc/Ing/i18n/fi/README.md) : Latauksen tai käsittelyn tilan ilmaisin
+[Kv](../../src/webc/Kv/i18n/fi/README.md) : avainarvopari
+[Lg](../../src/webc/Lg/i18n/fi/README.md) : Himmeä lasi tausta ja reunan korostustehoste
+[MdCss](../../src/webc/MdCss/i18n/fi/README.md) : Lukukokemukseen optimoidut typografiset tyylit
+[NavALi](../../src/webc/NavALi/i18n/fi/README.md) : Navigointipalkin linkkiluettelon tyyli
+[O](../../src/webc/O/i18n/fi/README.md) : Piirrä ontto pistelogo elementin eteen
+[Toast](../../src/webc/Toast/i18n/fi/README.md) : Ponnahdusikkuna sivun reunassa
+[404](../../src/webc/404/i18n/fi/README.md) : Polkua ei ole olemassa virheilmoitussivua
+[Back](../../src/webc/Back/i18n/fi/README.md) : takaisin-painiketta
+[Box](../../src/webc/Box/i18n/fi/README.md) : Luo ja näytä ponnahdusikkuna
+[CardLi](../../src/webc/CardLi/i18n/fi/README.md) : Lataa ja näytä korttiluettelo asynkronisesti
+[Md](../../src/webc/Md/i18n/fi/README.md) : Jäsennä ja renderöi Markdown-teksti turvallisesti HTML-muotoon.
+[Pophover](../../src/webc/Pophover/i18n/fi/README.md) : kelluva kupla kehote
+[Scroll](../../src/webc/Scroll/i18n/fi/README.md) : virtuaalinen vierityspalkki
+[Select](../../src/webc/Select/i18n/fi/README.md) : Valinta alasvetovalikosta, leveys mukautuu nykyiseen kohteeseen
+[Tab](../../src/webc/Tab/i18n/fi/README.md) : Vaihdettavat välilehdet
+[fkv](../fi/doc/README.md)
+[Arkkitehtuuri](../fi/doc/architecture.md)
+[Crate](../fi/doc/crates.md)
+[testata](../fi/doc/testing.md)
+[Suorituskyky](../fi/doc/performance.md)

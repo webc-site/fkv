@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/sd/README.md) : بلاگ پوسٽ جو حصو
+[BoxX](../../src/webc/BoxX/i18n/sd/README.md) : هڪ بند بٽڻ سان هڪ پاپ اپ پرت ٺاهيو ۽ ڏيکاريو
+[Code](../../src/webc/Code/i18n/sd/README.md) : ڪوڊ بٽڻ
+[Copy](../../src/webc/Copy/i18n/sd/README.md) : ڪلپ بورڊ تي متن نقل ڪريو
+[Edit](../../src/webc/Edit/i18n/sd/README.md) : تبديلي جو بٽڻ
+[HtmDemo](../../src/webc/HtmDemo/i18n/sd/README.md) : ڊيبگنگ HTML ۽ JS ڪوڊ آن لائن
+[I18n](../../src/webc/I18n/i18n/sd/README.md) : انٽرفيس ٻولين کي مٽائڻ لاءِ بٽڻ ۽ پاپ اپ ونڊوز
+[Nav](../../src/webc/Nav/i18n/sd/README.md) : مٿيون نيويگيشن بار جيڪو خود بخود ختم ٿئي ٿو يا وڌايو وڃي ٿو جڏهن صفحو اسڪرال ٿئي ٿو
+[NavL](../../src/webc/NavL/i18n/sd/README.md) : خودڪار طور تي نيويگيشن مينيو ۽ موٽڻ واري بٽڻ کي تبديل ڪريو
+[NavMenu](../../src/webc/NavMenu/i18n/sd/README.md) : نيويگيشن مينيو مختلف اسڪرين جي سائزن سان ترتيب ڏنل
+[SelectBtn](../../src/webc/SelectBtn/i18n/sd/README.md) : ڊراپ-ڊائون چونڊ باڪس ۽ بٽڻ جو ميلاپ
+[Side](../../src/webc/Side/i18n/sd/README.md) : دراز پينل جيڪي پاسي کان سلائڊ ڪن ٿا
+[TabSelect](../../src/webc/TabSelect/i18n/sd/README.md) : ٽئب صفحو ڊراپ-ڊائون چونڊ سان
+[Toc](../../src/webc/Toc/i18n/sd/README.md) : ڊاريڪٽري نيويگيشن جزو
+[Btn](../../src/webc/Btn/i18n/sd/README.md) : عام بٽڻ ۽ گول آئڪن بٽڻ
+[Card](../../src/webc/Card/i18n/sd/README.md) : ڪئپسول ڪارڊ ساڄي تير سان معطلي ۾ ڏيکاريل آهي
+[H1Txt](../../src/webc/H1Txt/i18n/sd/README.md) : بناوت جو عنوان ۽ وضاحت
+[Ing](../../src/webc/Ing/i18n/sd/README.md) : لوڊشيڊنگ يا پروسيسنگ جي حالت جو اشارو
+[Kv](../../src/webc/Kv/i18n/sd/README.md) : اهم قدر جوڙو
+[Lg](../../src/webc/Lg/i18n/sd/README.md) : ڀريل گلاس پس منظر ۽ ڪنڊ نمايان اثر
+[MdCss](../../src/webc/MdCss/i18n/sd/README.md) : ٽائپوگرافي اسلوب کي پڙهڻ جي تجربي لاءِ بهتر بڻايو ويو
+[NavALi](../../src/webc/NavALi/i18n/sd/README.md) : نيويگيشن بار لنڪ لسٽ جو انداز
+[O](../../src/webc/O/i18n/sd/README.md) : عنصر جي سامهون هڪ سوراخ ڊٽ لوگو ٺاھيو
+[Toast](../../src/webc/Toast/i18n/sd/README.md) : صفحي جي ڪنڊ تي پاپ اپ ونڊو کي فوري طور تي
+[404](../../src/webc/404/i18n/sd/README.md) : رستو موجود ناهي غلطي پيغام وارو صفحو
+[Back](../../src/webc/Back/i18n/sd/README.md) : پوئتي بٽڻ
+[Box](../../src/webc/Box/i18n/sd/README.md) : پاپ اپ پرت ٺاهيو ۽ ڊسپلي ڪريو
+[CardLi](../../src/webc/CardLi/i18n/sd/README.md) : لوڊ ڪريو ۽ ڏيکاريو ڪارڊ لسٽ غير مطابقت سان
+[Md](../../src/webc/Md/i18n/sd/README.md) : مارڪ ڊائون ٽيڪسٽ کي HTML ۾ محفوظ طور تي پارس ۽ رينڈر ڪريو.
+[Pophover](../../src/webc/Pophover/i18n/sd/README.md) : سچل بلبل جو اشارو
+[Scroll](../../src/webc/Scroll/i18n/sd/README.md) : ورچوئل اسڪرول بار
+[Select](../../src/webc/Select/i18n/sd/README.md) : ڊراپ-ڊائون چونڊ، ويڪر موجوده شيءِ سان ٺهڪي اچي ٿي
+[Tab](../../src/webc/Tab/i18n/sd/README.md) : تبديل ٿيندڙ ٽيب
+[fkv](../sd/doc/README.md)
+[آرڪيٽيڪچر](../sd/doc/architecture.md)
+[Crate](../sd/doc/crates.md)
+[ٽيسٽ](../sd/doc/testing.md)
+[ڪارڪردگي](../sd/doc/performance.md)

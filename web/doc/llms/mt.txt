@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/mt/README.md) : Komponent tal-post tal-blog
+[BoxX](../../src/webc/BoxX/i18n/mt/README.md) : Oħloq u uri saff popup b'buttuna mill-qrib
+[Code](../../src/webc/Code/i18n/mt/README.md) : buttuna tal-kodiċi
+[Copy](../../src/webc/Copy/i18n/mt/README.md) : Ikkopja t-test fil-clipboard
+[Edit](../../src/webc/Edit/i18n/mt/README.md) : buttuna editja
+[HtmDemo](../../src/webc/HtmDemo/i18n/mt/README.md) : Debugging HTML u kodiċi JS onlajn
+[I18n](../../src/webc/I18n/i18n/mt/README.md) : Buttuni u twieqi pop-up biex taqleb il-lingwi tal-interface
+[Nav](../../src/webc/Nav/i18n/mt/README.md) : Barra tan-navigazzjoni ta' fuq li tikkollassa jew tespandi awtomatikament meta l-paġna tiskrollja
+[NavL](../../src/webc/NavL/i18n/mt/README.md) : Awtomatikament taqleb il-menu tan-navigazzjoni u l-buttuna tar-ritorn
+[NavMenu](../../src/webc/NavMenu/i18n/mt/README.md) : Menu tan-navigazzjoni adattat għal daqsijiet differenti tal-iskrin
+[SelectBtn](../../src/webc/SelectBtn/i18n/mt/README.md) : Kombinazzjoni ta 'kaxxa ta' għażla drop-down u buttuna
+[Side](../../src/webc/Side/i18n/mt/README.md) : Pannelli tal-kxaxen li jiżżerżqu 'l barra mill-ġenb
+[TabSelect](../../src/webc/TabSelect/i18n/mt/README.md) : Tab page b'għażla drop-down
+[Toc](../../src/webc/Toc/i18n/mt/README.md) : Komponent tan-Navigazzjoni tad-Direttorju
+[Btn](../../src/webc/Btn/i18n/mt/README.md) : Buttuna ordinarja u buttuna tonda tal-ikona
+[Card](../../src/webc/Card/i18n/mt/README.md) : Kard tal-kapsula bil-vleġġa tal-lemin murija f'sospensjoni
+[H1Txt](../../src/webc/H1Txt/i18n/mt/README.md) : Titolu u deskrizzjoni tat-tessut
+[Ing](../../src/webc/Ing/i18n/mt/README.md) : Indikatur tal-istatus tat-tagħbija jew tal-ipproċessar
+[Kv](../../src/webc/Kv/i18n/mt/README.md) : par valur ewlieni
+[Lg](../../src/webc/Lg/i18n/mt/README.md) : Sfond tal-ħġieġ matt u effett ta 'enfasi tat-tarf
+[MdCss](../../src/webc/MdCss/i18n/mt/README.md) : Stili tipografiċi ottimizzati għall-esperjenza tal-qari
+[NavALi](../../src/webc/NavALi/i18n/mt/README.md) : Stil tal-lista tal-links tal-bar tan-navigazzjoni
+[O](../../src/webc/O/i18n/mt/README.md) : Iġbed logo b'tikka vojta quddiem l-element
+[Toast](../../src/webc/Toast/i18n/mt/README.md) : Tieqa pop-up fil-pront fit-tarf tal-paġna
+[404](../../src/webc/404/i18n/mt/README.md) : It-triq ma teżistix paġna tal-messaġġ ta' żball
+[Back](../../src/webc/Back/i18n/mt/README.md) : buttuna lura
+[Box](../../src/webc/Box/i18n/mt/README.md) : Oħloq u uri saff popup
+[CardLi](../../src/webc/CardLi/i18n/mt/README.md) : Tagħbija u turi l-lista tal-karti b'mod asinkroniku
+[Md](../../src/webc/Md/i18n/mt/README.md) : Analiżi u tirrendi b'mod sikur it-test ta' Markdown għal HTML.
+[Pophover](../../src/webc/Pophover/i18n/mt/README.md) : bużżieqa f'wiċċ l-ilma fil-pront
+[Scroll](../../src/webc/Scroll/i18n/mt/README.md) : iscroll bar virtwali
+[Select](../../src/webc/Select/i18n/mt/README.md) : Għażla drop-down, il-wisa 'tadatta għall-oġġett kurrenti
+[Tab](../../src/webc/Tab/i18n/mt/README.md) : Tabs jaqilbu
+[fkv](../mt/doc/README.md)
+[Arkitettura](../mt/doc/architecture.md)
+[Crate](../mt/doc/crates.md)
+[test](../mt/doc/testing.md)
+[Prestazzjoni](../mt/doc/performance.md)

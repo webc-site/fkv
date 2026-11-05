@@ -1,0 +1,26 @@
+.Ing
+  min-height 128px
+  min-width 128px
+  position relative
+
+  &, &:before
+    cursor wait
+
+  &:before
+    background url('./svg/ing.svg') 50% 50% / 64px no-repeat
+    content ''
+    display block
+    inset 0
+    position absolute
+    z-index 999
+
+form.Ing
+  user-select none
+
+  &:after
+    backdrop-filter blur(1px)
+    content ''
+    inset -1px
+    position absolute
+    transform scale(1.1)
+    z-index 100

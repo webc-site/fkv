@@ -1,0 +1,9 @@
+css: ren stil
+base: Grundläggande komponenter
+webc: Sammansatt komponent
+js: Skriptbibliotek
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: popup-lager
+  ^Nav(?![a-z]): navigering
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kort

@@ -1,0 +1,23 @@
+[package]
+name = "fkv_task_scan"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "Scan 迭代、prefetch、分页"
+
+[dependencies]
+fkv_btree = { version = "0.1.0", path = "../../core/fkv_btree" }
+fkv_compress = { version = "0.1.0", path = "../../format/fkv_compress" }
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+fkv_io = { version = "0.1.0", path = "../../io/fkv_io" }
+fkv_mapping = { version = "0.1.0", path = "../../core/fkv_mapping" }
+fkv_page = { version = "0.1.0", path = "../../format/fkv_page" }
+fkv_task_read = { version = "0.1.0", path = "../fkv_task_read" }
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+
+[dev-dependencies]
+fkv_io_mem = { path = "../../io/fkv_io_mem" }
+pollster = "1.0.1"
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

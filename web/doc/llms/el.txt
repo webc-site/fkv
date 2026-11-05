@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/el/README.md) : Στοιχείο ανάρτησης ιστολογίου
+[BoxX](../../src/webc/BoxX/i18n/el/README.md) : Δημιουργήστε και εμφανίστε ένα αναδυόμενο επίπεδο με ένα κουμπί κλεισίματος
+[Code](../../src/webc/Code/i18n/el/README.md) : κουμπί κωδικού
+[Copy](../../src/webc/Copy/i18n/el/README.md) : Αντιγραφή κειμένου στο πρόχειρο
+[Edit](../../src/webc/Edit/i18n/el/README.md) : κουμπί επεξεργασίας
+[HtmDemo](../../src/webc/HtmDemo/i18n/el/README.md) : Εντοπισμός σφαλμάτων HTML και κώδικα JS στο διαδίκτυο
+[I18n](../../src/webc/I18n/i18n/el/README.md) : Κουμπιά και αναδυόμενα παράθυρα για εναλλαγή γλωσσών διεπαφής
+[Nav](../../src/webc/Nav/i18n/el/README.md) : Κορυφαία γραμμή πλοήγησης που συμπτύσσεται ή επεκτείνεται αυτόματα κατά την κύλιση της σελίδας
+[NavL](../../src/webc/NavL/i18n/el/README.md) : Αυτόματη εναλλαγή μενού πλοήγησης και κουμπί επιστροφής
+[NavMenu](../../src/webc/NavMenu/i18n/el/README.md) : Μενού πλοήγησης προσαρμοσμένο σε διαφορετικά μεγέθη οθόνης
+[SelectBtn](../../src/webc/SelectBtn/i18n/el/README.md) : Συνδυασμός αναπτυσσόμενου πλαισίου επιλογής και κουμπιού
+[Side](../../src/webc/Side/i18n/el/README.md) : Πάνελ συρταριών που γλιστρούν από το πλάι
+[TabSelect](../../src/webc/TabSelect/i18n/el/README.md) : Καρτέλα με αναπτυσσόμενη επιλογή
+[Toc](../../src/webc/Toc/i18n/el/README.md) : Στοιχείο πλοήγησης καταλόγου
+[Btn](../../src/webc/Btn/i18n/el/README.md) : Συνηθισμένο κουμπί και κουμπί στρογγυλού εικονιδίου
+[Card](../../src/webc/Card/i18n/el/README.md) : Κάρτα κάψουλας με δεξί βέλος που εμφανίζεται σε αναστολή
+[H1Txt](../../src/webc/H1Txt/i18n/el/README.md) : Τίτλος υφής και περιγραφή
+[Ing](../../src/webc/Ing/i18n/el/README.md) : Ένδειξη κατάστασης φόρτωσης ή επεξεργασίας
+[Kv](../../src/webc/Kv/i18n/el/README.md) : ζεύγος βασικών τιμών
+[Lg](../../src/webc/Lg/i18n/el/README.md) : Φόντο από παγωμένο γυαλί και εφέ τονισμού των άκρων
+[MdCss](../../src/webc/MdCss/i18n/el/README.md) : Στυλ τυπογραφίας βελτιστοποιημένα για εμπειρία ανάγνωσης
+[NavALi](../../src/webc/NavALi/i18n/el/README.md) : Στυλ λίστας συνδέσμων γραμμής πλοήγησης
+[O](../../src/webc/O/i18n/el/README.md) : Σχεδιάστε ένα λογότυπο με κούφια κουκκίδα μπροστά από το στοιχείο
+[Toast](../../src/webc/Toast/i18n/el/README.md) : Αναδυόμενο παράθυρο προτροπής στην άκρη της σελίδας
+[404](../../src/webc/404/i18n/el/README.md) : Η διαδρομή δεν υπάρχει σελίδα μηνύματος σφάλματος
+[Back](../../src/webc/Back/i18n/el/README.md) : κουμπί πίσω
+[Box](../../src/webc/Box/i18n/el/README.md) : Δημιουργία και εμφάνιση αναδυόμενου στρώματος
+[CardLi](../../src/webc/CardLi/i18n/el/README.md) : Φόρτωση και εμφάνιση λίστας καρτών ασύγχρονα
+[Md](../../src/webc/Md/i18n/el/README.md) : Αναλύστε με ασφάλεια και αποδώστε το κείμενο Markdown σε HTML.
+[Pophover](../../src/webc/Pophover/i18n/el/README.md) : αιωρούμενη φυσαλίδα
+[Scroll](../../src/webc/Scroll/i18n/el/README.md) : εικονική γραμμή κύλισης
+[Select](../../src/webc/Select/i18n/el/README.md) : Αναπτυσσόμενη επιλογή, το πλάτος προσαρμόζεται στο τρέχον στοιχείο
+[Tab](../../src/webc/Tab/i18n/el/README.md) : Εναλλασσόμενες καρτέλες
+[fkv](../el/doc/README.md)
+[Αρχιτεκτονική](../el/doc/architecture.md)
+[Crate](../el/doc/crates.md)
+[δοκιμή](../el/doc/testing.md)
+[Απόδοση](../el/doc/performance.md)

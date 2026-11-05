@@ -1,0 +1,59 @@
+.NavALi
+  align-items center
+  display flex
+  flex-direction row
+  gap 24px
+
+  &>.Card
+    box-shadow none
+    box-sizing border-box
+    color #86868b
+    cursor pointer
+    font-variation-settings "wght" 300
+    letter-spacing 1px
+    text-align center
+    white-space nowrap
+    background 0 0
+    border 1px solid #0000
+    border-radius 20px
+    width auto
+    padding 8px 20px
+    font-size 16px
+    font-weight 300
+
+    &::after
+      display none
+
+    &:hover
+      background linear-gradient(180deg, #0071e30f 0, #0071e305 100%)
+      border-color #0071e31a
+      box-shadow inset 0 1px 2px #0071e30d
+      color #0071e3
+      transform none
+
+    &:active
+      box-shadow inset 0 2px 4px #00000026
+      transform scale(0.96)
+      transition all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)
+
+    &.A
+      backdrop-filter blur(8px)
+      background linear-gradient(#fffc 0, #fffa 100%)
+      border-color #0000001a
+      box-shadow inset 0 0 3px #0002
+      color #333
+      border-style double
+      padding 6px 18px
+      border-width 3px
+
+      &::after
+        display none
+
+      &:hover
+        background linear-gradient(180deg, #fffffff2 0, #ffffffa6 100%)
+        box-shadow inset 0 1px 3px #0000001a
+        transform none
+
+      &:active
+        box-shadow inset 0 2px 4px #00000026
+        transform scale(0.96)

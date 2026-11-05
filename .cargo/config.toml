@@ -1,0 +1,11 @@
+[term]
+quiet = true
+
+# gxhash 没有运行时回退：x86_64 需要 AES-NI + SSE2，aarch64 需要 AES + NEON。
+# GitHub Actions 的 ubuntu-26.04 / ubuntu-26.04-arm runner 都满足；
+# 不满足的 CPU 会在启动时 illegal instruction。
+[target.'cfg(target_arch = "x86_64")']
+rustflags = ["-C", "target-feature=+aes,+sse2"]
+
+[target.'cfg(target_arch = "aarch64")']
+rustflags = ["-C", "target-feature=+aes,+neon"]

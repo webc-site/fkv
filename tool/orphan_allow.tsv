@@ -1,0 +1,6 @@
+# 孤儿 crate 白名单：crate<TAB>原因
+# 每项都必须写明原因，禁止长期挂着不处理。
+# 2026-11-05：fkv facade 接线 fkv_runtime（start_runtime / start_mem_runtime），
+# fkv_runtime 及其生产依赖 fkv_cloud / fkv_task_prewarm / fkv_object_s3 /
+# fkv_io_mem 已从顶层交付物可达，对应白名单行随之删除。
+fkv_io_sim	故障注入后端

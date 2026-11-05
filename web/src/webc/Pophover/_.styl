@@ -1,0 +1,173 @@
+c-pophover
+  display inline-block
+  position relative
+  --pophover-gap 12px
+  --pophover-margin 24px
+  --pophover-bg-top #18181ce0
+  --pophover-bg-mid #121215e5
+  --pophover-bg-bottom #0c0c0feb
+
+  [slot="pop"]
+    display none
+    position absolute
+    left 50%
+    bottom calc(100% + var(--pophover-gap))
+    width max-content
+    max-width var(--pophover-max-w, min(calc(100vw - 32px), 320px))
+    overflow-wrap anywhere
+    word-break break-word
+    box-sizing border-box
+    transform translateX(calc(-50% + var(--pophover-x, 0px))) translateY(var(--pophover-gap)) scale(0.98)
+    transform-origin calc(50% - var(--pophover-x, 0px)) 100%
+    opacity 0
+    pointer-events none
+    isolation isolate
+    z-index 9999
+    transition opacity 0.22s ease, transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), display 0.28s allow-discrete
+    padding 8px 12px
+    font-size 14px
+    text-align left
+    color #fff
+
+    @starting-style
+      opacity 0
+      transform translateX(calc(-50% + var(--pophover-x, 0px))) translateY(var(--pophover-gap)) scale(0.98)
+
+    h1, h2, h3, h4, h5, h6
+      color #fff
+
+    p
+      color #e2e8f0
+
+    a
+      color #60a5fa
+      word-break break-all
+
+    &::before, &::after
+      content ""
+      position absolute
+      pointer-events none
+
+    &::before
+      z-index -2
+      inset 0
+      border-radius 8px
+      background linear-gradient(to bottom, var(--pophover-bg-top) 0%, var(--pophover-bg-bottom) 100%)
+      backdrop-filter blur(36px) saturate(220%)
+      box-shadow inset 0 1px 1px #ffffff2e, inset 0 -1px 2px #0006, inset 0 0 10px #0009
+
+    &::after
+      z-index -1
+      left calc(50% - var(--pophover-x, 0px))
+      bottom calc(-1 * var(--pophover-gap) + 3px)
+      transform translateX(-50%) rotate(180deg)
+      width calc(var(--pophover-gap) * 2.5)
+      height calc(var(--pophover-gap) - 1px)
+      background var(--pophover-bg-bottom)
+      mask-image url("./svg/arrow.svg")
+      mask-repeat no-repeat
+      mask-position center
+      mask-size 100% 100%
+
+  &.A , &:hover , &:active , &:focus-within
+    [slot="pop"]
+      display block
+      opacity 1
+      transform translateX(calc(-50% + var(--pophover-x, 0px))) translateY(0) scale(1)
+      pointer-events auto
+
+  &.bottom
+    [slot="pop"]
+      bottom auto
+      top calc(100% + var(--pophover-gap))
+      transform translateX(calc(-50% + var(--pophover-x, 0px))) translateY(calc(-1 * var(--pophover-gap))) scale(0.98)
+      transform-origin calc(50% - var(--pophover-x, 0px)) 0
+
+      @starting-style
+        opacity 0
+        transform translateX(calc(-50% + var(--pophover-x, 0px))) translateY(calc(-1 * var(--pophover-gap))) scale(0.98)
+
+      &::after
+        bottom auto
+        top calc(-1 * var(--pophover-gap) + 3px)
+        left calc(50% - var(--pophover-x, 0px))
+        transform translateX(-50%)
+        background var(--pophover-bg-top)
+
+    &.A , &:hover , &:active , &:focus-within
+      [slot="pop"]
+        display block
+        transform translateX(calc(-50% + var(--pophover-x, 0px))) translateY(0) scale(1)
+
+  &.left
+    [slot="pop"]
+      bottom auto
+      top 50%
+      right calc(100% + var(--pophover-gap))
+      left auto
+      transform translateX(calc(-1 * var(--pophover-gap))) translateY(-50%) scale(0.98)
+      transform-origin 100% 50%
+
+      @starting-style
+        opacity 0
+        transform translateX(calc(-1 * var(--pophover-gap))) translateY(-50%) scale(0.98)
+
+      &::after
+        left auto
+        bottom auto
+        right -15px
+        top 50%
+        transform translateY(-50%) rotate(90deg)
+        width var(--pophover-margin)
+        height 10px
+        background var(--pophover-bg-mid)
+
+    &.A , &:hover , &:active , &:focus-within
+      [slot="pop"]
+        display block
+        transform translateX(0) translateY(-50%) scale(1)
+
+  &.right
+    [slot="pop"]
+      bottom auto
+      top 50%
+      left calc(100% + var(--pophover-gap))
+      right auto
+      transform translateX(var(--pophover-gap)) translateY(-50%) scale(0.98)
+      transform-origin 0 50%
+
+      @starting-style
+        opacity 0
+        transform translateX(var(--pophover-gap)) translateY(-50%) scale(0.98)
+
+      &::after
+        left -15px
+        bottom auto
+        right auto
+        top 50%
+        transform translateY(-50%) rotate(-90deg)
+        width var(--pophover-margin)
+        height 10px
+        background var(--pophover-bg-mid)
+
+    &.A , &:hover , &:active , &:focus-within
+      [slot="pop"]
+        display block
+        transform translateX(0) translateY(-50%) scale(1)
+
+.Ico
+  display inline-flex
+  align-self center
+
+  > c-pophover > a
+    display flex
+    width 18px
+    height 18px
+    background-color currentColor
+    cursor pointer
+    mask-repeat no-repeat
+    mask-position center
+    mask-size 18px 18px
+
+    &:hover
+      background-color #0071e3

@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/ca/README.md) : Component de publicació del bloc
+[BoxX](../../src/webc/BoxX/i18n/ca/README.md) : Creeu i visualitzeu una capa emergent amb un botó de tancament
+[Code](../../src/webc/Code/i18n/ca/README.md) : botó de codi
+[Copy](../../src/webc/Copy/i18n/ca/README.md) : Copia el text al porta-retalls
+[Edit](../../src/webc/Edit/i18n/ca/README.md) : botó d'edició
+[HtmDemo](../../src/webc/HtmDemo/i18n/ca/README.md) : Depuració de codi HTML i JS en línia
+[I18n](../../src/webc/I18n/i18n/ca/README.md) : Botons i finestres emergents per canviar els idiomes de la interfície
+[Nav](../../src/webc/Nav/i18n/ca/README.md) : Barra de navegació superior que es replega o s'expandeix automàticament quan es desplaça la pàgina
+[NavL](../../src/webc/NavL/i18n/ca/README.md) : Canvia automàticament el menú de navegació i el botó de retorn
+[NavMenu](../../src/webc/NavMenu/i18n/ca/README.md) : Menú de navegació adaptat a diferents mides de pantalla
+[SelectBtn](../../src/webc/SelectBtn/i18n/ca/README.md) : Combinació de quadre de selecció desplegable i botó
+[Side](../../src/webc/Side/i18n/ca/README.md) : Panells del calaix que llisquen des del costat
+[TabSelect](../../src/webc/TabSelect/i18n/ca/README.md) : Pestanya amb selecció desplegable
+[Toc](../../src/webc/Toc/i18n/ca/README.md) : Component de navegació de directoris
+[Btn](../../src/webc/Btn/i18n/ca/README.md) : Botó normal i botó d'icona rodona
+[Card](../../src/webc/Card/i18n/ca/README.md) : Targeta de la càpsula amb la fletxa dreta que es mostra en suspensió
+[H1Txt](../../src/webc/H1Txt/i18n/ca/README.md) : Títol i descripció de la textura
+[Ing](../../src/webc/Ing/i18n/ca/README.md) : Indicador d'estat de càrrega o processament
+[Kv](../../src/webc/Kv/i18n/ca/README.md) : parell de valors clau
+[Lg](../../src/webc/Lg/i18n/ca/README.md) : Fons de vidre esmerilat i efecte de ressaltat de vora
+[MdCss](../../src/webc/MdCss/i18n/ca/README.md) : Estils de tipografia optimitzats per a l'experiència de lectura
+[NavALi](../../src/webc/NavALi/i18n/ca/README.md) : Estil de llista d'enllaços de la barra de navegació
+[O](../../src/webc/O/i18n/ca/README.md) : Dibuixa un logotip de punt buit davant de l'element
+[Toast](../../src/webc/Toast/i18n/ca/README.md) : Sol·licita una finestra emergent a la vora de la pàgina
+[404](../../src/webc/404/i18n/ca/README.md) : La ruta no existeix pàgina de missatges d'error
+[Back](../../src/webc/Back/i18n/ca/README.md) : botó enrere
+[Box](../../src/webc/Box/i18n/ca/README.md) : Crear i mostrar una capa emergent
+[CardLi](../../src/webc/CardLi/i18n/ca/README.md) : Carregueu i visualitzeu la llista de targetes de manera asíncrona
+[Md](../../src/webc/Md/i18n/ca/README.md) : Analitzeu i renderitzeu el text Markdown de manera segura a HTML.
+[Pophover](../../src/webc/Pophover/i18n/ca/README.md) : missatge de bombolla flotant
+[Scroll](../../src/webc/Scroll/i18n/ca/README.md) : barra de desplaçament virtual
+[Select](../../src/webc/Select/i18n/ca/README.md) : Selecció desplegable, l'amplada s'adapta a l'element actual
+[Tab](../../src/webc/Tab/i18n/ca/README.md) : Pestanyes canviables
+[fkv](../ca/doc/README.md)
+[Arquitectura](../ca/doc/architecture.md)
+[Crate](../ca/doc/crates.md)
+[prova](../ca/doc/testing.md)
+[Rendiment](../ca/doc/performance.md)

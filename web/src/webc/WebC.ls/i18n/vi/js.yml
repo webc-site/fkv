@@ -1,0 +1,9 @@
+css: phong cách thuần khiết
+base: Thành phần cơ bản
+webc: Thành phần tổng hợp
+js: Thư viện tập lệnh
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: lớp bật lên
+  ^Nav(?![a-z]): điều hướng
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): thẻ

@@ -1,0 +1,9 @@
+css: 純粋なスタイル
+base: 基本コンポーネント
+webc: 複合コンポーネント
+js: スクリプトライブラリ
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: ポップアップレイヤー
+  ^Nav(?![a-z]): ナビゲーション
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): カード

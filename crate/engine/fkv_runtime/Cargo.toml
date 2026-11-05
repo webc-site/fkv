@@ -1,0 +1,38 @@
+[package]
+name = "fkv_runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "shard OS 线程、compio Runtime、ingress"
+
+[dependencies]
+fkv_api = { version = "0.1.0", path = "../fkv_api" }
+fkv_btree = { version = "0.1.0", path = "../../core/fkv_btree" }
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+fkv_metrics = { version = "0.1.0", path = "../../foundation/fkv_metrics" }
+log = { version = "0.4.28", features = ["std"] }
+fkv_shard = { version = "0.1.0", path = "../fkv_shard" }
+fkv_standby = { version = "0.1.0", path = "../../io/fkv_standby" }
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+crossfire = "3.1.22"
+futures = { version = "0.3.34", default-features = false, features = ["executor", "std"] }
+fkv_config = { version = "0.1.0", path = "../../foundation/fkv_config" }
+fkv_page = { version = "0.1.0", path = "../../format/fkv_page" }
+fkv_object = { version = "0.1.0", path = "../../io/fkv_object" }
+fkv_object_s3 = { version = "0.1.0", path = "../../io/fkv_object_s3" }
+fkv_task_prewarm = { version = "0.1.0", path = "../fkv_task_prewarm" }
+fkv_io = { version = "0.1.0", path = "../../io/fkv_io" }
+fkv_io_compio = { version = "0.1.0", path = "../../io/fkv_io_compio" }
+fkv_cloud = { version = "0.1.0", path = "../fkv_cloud" }
+compio = { version = "0.19.2", features = ["fs", "io", "macros", "time"] }
+gxhash = "3.5.0"
+
+[dev-dependencies]
+bytes = "1"
+fkv_api = { path = "../fkv_api" }
+fkv_io_mem = { path = "../../io/fkv_io_mem" }
+fkv_store = { path = "../fkv_store" }
+pollster = "1.0.1"
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

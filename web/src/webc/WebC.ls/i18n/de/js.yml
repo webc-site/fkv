@@ -1,0 +1,9 @@
+css: purer Stil
+base: Grundkomponenten
+webc: Verbundkomponente
+js: Skriptbibliothek
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: Popup-Ebene
+  ^Nav(?![a-z]): Navigation
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): Karte

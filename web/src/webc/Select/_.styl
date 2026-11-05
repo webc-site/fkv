@@ -1,0 +1,57 @@
+c-select
+  position relative
+  display inline-flex
+  align-items center
+  cursor pointer
+  user-select none
+
+  > b
+    font-size inherit
+    font-variation-settings inherit
+    font-weight inherit
+    color inherit
+    line-height 22px
+    height 24px
+    padding 0 24px 0 10px
+    border 1px solid #eee
+    border-radius 6px
+    background-color #fff
+    background-image linear-gradient(180deg, #fff 0%, #f5f5f5 100%)
+    box-shadow 0 1px 2px #0000000d
+    box-sizing border-box
+    position relative
+    display inline-block
+    white-space nowrap
+    transition all 0.2s ease-in-out
+    pointer-events none
+
+    &::after
+      content ""
+      position absolute
+      right 8px
+      top 50%
+      transform translateY(-50%)
+      width 10px
+      height 10px
+      background url('./svg/arrow.svg') no-repeat center / contain
+      opacity 0.6
+      transition opacity 0.2s
+
+  select
+    position absolute
+    left 0
+    top 0
+    width 100%
+    height 100%
+    opacity 0
+    cursor pointer
+    border-radius 6px
+
+  &:hover
+    > b
+      background-image linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 100%)
+      border-color #ccc
+      color #000
+
+      &::after
+        opacity 0.8

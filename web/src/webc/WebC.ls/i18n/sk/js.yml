@@ -1,0 +1,9 @@
+css: čistý štýl
+base: Základné komponenty
+webc: Kompozitný komponent
+js: Knižnica skriptov
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: vyskakovacia vrstva
+  ^Nav(?![a-z]): navigácia
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kartu

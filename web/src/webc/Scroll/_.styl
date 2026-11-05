@@ -1,0 +1,109 @@
+c-vs, c-hs
+  display block
+  position relative
+
+  &::part(scroll)
+    display flex
+    height 100%
+    overflow auto
+    position relative
+    scrollbar-width none
+    width 100%
+
+  &::part(bar)
+    bottom 0
+    display block
+    position absolute
+    transition all 0.2s, opacity 1s, box-shadow 1s
+    user-select none
+    z-index 13000
+    --si-anim none
+    --si-bg #7d7d7d99
+
+  &::part(bar):hover, &::part(drag)
+    background #0001
+    box-shadow inset 0 1px 6px #fffc, inset 0 0 3px #0003
+    opacity 1 !important
+    --si-bg #7d7d7dcc
+
+  &::part(si)
+    animation var(--si-anim)
+    background var(--si-bg)
+    border-radius 3px
+    display block
+    margin auto
+    position absolute
+    transition all 0.2s, opacity 1s, box-shadow 1s
+
+c-vs
+  display flex
+  flex-direction column
+  height 100%
+  width 100%
+  --sh inset 3px 0 3px -3px #00000020, inset -3px 0 3px -3px #0002
+
+  &::part(i)
+    display flex
+    flex-direction column
+    min-height 100%
+    width 100%
+
+  &::part(scroll)
+    display block
+    flex 1
+    min-height 0
+    overflow-x hidden
+
+  &::part(bar)
+    height 100%
+    right 0
+    top 0
+    width 13px
+
+  &::part(bar):hover, &::part(drag)
+    cursor var(--cursorScrollvSvg)
+    width 21px
+
+  &::part(si)
+    cursor var(--cursorScrollvSvg)
+    left 0
+    right 0
+    width 7px
+
+c-hs
+  width 100%
+  --sh inset 0 3px 3px -3px #00000020, inset 0 -3px 3px -3px #0002
+
+  &::part(i)
+    display flex
+    height 100%
+    min-width 100%
+    width max-content
+
+  &::part(scroll)
+    display block
+    overflow-y hidden
+    width 100%
+
+  &::part(bar)
+    height 13px
+    left 0
+    right 0
+    width 100%
+
+  &::part(bar):hover, &::part(drag)
+    cursor var(--cursorScrollhSvg)
+    height 21px
+
+  &::part(si)
+    bottom 0
+    cursor var(--cursorScrollhSvg)
+    height 7px
+    top 0
+
+body.drag
+  cursor url('./cursor/grab.svg') 8 7, grabbing
+
+:root
+  --cursorScrollhSvg url('./cursor/scrollh.svg') 10 10, ew-resize
+  --cursorScrollvSvg url('./cursor/scrollv.svg') 10 10, ns-resize

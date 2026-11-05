@@ -1,0 +1,9 @@
+css: سبک ناب
+base: اجزای اساسی
+webc: جزء مرکب
+js: کتابخانه اسکریپت
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: لایه بازشو
+  ^Nav(?![a-z]): ناوبری
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): کارت

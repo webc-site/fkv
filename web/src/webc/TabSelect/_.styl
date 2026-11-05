@@ -1,0 +1,121 @@
+c-tab-select
+  display flex
+  flex-direction column
+  width 100%
+
+  > nav > a.A , > b
+    background #fff
+
+  > nav
+    display flex
+    align-items flex-end
+    padding 8px 0 0
+
+    > a
+      position relative
+      display inline-flex
+      align-items center
+      justify-content center
+      padding 0 20px
+      height 38px
+      font-size 13px
+      font-weight 500
+      color #777
+      text-decoration none
+      cursor pointer
+      user-select none
+      margin-right 6px
+      border-radius 10px 10px 0 0
+      border-top 1px solid transparent
+
+      &:hover
+        color #000
+
+      &.A
+        color #222
+        z-index 2
+        border 1px solid #eee
+        margin-bottom -1px
+        border-bottom 1px solid #fff
+
+        &:hover
+          color #222
+
+        &::before, &::after
+          content ""
+          position absolute
+          bottom -1px
+          width 8px
+          height 8px
+          pointer-events none
+
+        &::before
+          left -8px
+          background radial-gradient(circle at 0 0, transparent 7px, #eee 7px, #eee 8px, #fff 8px)
+
+        &::after
+          right -8px
+          background radial-gradient(circle at 8px 0, transparent 7px, #eee 7px, #eee 8px, #fff 8px)
+
+        &:first-child
+          &::before
+            display none
+
+      c-select
+        display none
+        margin-left 6px
+        height 100%
+
+        select
+          border-radius 0
+
+        > b
+          font-size 13px
+          font-weight 500
+          color #222
+          border none
+          border-bottom 1px solid #00000014
+          border-radius 0
+          background none
+          box-shadow none
+          padding 2px 16px 2px 0
+          height auto
+          line-height inherit
+
+          &::after
+            right 0
+            opacity 0.15
+
+        &:hover
+          > b
+            background none
+            border-color transparent
+            border-bottom-color #0000004d
+            color #222
+
+            &::after
+              opacity 0.5
+
+      &.A c-select
+        display inline-flex
+
+  > b
+    display none
+    padding 24px
+    border 1px solid #eee
+    font-weight inherit
+    box-sizing border-box
+    border-radius 16px
+
+    &:first-of-type
+      border-top-left-radius 0
+
+    &.A
+      display block
+
+    b
+      display none
+      font-weight inherit
+
+      &.A
+        display block

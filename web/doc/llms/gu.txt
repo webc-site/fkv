@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/gu/README.md) : બ્લોગ પોસ્ટ ઘટક
+[BoxX](../../src/webc/BoxX/i18n/gu/README.md) : બંધ બટન વડે પોપઅપ લેયર બનાવો અને પ્રદર્શિત કરો
+[Code](../../src/webc/Code/i18n/gu/README.md) : કોડ બટન
+[Copy](../../src/webc/Copy/i18n/gu/README.md) : ટેક્સ્ટને ક્લિપબોર્ડ પર કૉપિ કરો
+[Edit](../../src/webc/Edit/i18n/gu/README.md) : સંપાદિત કરો બટન
+[HtmDemo](../../src/webc/HtmDemo/i18n/gu/README.md) : HTML અને JS કોડને ઑનલાઇન ડિબગ કરવું
+[I18n](../../src/webc/I18n/i18n/gu/README.md) : ઈન્ટરફેસ ભાષાઓ બદલવા માટે બટનો અને પોપ-અપ વિન્ડો
+[Nav](../../src/webc/Nav/i18n/gu/README.md) : ટોચના નેવિગેશન બાર જે જ્યારે પૃષ્ઠ સ્ક્રોલ કરે છે ત્યારે આપમેળે સંકુચિત અથવા વિસ્તૃત થાય છે
+[NavL](../../src/webc/NavL/i18n/gu/README.md) : નેવિગેશન મેનૂ અને રીટર્ન બટનને આપમેળે સ્વિચ કરો
+[NavMenu](../../src/webc/NavMenu/i18n/gu/README.md) : નેવિગેશન મેનૂ વિવિધ સ્ક્રીન માપો માટે અનુકૂળ
+[SelectBtn](../../src/webc/SelectBtn/i18n/gu/README.md) : ડ્રોપ-ડાઉન પસંદગી બોક્સ અને બટનનું સંયોજન
+[Side](../../src/webc/Side/i18n/gu/README.md) : ડ્રોઅર પેનલ્સ કે જે બાજુમાંથી બહાર નીકળે છે
+[TabSelect](../../src/webc/TabSelect/i18n/gu/README.md) : ડ્રોપ-ડાઉન પસંદગી સાથે ટૅબ પૃષ્ઠ
+[Toc](../../src/webc/Toc/i18n/gu/README.md) : ડિરેક્ટરી નેવિગેશન ઘટક
+[Btn](../../src/webc/Btn/i18n/gu/README.md) : સામાન્ય બટન અને રાઉન્ડ આઇકન બટન
+[Card](../../src/webc/Card/i18n/gu/README.md) : સસ્પેન્શનમાં પ્રદર્શિત જમણા તીર સાથે કૅપ્સ્યુલ કાર્ડ
+[H1Txt](../../src/webc/H1Txt/i18n/gu/README.md) : ટેક્સચર શીર્ષક અને વર્ણન
+[Ing](../../src/webc/Ing/i18n/gu/README.md) : લોડિંગ અથવા પ્રોસેસિંગ સ્થિતિનું સૂચક
+[Kv](../../src/webc/Kv/i18n/gu/README.md) : કી મૂલ્યની જોડી
+[Lg](../../src/webc/Lg/i18n/gu/README.md) : ફ્રોસ્ટેડ ગ્લાસ બેકગ્રાઉન્ડ અને એજ હાઇલાઇટ ઇફેક્ટ
+[MdCss](../../src/webc/MdCss/i18n/gu/README.md) : વાંચન અનુભવ માટે ઑપ્ટિમાઇઝ ટાઇપોગ્રાફી શૈલીઓ
+[NavALi](../../src/webc/NavALi/i18n/gu/README.md) : નેવિગેશન બાર લિંક સૂચિ શૈલી
+[O](../../src/webc/O/i18n/gu/README.md) : તત્વની સામે હોલો ડોટ લોગો દોરો
+[Toast](../../src/webc/Toast/i18n/gu/README.md) : પૃષ્ઠની ધાર પર પોપ-અપ વિન્ડોને પ્રોમ્પ્ટ કરો
+[404](../../src/webc/404/i18n/gu/README.md) : પાથ અસ્તિત્વમાં નથી ભૂલ સંદેશ પૃષ્ઠ
+[Back](../../src/webc/Back/i18n/gu/README.md) : પાછળનું બટન
+[Box](../../src/webc/Box/i18n/gu/README.md) : પોપઅપ લેયર બનાવો અને પ્રદર્શિત કરો
+[CardLi](../../src/webc/CardLi/i18n/gu/README.md) : અસુમેળ રીતે કાર્ડ સૂચિ લોડ કરો અને પ્રદર્શિત કરો
+[Md](../../src/webc/Md/i18n/gu/README.md) : માર્કડાઉન ટેક્સ્ટને HTML પર સુરક્ષિત રીતે પાર્સ અને રેન્ડર કરો.
+[Pophover](../../src/webc/Pophover/i18n/gu/README.md) : ફ્લોટિંગ બબલ પ્રોમ્પ્ટ
+[Scroll](../../src/webc/Scroll/i18n/gu/README.md) : વર્ચ્યુઅલ સ્ક્રોલ બાર
+[Select](../../src/webc/Select/i18n/gu/README.md) : ડ્રોપ-ડાઉન પસંદગી, પહોળાઈ વર્તમાન આઇટમને અનુકૂળ છે
+[Tab](../../src/webc/Tab/i18n/gu/README.md) : સ્વિચ કરવા યોગ્ય ટૅબ્સ
+[fkv](../gu/doc/README.md)
+[આર્કિટેક્ચર](../gu/doc/architecture.md)
+[Crate](../gu/doc/crates.md)
+[પરીક્ષણ](../gu/doc/testing.md)
+[કામગીરી](../gu/doc/performance.md)
