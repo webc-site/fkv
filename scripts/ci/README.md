@@ -7,7 +7,7 @@ CI 与本地共用的原生依赖 / RustFS 脚本，不依赖 Docker。
 `crate/test/fkv_nvme_test` 只放必须跑在本地 NVMe / SSD 上的少量测试，
 `publish = false`，普通 `ci.yml` 用 `--exclude fkv_nvme_test` 跳过。
 `.github/workflows/nvme.yml` 在 GitHub 托管 runner 上执行
-`cargo nextest archive -p fkv_nvme_test`（输出 `.tar.zst`，约 7 MB），
+`cargo nextest archive -p fkv_nvme_test`（输出 `.tar.zst`，约 18 MB），
 再交给 Blacksmith 下载执行。
 
 runner 要求与变量：
