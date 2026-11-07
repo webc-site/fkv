@@ -128,6 +128,9 @@ mod tests {
     assert_eq!(parse(b"5x").unwrap_err(), KvError::Corrupted);
     assert_eq!(parse(b"+5").unwrap_err(), KvError::Corrupted);
     // 溢出 u64：Corrupted。
-    assert_eq!(parse(b"18446744073709551616").unwrap_err(), KvError::Corrupted);
+    assert_eq!(
+      parse(b"18446744073709551616").unwrap_err(),
+      KvError::Corrupted
+    );
   }
 }
