@@ -1,5 +1,6 @@
 //! 并发点读链与读阶段计量。
 
+use core::{future::poll_fn, task::Poll};
 use std::time::{Duration, Instant};
 
 use fastrand::Rng;
@@ -75,6 +76,25 @@ pub(crate) fn read_lane_li(rows: usize, partitions: usize, read_per_part: usize)
 /// `state` 是本分区的写状态：`exact` 且网格口径时，命中/未命中按
 /// [`live_after`] 判定，覆盖写（`--write-batchs`）后也能精确断言；C++
 /// 随机游走（`--rng cpp`）或跨进程读不到写状态时只校验读回值长度。
+/// 协作让出：自唤醒把当前任务排到执行器就绪队列尾部（同
+/// `fkv_task_read::yield_now` 的语义；compio 无公开 `yield_now`，`sleep(0)`
+/// 只是新增 timer 让出点、不改排队位置，bench 不为此引入 engine 依赖）。
+async fn yield_now() {
+  let mut yielded = false;
+  poll_fn(move |cx| {
+    if yielded {
+      return Poll::Ready(());
+    }
+    yielded = true;
+    cx.waker().wake_by_ref();
+    Poll::Pending
+  })
+  .await
+}
+
+/// 读链协作让出周期：见 `run_read_lane` 内 perf-22 注释。
+const YIELD_EVERY: usize = 64;
+
 pub(crate) async fn run_read_lane(
   store: &Store<CompioStore>,
   tbl: &TableIdent,
@@ -95,6 +115,14 @@ pub(crate) async fn run_read_lane(
     let index = shard_index(lane.part, lane.step, pos);
     let req_start = Instant::now();
     let got = store.get(tbl, &probe_key_bytes(index, mix)).await.unwrap();
+    // perf-22：页缓存全命中后 get 不再返回 Pending，join_all 单任务内的
+    // 就绪链会饿死兄弟链（实测一链独占整窗、其余链 5s 只跑几千次，兄弟链
+    // 在飞 get 的样本被拉长到窗口量级）。每 YIELD_EVERY 次 get 让出一次：
+    // 公平量子 ~64 × 单次 get（亚毫秒级，远小于测试窗），轮转开销摊销到
+    // 1/64，吞吐不受逐 get 让出的执行器往返税拖累。
+    if done.is_multiple_of(YIELD_EVERY) {
+      yield_now().await;
+    }
     let req_elapsed = req_start.elapsed();
     hist.record(req_elapsed);
     window_rec.record(req_elapsed, 1);
