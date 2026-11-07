@@ -14,6 +14,13 @@
 //! `!err` 触发后该点失效；`!hold` 的 `@count` 表示前 `count` 次命中都停在
 //! 门闩上，之后放行（门闩由 [`release`] 打开）。
 //!
+//! # 进程内全局注册表与并行测试
+//!
+//! 注册表是进程级全局的（`@count` 计数跨用例共享）。libtest 默认并行下，
+//! 同一 binary 内多个用例的 failpoint 配置会互相串扰（计数被别的用例消费）；
+//! 门禁与 CI 用 nextest（每用例独立进程）无此问题。用 `cargo test` 调试单个
+//! binary 时加 `RUST_TEST_THREADS=1`，或用 `cargo nextest run -E 'binary(<名>)'`。
+//!
 //! 埋点侧不写字符串：名字的唯一来源是 [`points`]，调用点用
 //! [`fail_point!`](crate::fail_point!) / [`kill_point!`](crate::kill_point!) /
 //! [`hold_point!`](crate::hold_point!) 引用常量标识符，
