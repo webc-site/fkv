@@ -187,8 +187,11 @@ impl<I: PageIo + ManifestIo> Store<I> {
         .get_mut(tbl)
         .and_then(|state| state.compression.as_mut())
       {
-        // 对齐 C++ `BuildDictionary`：首次尝试后即置 `training_attempted`，
-        // 失败也不重试、样本随 `take` 丢弃；写路径继续按 standalone/None 压缩。
+        // no-retry / 弃样本面对齐 C++ `BuildDictionary`：首次尝试后即置
+        // `training_attempted`，失败也不重试、样本随 `take` 丢弃。失败
+        // epoch 的输出与存活面为 fkv 有意加固：无字典、中间区间值保持 raw
+        // 永久可读、不强制 snapshot（C++ 失败即空字典 + has_dictionary 真
+        // 继续产 Dictionary 页，重启后 C++ 自身不可读），见 sem-68 基线登记。
         let _ = compression.maybe_build_dictionary(&sample_li);
       }
     }

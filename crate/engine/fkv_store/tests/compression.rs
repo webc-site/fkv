@@ -648,3 +648,63 @@ async fn compression_toggle_across_reopen_keeps_all_data_readable() {
     assert_all_entries_readable(&store, &tbl, &expected).await;
   }
 }
+
+/// sem-68：字典训练失败 epoch 的 fkv 有意加固——失败后无字典、中间区间值
+/// 保持 raw 永久可读、不产 Dictionary 页（C++ `BuildDictionary` 失败即置
+/// `has_dictionary_` 真并继续产 Dictionary 页，重启后 C++ 自身也不可读，
+/// 属上游缺陷面；fkv 不复制，见 COMPAT_BASELINE sem-68 登记）。
+/// 触发：5 × 350KB 完全相同值——总量 ≥ SAMPLE_TARGET_BYTES、份数 =
+/// MIN_SAMPLES，`ZDICT_trainFromBuffer` 对全同样本报错，平凡可达。
+#[compio::test]
+async fn dictionary_training_failure_epoch_keeps_values_raw_and_readable() {
+  let root = TempRoot::new("store_dict_train_fail");
+  let tbl = TableIdent::new("demo", 1).unwrap();
+  let value = vec![b's'; 350_000];
+  let batch: Vec<_> = (0..5u8)
+    .map(|i| BatchEntry::upsert(format!("k{i}").into_bytes(), value.clone(), 1))
+    .collect();
+  {
+    let mut store = open_compio_store(&root, Some(3));
+    store.put(&tbl, &batch).await.unwrap();
+    assert!(
+      !store.has_dictionary(&tbl),
+      "训练失败后不得标记有字典（C++ 的空字典 + has_dictionary 真不在 fkv 复制）"
+    );
+    for i in 0..5u8 {
+      assert_eq!(
+        store.read(&tbl, format!("k{i}").as_bytes()).await.unwrap(),
+        value
+      );
+    }
+  }
+  {
+    // 不注入任何字典重开：失败 epoch 的值必须仍可读——若曾以 Dictionary 型
+    // 落盘而无持久化字典，reopen 后 read 会 Corrupted。
+    let mut store = open_compio_store(&root, Some(3));
+    store.reopen(&tbl).await.unwrap();
+    assert!(!store.has_dictionary(&tbl));
+    for i in 0..5u8 {
+      assert_eq!(
+        store.read(&tbl, format!("k{i}").as_bytes()).await.unwrap(),
+        value
+      );
+    }
+  }
+  // 盘面：失败 epoch 的中间区间值必须 raw，全盘不得出现 Dictionary 页。
+  let compression_map = data_page_compression(&root, &tbl, 4096);
+  for (key, compression) in &compression_map {
+    assert_ne!(
+      compression,
+      &CompressionType::Dictionary,
+      "训练失败 epoch 不得产 Dictionary 页: {}",
+      String::from_utf8_lossy(key)
+    );
+  }
+  for i in 0..5u8 {
+    assert_eq!(
+      compression_map.get(format!("k{i}").as_bytes()),
+      Some(&CompressionType::None),
+      "失败 epoch 的值必须以 raw 落盘: k{i}"
+    );
+  }
+}
