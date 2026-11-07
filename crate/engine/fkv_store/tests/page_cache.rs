@@ -1096,3 +1096,54 @@ async fn read_cache_sees_writes_deletes_compaction_reopen_and_truncate() {
   assert!(read.hit > 0 && read.miss > 0);
   assert!(read.bytes <= CACHE_BYTES);
 }
+
+/// test-23：compaction 开批前整体清空页缓存（`compact.rs` 入口的
+/// `clear_page_cache`）的锁定测试。搬页走裸 IO 不经写路径装饰器，Pooled
+/// 下新物理页可能落在缓存里仍有旧条目的 id 上——删掉该清空调用会出现
+/// 「快照回填退役页 → maintain 回池 → compact 裸写复用同 id」的陈旧读
+/// 窗口（第 32 轮语义域探针实证 load-bearing），而现有套件对该调用零
+/// 判别力（删掉后全绿）。本用例锁「compact 后缓存占用必须归零 + 数据仍
+/// 可读」：占用断言在正确性回读之前，避免回读自身回填干扰。
+#[compio::test]
+async fn compact_clears_page_cache_before_moving_pages() {
+  const TINY_PAGE: usize = 512;
+  /// 8 页 / 文件：60 × 100B 值摊到多文件，file 0 制造空洞后成为压缩候选。
+  const TINY_SHIFT: u8 = 3;
+  let tbl = TableIdent::new("demo", 1).unwrap();
+  let mut store = Store::new(
+    MemStore::with_pages_per_file(TINY_PAGE, TINY_SHIFT),
+    TINY_PAGE,
+    16,
+  )
+  .with_page_cache_bytes(CACHE_BYTES);
+
+  let batch: Vec<BatchEntry> = (0..60u32)
+    .map(|i| BatchEntry::upsert(format!("k{i:03}").into_bytes(), vec![b'v'; 100], 1))
+    .collect();
+  store.put(&tbl, &batch).await.unwrap();
+  // 删掉 file 0 前段 key：该文件变部分 live，成为可压缩候选。
+  let dead: Vec<BatchEntry> = (0..10u32)
+    .map(|i| BatchEntry::delete(format!("k{i:03}").into_bytes(), 1))
+    .collect();
+  store.put(&tbl, &dead).await.unwrap();
+  // 读热缓存（file 0 与后续文件的页都进缓存）——前提锁定：占用非零。
+  for i in 0..60u32 {
+    store.read(&tbl, format!("k{i:03}").as_bytes()).await.ok();
+  }
+  assert!(store.read_cache_stat().bytes > 0, "夹具必须先把页缓存读热");
+
+  let moved = store.compact_file(&tbl, 0, TINY_SHIFT).await.unwrap();
+  assert!(moved > 0, "夹具必须真实搬页（moved={moved}）");
+  let stat = store.read_cache_stat();
+  assert_eq!(
+    (stat.bytes, stat.len),
+    (0, 0),
+    "compact 开批前必须整体清空页缓存：删掉 clear_page_cache 即红"
+  );
+  // 清空不破坏正确性：幸存 key 全部可读（回读会重新回填缓存，故在占用
+  // 断言之后执行）。
+  for i in 10..60u32 {
+    let value = store.read(&tbl, format!("k{i:03}").as_bytes()).await;
+    assert_eq!(value.unwrap(), vec![b'v'; 100], "k{i:03} 应可读");
+  }
+}
