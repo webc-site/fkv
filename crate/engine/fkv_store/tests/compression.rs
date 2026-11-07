@@ -4,6 +4,7 @@ use std::{
 };
 
 use fkv_btree::BatchEntry;
+use fkv_error::KvError;
 use fkv_io_compio::CompioStore;
 use fkv_io_mem::MemStore;
 use fkv_large::SegmentLayout;
@@ -124,6 +125,107 @@ async fn dictionary_compression_end_to_end_reopen() {
   }
   {
     // 重开时不显式设置字典，靠 manifest 恢复。
+    let io = CompioStore::new(
+      root.path().to_path_buf(),
+      4096,
+      fkv_types::DEFAULT_PAGES_PER_FILE_SHIFT,
+    );
+    let mut store = Store::new(io, 4096, 16);
+    store.reopen(&tbl).await.unwrap();
+    assert!(store.has_dictionary(&tbl));
+    assert_eq!(store.read(&tbl, b"k").await.unwrap(), value);
+  }
+}
+
+/// sem-67 声明 1 主缺陷：**manifest 已建**的表注入字典必须置脏持久化。
+/// 与上面的端到端用例互补：那里 `set_dictionary` 发生在首批写之前，首个
+/// manifest 本来就是全量 snapshot（`first_manifest`），dict_bytes 无条件包含，
+/// 恰好绕过缺陷窗口；本用例先 put 建首 manifest（无字典），此后注入的字典
+/// 只能靠 `dict_dirty` 触发的全量 snapshot 进 manifest——去掉置脏即红
+/// （reopen 后 `has_dictionary == false`、Dictionary 压缩页 read `Corrupted`）。
+#[compio::test]
+async fn dictionary_injected_after_first_manifest_survives_reopen() {
+  let root = TempRoot::new("store_compress_dict_after_manifest");
+  let tbl = TableIdent::new("demo", 1).unwrap();
+  let dict = vec![b'd'; 1024];
+  let value = vec![b'd'; 600];
+  {
+    let io = CompioStore::new(
+      root.path().to_path_buf(),
+      4096,
+      fkv_types::DEFAULT_PAGES_PER_FILE_SHIFT,
+    );
+    let mut store = Store::new(io, 4096, 16).with_compression_level(3);
+    // 先写后注入：首个 manifest 落盘时无字典，此后的 flush 不再走
+    // first_manifest 分支。
+    let first = compressible(b'f');
+    store
+      .put(
+        &tbl,
+        &[BatchEntry::upsert(b"first".to_vec(), first.clone(), 1)],
+      )
+      .await
+      .unwrap();
+    assert!(!store.has_dictionary(&tbl));
+
+    store.set_dictionary(&tbl, dict).unwrap();
+    store
+      .put(&tbl, &[BatchEntry::upsert(b"k".to_vec(), value.clone(), 2)])
+      .await
+      .unwrap();
+    assert_eq!(store.read(&tbl, b"k").await.unwrap(), value);
+  }
+  {
+    // 不显式设置字典，靠 manifest 恢复：注入必须已随 snapshot 持久化。
+    let io = CompioStore::new(
+      root.path().to_path_buf(),
+      4096,
+      fkv_types::DEFAULT_PAGES_PER_FILE_SHIFT,
+    );
+    let mut store = Store::new(io, 4096, 16);
+    store.reopen(&tbl).await.unwrap();
+    assert!(
+      store.has_dictionary(&tbl),
+      "注入的字典必须随 manifest 持久化"
+    );
+    assert_eq!(store.read(&tbl, b"k").await.unwrap(), value);
+    assert_eq!(
+      store.read(&tbl, b"first").await.unwrap(),
+      compressible(b'f')
+    );
+  }
+}
+
+/// sem-67 声明 2：已有字典的表再 `set_dictionary` 必须拒绝（对齐 C++ 封闭
+/// 生命周期）——zstd 帧不内嵌字典、不校验字典身份，静默替换会让旧
+/// Dictionary 压缩页按新字典解出**错值**（无任何错误信号）。去掉守卫即红
+/// （第二次注入返回 `Ok`、旧值被换字典解码）。
+#[compio::test]
+async fn set_dictionary_rejects_replacing_live_dictionary() {
+  let root = TempRoot::new("store_compress_dict_no_replace");
+  let tbl = TableIdent::new("demo", 1).unwrap();
+  let value = vec![b'd'; 600];
+  {
+    let io = CompioStore::new(
+      root.path().to_path_buf(),
+      4096,
+      fkv_types::DEFAULT_PAGES_PER_FILE_SHIFT,
+    );
+    let mut store = Store::new(io, 4096, 16).with_compression_level(3);
+    store.set_dictionary(&tbl, vec![b'd'; 1024]).unwrap();
+    store
+      .put(&tbl, &[BatchEntry::upsert(b"k".to_vec(), value.clone(), 1)])
+      .await
+      .unwrap();
+
+    let err = store.set_dictionary(&tbl, vec![b'x'; 1024]);
+    assert_eq!(err, Err(KvError::InvalidArgs), "已有字典时必须拒绝替换");
+    assert!(store.has_dictionary(&tbl));
+    // 拒绝后原字典仍完整服务读路径。
+    assert_eq!(store.read(&tbl, b"k").await.unwrap(), value);
+  }
+  {
+    // reopen 后仍是注入时的原字典语义，旧值可读。
     let io = CompioStore::new(
       root.path().to_path_buf(),
       4096,

@@ -217,6 +217,17 @@ impl DictCompression {
     self.dirty
   }
 
+  /// 标记字典待持久化：运行中注入（`fkv_store` 的 `set_dictionary`）复用
+  /// [`Self::load_dictionary`] 后必须调用，使下一次 flush 走全量 snapshot 把
+  /// `dict_bytes` 写入 manifest（对齐 `build_dictionary` 的置脏语义）。
+  ///
+  /// manifest replay 装载盘上字典**不得**调用：字典已在 manifest 里，再置脏
+  /// 会让每次 reopen 后首个 flush 被迫全量 snapshot（对齐 C++ `LoadDictionary`
+  /// 不置脏）。
+  pub fn mark_dirty(&mut self) {
+    self.dirty = true;
+  }
+
   pub fn clear_dirty(&mut self) {
     self.dirty = false;
   }

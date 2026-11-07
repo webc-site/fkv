@@ -4,7 +4,7 @@ use std::cell::RefCell;
 
 use fkv_btree::{CacheStat, IndexCache};
 use fkv_compress::DictCompression;
-use fkv_error::Result;
+use fkv_error::{KvError, Result};
 use fkv_io::PageIo;
 use fkv_manifest::{BranchManifestMetadata, ManifestBuilder, SnapshotArg};
 use fkv_mapping::{MappingSnapshot, PageMapper, SnapshotSource};
@@ -274,17 +274,39 @@ impl<I: PageIo> Store<I> {
   /// 为表装载已有 zstd 字典；启用压缩（[`Store::with_compression_level`]）时
   /// 该表后续写入按字典压缩，manifest 会持久化字典字节，reopen 时自动恢复。
   ///
+  /// 装载成功即标记字典待持久化（`mark_dirty`）：manifest 已建的表下一次
+  /// flush 走全量 snapshot 携带 `dict_bytes`——增量 record 不含字典，不置脏
+  /// 的话 reopen 后 `has_dictionary == false`，已写入的 Dictionary 压缩页
+  /// 永久 `Corrupted`（sem-67 声明 1）。
+  ///
+  /// 该表已有字典（人工注入 / 自动训练 / replay 恢复）时返回
+  /// `Err(KvError::InvalidArgs)`，不替换：
+  /// zstd 帧不内嵌字典、也不校验字典身份，静默换字典会让旧 Dictionary 压缩页
+  /// 按新字典解出**错值**（sem-67 声明 2）。对齐 C++ 封闭生命周期——
+  /// `LoadDictionary` 只在 replay 内部调用、训练有 `HasDictionary()` 门，
+  /// 不存在运行中注入 / 换字典的状态。
+  ///
   /// 未启用压缩时字典仍可用于解码历史压缩页，但新写入保持 raw（对齐 C++
   /// `enable_compression` 门控）。
   pub fn set_dictionary(&mut self, tbl: &TableIdent, dict: Vec<u8>) -> Result<()> {
+    if self.has_dictionary(tbl) {
+      // 拒绝替换活字典：旧 Dictionary 压缩页依赖原字典内容解压，替换后解码
+      // 静默失真（无任何错误信号），只能整体拒绝。
+      return Err(KvError::InvalidArgs);
+    }
     let level = self.compression_level.unwrap_or_default();
     let state = self.table_state(tbl);
-    let mut compression = state
+    // get_or_insert：装载失败（字典非法）时保留原压缩状态（含已积累样本），
+    // 不像旧 take + ? 路径把整份状态静默丢掉。
+    let compression = state
       .compression
-      .take()
-      .unwrap_or_else(|| DictCompression::new(level));
+      .get_or_insert_with(|| DictCompression::new(level));
     compression.load_dictionary(dict)?;
-    self.table_state(tbl).compression = Some(compression);
+    // 注入的字典尚未进入 manifest：显式置脏，下一次 flush 走全量 snapshot
+    // 持久化 dict_bytes。不得让 `load_dictionary` 本身置脏——manifest replay
+    // 复用它装载已在盘上的字典，置脏会让每次 reopen 后首个 flush 被迫全量
+    // snapshot（对齐 C++ `LoadDictionary` 不置脏）。
+    compression.mark_dirty();
     self.refresh_table_bytes(tbl);
     Ok(())
   }
