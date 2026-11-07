@@ -6,10 +6,14 @@
   pooled 原地复用。pooled 旧页按快照代际水位回收，reopen 从映射空洞重建空闲池。
 - 单进程只托管一个 attach 身份。`partition_filter` / 多 data store shard
   fanout 不实现；请求路由固定按 `partition_id % shard_num`。
-- data page cache / 用户态 page buffer pool 不实现：data 读路径依赖内核 page cache
-  或 direct IO；data 写路径自 `WritePageCache`（`Store::with_write_cache_bytes`
-  门控，预算同源 `buffer_pool_size`，开启 / 关闭盘面逐字节相同）起有写侧页缓存；
-  index 侧由 `fkv_gc` / `IndexCache` 的 Clock + 代际策略覆盖。
+- 用户态 page buffer pool 以**读写共用页缓存**的形式实现：`PageCache`
+  （`Store::with_page_cache_bytes` 门控，预算同源 `buffer_pool_size`，Clock
+  淘汰，开启 / 关闭盘面逐字节相同）。写路径经 `CachedWriteIo` 回填，读路径
+  （点读 / floor / 范围扫描 / 全表计数）经 `CachedReadIo` 命中同一实例；
+  缓存键是 per-table 物理 `FilePageId`，失效由 `freed_file_page_li` 逐页对账 +
+  compaction / reopen / truncate / 回滚整体清空。index 侧由
+  `fkv_gc` / `IndexCache` 的 Clock + 代际策略覆盖。大 value 的 segment 读走
+  `SegmentIo`，不在此缓存内。
 
 ## 格式
 

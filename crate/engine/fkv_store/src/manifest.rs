@@ -675,7 +675,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
     // 与快照水位重算，旧条目的物理页可能已不属于活跃映射。重建代价只是第一批
     // 按未命中回填；与 index 缓存逐条校验（`retain_mapped`）的复用策略不同，
     // 这里选整体丢弃，不为此再维护一套「物理页仍有效」的判据。
-    self.clear_write_cache(tbl);
+    self.clear_page_cache(tbl);
     let old_cache = self
       .table_map
       .get_mut(tbl)
@@ -787,6 +787,9 @@ impl<I: PageIo + ManifestIo> Store<I> {
     // 对齐 C++ `page_manager.cpp` reopen：TTL 树非空时 next_expire_ts=1，
     // 强制重启后的第一次写触发一次过期清理（而不是等新的 TTL 写入）。
     state.next_expire = u64::from(replay.ttl_root_id != NULL_PAGE);
+    // 只读打开（`--read-only-existing`）的 store 从不走写路径，页缓存实例必须
+    // 在这里建好，否则读路径只能直连 IO。旧实例已在上面整体清空，这里复用。
+    self.ensure_page_cache(tbl);
     // 挂载的缓存改变了实例数：均分额度同步收缩，不能等下一次写才回收。
     self.rebalance_cache_budget();
     // open_branch 不走 `touch_table`：安装后立即补记账，避免 attach 表漏计预算。

@@ -126,7 +126,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
     self.clear_index_cache(tbl);
     // 两棵树全部页已释放、root 归零：写缓存留着只会是死条目（下批首次分配
     // 即覆盖其 id），整体丢弃。
-    self.clear_write_cache(tbl);
+    self.clear_page_cache(tbl);
     Ok(())
   }
 

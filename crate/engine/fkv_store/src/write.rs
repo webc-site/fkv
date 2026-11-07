@@ -22,8 +22,8 @@ use fkv_types::{NULL_PAGE, TableIdent, WriteOp, now_ms};
 use crate::{
   Store,
   batch::MapperBatch,
+  page_cache::{CachedWriteIo, PageCache},
   reborrow_segment,
-  write_cache::{CachedWriteIo, WritePageCache},
 };
 
 impl<I: PageIo + ManifestIo> Store<I> {
@@ -196,8 +196,8 @@ impl<I: PageIo + ManifestIo> Store<I> {
       }
     }
     self.ensure_index_cache(tbl);
-    self.ensure_write_cache(tbl);
-    let write_cache_bytes = self.write_cache_bytes;
+    self.ensure_page_cache(tbl);
+    let page_cache_bytes = self.page_cache_bytes;
     let compression_enabled = self.compression_level.is_some();
     let state = self.table_map.entry(tbl.clone()).or_default();
     let root_id = state.root.unwrap_or(NULL_PAGE);
@@ -226,9 +226,9 @@ impl<I: PageIo + ManifestIo> Store<I> {
     }
     let (new_root, new_ttl_root, ttl_li) = {
       let state = self.table_map.entry(tbl.clone()).or_default();
-      let write_cache = state
-        .write_cache
-        .get_or_insert_with(|| RefCell::new(WritePageCache::new(write_cache_bytes)));
+      let page_cache = state
+        .page_cache
+        .get_or_insert_with(|| RefCell::new(PageCache::new(page_cache_bytes)));
       let mapper = state.mapper.get_or_insert_with(|| {
         let mut mapper = PageMapper::new_with_source(source, alloc_mode, 0);
         mapper.set_snapshot_generation_source(snapshot_source);
@@ -260,10 +260,11 @@ impl<I: PageIo + ManifestIo> Store<I> {
       )
       .with_now_ms(now_ms);
       layout.data.ttl_upsert_sink = Some(&ttl_sink);
-      // 写路径 IO：读先探写缓存（COW 路径上一批刚写出的 root / index / data 页
-      // 因此免一次磁盘读），写成功后回填。失效由 `PageMapper::freed_file_page_li`
-      // 在批次结算时逐页执行，见 `write_cache` 模块文档。
-      let io = CachedWriteIo::new(&self.io, write_cache, self.page_size);
+      // 写路径 IO：读先探页缓存（COW 路径上一批刚写出的 root / index / data 页
+      // 因此免一次磁盘读），写成功后回填同一个读写共用实例。失效由
+      // `PageMapper::freed_file_page_li` 在批次结算时逐页执行，见 `page_cache`
+      // 模块文档。
+      let io = CachedWriteIo::new(&self.io, page_cache, self.page_size);
       // `live_li` 在入口已判空，本批必然重写主树。
       let new_root = write_batch(
         &io,

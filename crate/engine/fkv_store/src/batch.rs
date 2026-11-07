@@ -73,9 +73,9 @@ impl<I: PageIo + ManifestIo> Store<I> {
     // 写缓存收尾：先消费 mapper 记录的已释放物理页（无论本层是否开场，嵌套时
     // 先失效更保守），失败批次额外整体清空——回滚后本批已落盘但已失效的字节
     // 不再对应任何活跃映射，清空比逐页对账更稳。
-    self.invalidate_freed_write_cache(tbl);
+    self.invalidate_freed_page_cache(tbl);
     if !ok && batch.data {
-      self.clear_write_cache(tbl);
+      self.clear_page_cache(tbl);
     }
   }
 }

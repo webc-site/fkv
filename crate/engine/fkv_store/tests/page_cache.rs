@@ -1,4 +1,4 @@
-//! 写路径页缓存（`Store::with_write_cache_bytes` / `Store::write_cache_stat`）。
+//! 写路径页缓存（`Store::with_page_cache_bytes` / `Store::write_cache_stat`）。
 //!
 //! 覆盖任务的三条验收：
 //! 1. COW 路径的磁盘页读真的被缓存吃掉（同一 workload 开 / 关缓存对比读次数）；
@@ -180,9 +180,9 @@ fn write_cache_cuts_cow_path_disk_reads() {
   pollster::block_on(async {
     let rows = 20_000u32;
     let mut with_cache =
-      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_write_cache_bytes(CACHE_BYTES);
+      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_BYTES);
     let mut without_cache =
-      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_write_cache_bytes(CACHE_OFF);
+      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_OFF);
     run_single_key_writes(&mut with_cache, rows).await;
     run_single_key_writes(&mut without_cache, rows).await;
 
@@ -215,7 +215,7 @@ fn disabled_cache_is_a_passthrough() {
   pollster::block_on(async {
     let rows = 2_000u32;
     let mut cached =
-      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_write_cache_bytes(CACHE_OFF);
+      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_OFF);
     run_single_key_writes(&mut cached, rows).await;
     let stat = cached.write_cache_stat();
     assert_eq!(stat.capacity, 0);
@@ -260,7 +260,7 @@ fn compio_store(root: &Path, cache_bytes: usize, alloc_mode: AllocMode) -> Store
   )
   .with_alloc_mode(alloc_mode)
   .with_large_value(layout, 1024)
-  .with_write_cache_bytes(cache_bytes)
+  .with_page_cache_bytes(cache_bytes)
 }
 
 /// 混合 workload：批量 put、覆盖、删除、大 value、交错点读。
@@ -396,7 +396,7 @@ fn write_cache_pooled_page_reuse_keeps_latest_values() {
     let tbl = TableIdent::new("reuse", 1).unwrap();
     let mut store = Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16)
       .with_alloc_mode(AllocMode::Pooled)
-      .with_write_cache_bytes(CACHE_BYTES);
+      .with_page_cache_bytes(CACHE_BYTES);
     let key_num = 400u32;
     for round in 0..8u32 {
       // 全量覆盖（COW remap + retire），值随轮次变化。
@@ -447,7 +447,15 @@ fn write_cache_pooled_page_reuse_keeps_latest_values() {
       store.page_io().read_num.get()
     );
     assert!(stat.hit > 0, "写缓存必须命中");
-    assert!(store.page_io().read_num.get() > 0, "对照：仍有回源读");
+    // 读写共用缓存后，点读也会命中写路径刚回填的页，因此这里不再有回源读；
+    // 用读侧命中记录做「本 workload 的页读真的走了缓存」的对照。
+    let read = store.read_cache_stat();
+    assert!(read.hit > 0, "对照：读路径确实命中过页缓存");
+    assert_eq!(
+      store.page_io().read_num.get(),
+      0,
+      "写路径回填 + 读路径命中后不应再有回源页读"
+    );
   });
 }
 
@@ -557,7 +565,7 @@ fn failed_batch_clears_write_cache() {
       PAGE_SIZE,
       16,
     )
-    .with_write_cache_bytes(CACHE_BYTES);
+    .with_page_cache_bytes(CACHE_BYTES);
     // 先写几批把缓存捂热。
     for round in 0..6u32 {
       let batch: Vec<BatchEntry> = (0..8)
@@ -710,7 +718,7 @@ fn repeated_failed_batches_keep_cache_empty() {
       PAGE_SIZE,
       16,
     )
-    .with_write_cache_bytes(CACHE_BYTES);
+    .with_page_cache_bytes(CACHE_BYTES);
     for _ in 0..3 {
       let err = store
         .put(
@@ -725,4 +733,366 @@ fn repeated_failed_batches_keep_cache_empty() {
       assert_eq!(stat.bytes, 0);
     }
   });
+}
+
+// 读路径命中
+
+/// 读缓存把重复读的磁盘页读降到 0：第一遍读填充缓存，后续点读 / 范围扫描 /
+/// 全表计数全部命中，`read_cache_stat` 与 `write_cache_stat` 分开记账。
+#[test]
+fn read_cache_serves_repeated_reads_without_disk_reads() {
+  pollster::block_on(async {
+    let tbl = TableIdent::new("rc_hit", 1).unwrap();
+    let mut store =
+      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_BYTES);
+    let key_li: Vec<Vec<u8>> = (0..300u32)
+      .map(|idx| format!("k{idx:05}").into_bytes())
+      .collect();
+    let value = |idx: u32| -> Vec<u8> { vec![(idx % 251) as u8; 120] };
+    for (round, chunk) in key_li.chunks(50).enumerate() {
+      let batch: Vec<BatchEntry> = chunk
+        .iter()
+        .enumerate()
+        .map(|(offset, key)| {
+          let idx = round as u32 * 50 + offset as u32;
+          BatchEntry::upsert(key.clone(), value(idx), u64::from(idx) + 1)
+        })
+        .collect();
+      store.put(&tbl, &batch).await.unwrap();
+    }
+
+    // reopen 会按契约清空页缓存（写路径回填的页全部作废）：第一遍读因此必须
+    // 真的回源磁盘，正好用来证明「读缓存确实在起作用」，而不是只靠写路径回填。
+    store.reopen(&tbl).await.unwrap();
+
+    // 第一遍读：填充读缓存（同时填充 index 缓存），必然有回源页读。
+    for (idx, key) in key_li.iter().enumerate() {
+      assert_eq!(
+        store.get(&tbl, key).await.unwrap(),
+        Some(value(idx as u32)),
+        "第一遍读必须返回最新值"
+      );
+    }
+    let after_first = store.page_io().read_num.get();
+    assert!(after_first > 0, "第一遍读必须真的走过磁盘页读");
+
+    // 后续两遍点读：全部命中读缓存，不应再触盘。
+    for _ in 0..2 {
+      for (idx, key) in key_li.iter().enumerate() {
+        assert_eq!(store.get(&tbl, key).await.unwrap(), Some(value(idx as u32)));
+      }
+    }
+    assert_eq!(
+      store.page_io().read_num.get(),
+      after_first,
+      "重复点读必须全部命中页缓存，不得再回源磁盘"
+    );
+
+    // 扫描 / 计数也命中同一份页缓存（`read_page_span` 的段尾投机页可能越过
+    // 已分配区，按契约不回填，因此允许少量回源；命中数必须确实增长）。
+    let hit_before_scan = store.read_cache_stat().hit;
+    for _ in 0..2 {
+      let scan_li = store.scan(&tbl, b"", b"", 0).await.unwrap();
+      assert_eq!(scan_li.len(), key_li.len());
+      assert_eq!(
+        store.scan_count(&tbl, b"", b"").await.unwrap(),
+        key_li.len()
+      );
+    }
+    assert!(
+      store.read_cache_stat().hit > hit_before_scan,
+      "扫描 / 计数必须命中页缓存"
+    );
+
+    let read = store.read_cache_stat();
+    let write = store.write_cache_stat();
+    assert!(read.hit > 0, "读路径必须有命中");
+    assert!(read.miss > 0, "第一遍读必须留下未命中记录");
+    assert!(read.hit > read.miss);
+    assert!(read.bytes <= CACHE_BYTES, "读缓存常驻不得超预算");
+    assert_eq!(read.len, write.len, "读写共用同一个池，占用必须一致");
+    assert_eq!(read.capacity, CACHE_BYTES);
+    println!(
+      "read_cache hit={} miss={} len={} bytes={} page_read={}",
+      read.hit, read.miss, read.len, read.bytes, after_first
+    );
+  });
+}
+
+/// 预算 `0`：读路径完全直通，读结果照常正确，且不产生任何读缓存账目。
+#[test]
+fn read_cache_disabled_is_a_passthrough() {
+  pollster::block_on(async {
+    let tbl = TableIdent::new("rc_off", 1).unwrap();
+    let mut store =
+      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_OFF);
+    for round in 0..4u32 {
+      let batch: Vec<BatchEntry> = (0..16u32)
+        .map(|idx| {
+          BatchEntry::upsert(
+            format!("k{idx:03}").into_bytes(),
+            vec![round as u8 + idx as u8; 100],
+            u64::from(round) * 100 + u64::from(idx) + 1,
+          )
+        })
+        .collect();
+      store.put(&tbl, &batch).await.unwrap();
+    }
+    for idx in 0..16u32 {
+      assert_eq!(
+        store
+          .get(&tbl, format!("k{idx:03}").as_bytes())
+          .await
+          .unwrap(),
+        Some(vec![3u8 + idx as u8; 100])
+      );
+    }
+    assert_eq!(store.scan_count(&tbl, b"", b"").await.unwrap(), 16);
+    let read = store.read_cache_stat();
+    assert_eq!(read.capacity, 0);
+    assert_eq!(read.len, 0);
+    assert_eq!(read.bytes, 0);
+    assert_eq!(read.hit, 0, "关闭时读路径不应有命中");
+    assert_eq!(read.miss, 0, "关闭时读路径不应记录未命中");
+  });
+}
+
+// 读结果差分：缓存开 / 关逐条一致
+
+/// 同一 op log 在缓存开 / 关两侧的**读结果逐条一致**：覆盖 TTL 过期过滤
+/// （同一 key 在 now 早于 / 晚于 `expire_ts` 两侧）、删除、覆盖与大 value
+/// 拒绝口径（`get` 对大 value 返回 `LargeValueUnsupported`）。
+async fn read_observation_log(store: &mut Store<CompioStore>) -> Vec<String> {
+  let tbl = TableIdent::new("rc_diff", 1).unwrap();
+  let mut obs = Vec::new();
+  let value = |seed: u32| -> Vec<u8> { vec![(seed % 251) as u8; 150] };
+  let mut ts = 1u64;
+  for round in 0..4u32 {
+    let batch: Vec<BatchEntry> = (0..8u32)
+      .map(|idx| {
+        let key = format!("k{:03}", round * 8 + idx).into_bytes();
+        BatchEntry::upsert(key, value(round * 8 + idx), ts)
+      })
+      .collect();
+    ts += 1;
+    store.put(&tbl, &batch).await.unwrap();
+  }
+  // 覆盖一半 + 删除四分之一。
+  let batch: Vec<BatchEntry> = (0..16u32)
+    .map(|idx| {
+      let key = format!("k{idx:03}").into_bytes();
+      BatchEntry::upsert(key, value(100 + idx), ts)
+    })
+    .collect();
+  ts += 1;
+  store.put(&tbl, &batch).await.unwrap();
+  let batch: Vec<BatchEntry> = (24..32u32)
+    .map(|idx| BatchEntry::delete(format!("k{idx:03}").into_bytes(), ts))
+    .collect();
+  ts += 1;
+  store.put(&tbl, &batch).await.unwrap();
+  // TTL：`ttl` 在 now=900 存活、now=1100 过期（读侧过滤）。
+  let mut ttl = BatchEntry::upsert(b"ttl".to_vec(), value(7), ts);
+  ttl.expire_ts = 1_000;
+  ts += 1;
+  store.put(&tbl, &[ttl]).await.unwrap();
+  // 大 value：`get` 必须返回 `LargeValueUnsupported`（与缓存开关无关）。
+  store
+    .put_large(
+      &tbl,
+      &[BatchEntry::upsert(b"big".to_vec(), vec![0xAB; 9000], ts)],
+    )
+    .await
+    .unwrap();
+
+  for now in [900u64, 1_100] {
+    for key in (0..32u32)
+      .map(|idx| format!("k{idx:03}").into_bytes())
+      .chain([b"ttl".to_vec(), b"big".to_vec(), b"missing".to_vec()])
+    {
+      obs.push(format!(
+        "get {key:?} @{now} = {:?}",
+        store.get_at(&tbl, &key, now).await
+      ));
+    }
+    obs.push(format!(
+      "scan @{now} = {:?}",
+      store.scan_entry_at(&tbl, b"", b"", 0, now).await
+    ));
+    obs.push(format!(
+      "scan_count @{now} = {:?}",
+      store.scan_count_at(&tbl, b"", b"", now).await
+    ));
+    obs.push(format!(
+      "floor k010 = {:?}",
+      store.floor(&tbl, b"k010").await
+    ));
+  }
+  obs
+}
+
+/// 缓存开 / 关产出逐条相同的读观测与逐字节相同的盘面。
+#[compio::test]
+async fn read_cache_on_off_read_results_and_bytes_identical() {
+  for alloc_mode in [AllocMode::Append, AllocMode::Pooled] {
+    for (cache_bytes, tag) in [(CACHE_BYTES, "4MiB"), (CACHE_TINY, "8KiB")] {
+      let on_root = TempRoot::new("rc_diff_on");
+      let off_root = TempRoot::new("rc_diff_off");
+      let mut on = compio_store(on_root.path(), cache_bytes, alloc_mode);
+      let mut off = compio_store(off_root.path(), CACHE_OFF, alloc_mode);
+      let on_obs = read_observation_log(&mut on).await;
+      let off_obs = read_observation_log(&mut off).await;
+      assert_eq!(
+        on_obs, off_obs,
+        "读缓存不得改变任何读结果 (mode={alloc_mode:?} cache={tag})"
+      );
+      assert!(
+        on_obs
+          .iter()
+          .any(|line| line.contains("LargeValueUnsupported")),
+        "大 value 拒绝口径必须被观测到"
+      );
+      assert!(
+        on_obs.iter().any(|line| line.contains("None")),
+        "删除 / 过期口径必须被观测到"
+      );
+      let read = on.read_cache_stat();
+      assert!(read.hit > 0, "mode={alloc_mode:?} cache={tag} 应有读命中");
+      println!(
+        "mode={alloc_mode:?} cache={tag} read_hit={} read_miss={} len={} bytes={}",
+        read.hit, read.miss, read.len, read.bytes
+      );
+
+      let on_files = dir_snapshot(on_root.path());
+      let off_files = dir_snapshot(off_root.path());
+      assert_eq!(
+        on_files.keys().collect::<Vec<_>>(),
+        off_files.keys().collect::<Vec<_>>(),
+        "文件集必须一致 (mode={alloc_mode:?} cache={tag})"
+      );
+      for (name, bytes) in &on_files {
+        assert_eq!(
+          bytes,
+          off_files.get(name).unwrap(),
+          "文件字节必须一致: {name} (mode={alloc_mode:?} cache={tag})"
+        );
+      }
+    }
+  }
+}
+
+// 变更后读：写 / 删 / 截断 / reopen / compaction
+
+/// 写后读、删除后读、compaction 后读、reopen 后读、truncate 后读都返回最新值。
+#[compio::test]
+async fn read_cache_sees_writes_deletes_compaction_reopen_and_truncate() {
+  let root = TempRoot::new("pc_mut");
+  let tbl = TableIdent::new("pc_mut", 1).unwrap();
+  let layout = SegmentLayout::new(PAGE_SIZE as u32, 2).unwrap();
+  let mut store = Store::new(
+    CompioStore::new(
+      root.path().to_path_buf(),
+      PAGE_SIZE,
+      DEFAULT_PAGES_PER_FILE_SHIFT,
+    ),
+    PAGE_SIZE,
+    16,
+  )
+  .with_alloc_mode(AllocMode::Append)
+  .with_large_value(layout, 1024)
+  .with_file_amplify_factor(1)
+  .with_page_cache_bytes(CACHE_BYTES);
+  let key_li: Vec<Vec<u8>> = (0..64u32)
+    .map(|idx| format!("k{idx:04}").into_bytes())
+    .collect();
+  let value = |round: u32, idx: u32| -> Vec<u8> { vec![(round * 37 + idx) as u8; 200] };
+
+  // 写后立即读。
+  let batch: Vec<BatchEntry> = key_li
+    .iter()
+    .enumerate()
+    .map(|(idx, key)| BatchEntry::upsert(key.clone(), value(0, idx as u32), idx as u64 + 1))
+    .collect();
+  store.put(&tbl, &batch).await.unwrap();
+  for (idx, key) in key_li.iter().enumerate() {
+    assert_eq!(
+      store.get(&tbl, key).await.unwrap(),
+      Some(value(0, idx as u32)),
+      "写后读"
+    );
+  }
+
+  // 覆盖后读（COW 换物理页，旧页进 freed 表）。
+  let batch: Vec<BatchEntry> = key_li
+    .iter()
+    .enumerate()
+    .map(|(idx, key)| BatchEntry::upsert(key.clone(), value(1, idx as u32), 100 + idx as u64))
+    .collect();
+  store.put(&tbl, &batch).await.unwrap();
+  for (idx, key) in key_li.iter().enumerate() {
+    assert_eq!(
+      store.get(&tbl, key).await.unwrap(),
+      Some(value(1, idx as u32)),
+      "覆盖后读"
+    );
+  }
+
+  // 删除后读。
+  let batch: Vec<BatchEntry> = key_li[32..]
+    .iter()
+    .enumerate()
+    .map(|(idx, key)| BatchEntry::delete(key.clone(), 200 + idx as u64))
+    .collect();
+  store.put(&tbl, &batch).await.unwrap();
+  for (idx, key) in key_li.iter().enumerate() {
+    let expect = (idx < 32).then(|| value(1, idx as u32));
+    assert_eq!(store.get(&tbl, key).await.unwrap(), expect, "删除后读");
+  }
+
+  // compaction 后读（搬页走裸 IO，缓存整体作废后按未命中重建）。
+  let moved = store.compact_if_needed(&tbl).await.unwrap();
+  println!("compact moved file num = {}", moved.len());
+  for (idx, key) in key_li.iter().enumerate() {
+    let expect = (idx < 32).then(|| value(1, idx as u32));
+    assert_eq!(
+      store.get(&tbl, key).await.unwrap(),
+      expect,
+      "compaction 后读"
+    );
+  }
+
+  // reopen 后读（mapper 重建成新化身，缓存清空）。
+  store.reopen(&tbl).await.unwrap();
+  for (idx, key) in key_li.iter().enumerate() {
+    let expect = (idx < 32).then(|| value(1, idx as u32));
+    assert_eq!(store.get(&tbl, key).await.unwrap(), expect, "reopen 后读");
+  }
+
+  // truncate 后读（整表页释放，不得命中任何旧页）。
+  store.truncate(&tbl).await.unwrap();
+  for key in &key_li {
+    assert_eq!(store.get(&tbl, key).await.unwrap(), None, "truncate 后读");
+  }
+  assert_eq!(store.scan_count(&tbl, b"", b"").await.unwrap(), 0);
+
+  // 截断后重写：新页复用旧物理页号也必须是新字节。
+  let batch: Vec<BatchEntry> = key_li[..8]
+    .iter()
+    .enumerate()
+    .map(|(idx, key)| BatchEntry::upsert(key.clone(), value(2, idx as u32), 300 + idx as u64))
+    .collect();
+  store.put(&tbl, &batch).await.unwrap();
+  for (idx, key) in key_li[..8].iter().enumerate() {
+    assert_eq!(
+      store.get(&tbl, key).await.unwrap(),
+      Some(value(2, idx as u32)),
+      "truncate 后重写读"
+    );
+  }
+  for key in &key_li[8..] {
+    assert_eq!(store.get(&tbl, key).await.unwrap(), None);
+  }
+  let read = store.read_cache_stat();
+  assert!(read.hit > 0 && read.miss > 0);
+  assert!(read.bytes <= CACHE_BYTES);
 }

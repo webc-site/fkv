@@ -406,8 +406,13 @@ fn put_large_base_timestamp_read_failure_rolls_back() {
         at: 1,
         err: KvError::IoFail,
       });
-    let mut store =
-      Store::new(io, PAGE_SIZE, RESTART_INTERVAL).with_large_value(layout(), LARGE_THRESHOLD);
+    // 本用例要注入「base_timestamp 树下降的第一页读失败」：开启页缓存后 setup
+    // 写出的 root / index 页会留在缓存里，失败批的下降根本不会触发 ReadPage，
+    // 故障点永远命中不了。显式关闭页缓存，保留真实的页读（缓存开关不影响
+    // 被测的失败回滚语义）。
+    let mut store = Store::new(io, PAGE_SIZE, RESTART_INTERVAL)
+      .with_large_value(layout(), LARGE_THRESHOLD)
+      .with_page_cache_bytes(0);
 
     let value_a = pattern(SEGMENT_SIZE * 3);
     store

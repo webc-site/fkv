@@ -1086,7 +1086,7 @@ async fn rewrite_ttl_page(store: &Store<MemStore>, tbl: &TableIdent, entry_li: &
   // 旁路写：直写 `page_io()` 绕过了写路径的页缓存（同一 `FilePageId` 的盘上
   // 字节已变而缓存不知），必须显式失效，否则后续 `clean_expired` 的写批会
   // 从缓存读到改写前的整页。
-  store.invalidate_write_cache();
+  store.invalidate_page_cache();
 }
 
 /// 坏 TTL key（长度不足 8 字节）不得让 `next_expire_ts` 归零、清理停摆，

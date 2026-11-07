@@ -158,6 +158,26 @@ pub(crate) fn collect_write_cache_stats(
   stats
 }
 
+/// 汇总各分区 store 的读路径页缓存统计（与写路径页缓存分开上报）。
+///
+/// 读写两侧共用同一个缓存池：`bytes` / `len` / `capacity` / `evict` 是公共
+/// 账目，读 / 写两份上报值相同；`hit` / `miss` 各自独立累计。
+pub(crate) fn collect_read_cache_stats(
+  store_li: &[(TableIdent, Store<CompioStore>)],
+) -> CacheStats {
+  let mut stats = CacheStats::default();
+  for (_tbl, store) in store_li {
+    let stat = store.read_cache_stat();
+    stats.hit += stat.hit;
+    stats.miss += stat.miss;
+    stats.evict += stat.evict;
+    stats.bytes += stat.bytes as u64;
+    stats.len += stat.len as u64;
+    stats.capacity += stat.capacity as u64;
+  }
+  stats
+}
+
 /// 收尾读取并求和各分区的 CompioStore 计数器（消耗 store，顺带触发关闭）。
 pub(crate) fn drain_io_counters(store_li: Vec<(TableIdent, Store<CompioStore>)>) -> IoCounters {
   let mut counters = IoCounters::default();
@@ -285,6 +305,14 @@ pub(crate) fn push_write_cache_stats(
   stats: CacheStats,
 ) {
   push_named_cache_stats(result_li, "write_cache", stats);
+}
+
+/// 读路径页缓存指标（`read_cache_*`）：与 `write_cache_*` 分列。
+pub(crate) fn push_read_cache_stats(
+  result_li: &mut Vec<(String, f64, &'static str)>,
+  stats: CacheStats,
+) {
+  push_named_cache_stats(result_li, "read_cache", stats);
 }
 
 fn push_named_cache_stats(

@@ -14,7 +14,7 @@ use fkv_task_scan::ScannedEntry;
 pub use fkv_task_scan::{PageOption, ScanOption};
 use fkv_types::{BranchFileRange, FilePageId, NULL_PAGE, PageId, TableIdent};
 use gxhash::HashMap;
-use write_cache::WritePageCache;
+use page_cache::PageCache;
 
 mod archive;
 mod batch;
@@ -22,6 +22,7 @@ mod compact;
 mod config;
 mod gc;
 mod manifest;
+mod page_cache;
 mod read;
 mod reuse_floor;
 mod state;
@@ -29,9 +30,8 @@ mod term;
 mod truncate;
 mod ttl;
 mod write;
-mod write_cache;
 
-pub use write_cache::WriteCacheStat;
+pub use page_cache::PageCacheStat;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct CleanExpiredStat {
@@ -188,9 +188,10 @@ struct TableState {
   next_expire: u64,
   compression: Option<DictCompression>,
   index_cache: Option<RefCell<IndexCache>>,
-  /// 写路径页缓存（`FilePageId -> 整页字节`，见 [`write_cache`]）：把上一批 COW
-  /// 写出的页留给下一批读回。`None` 表示预算为 `0`（显式关闭）。
-  write_cache: Option<RefCell<WritePageCache>>,
+  /// 读写共用页缓存（`FilePageId -> 整页字节`，见 [`page_cache`]）：写路径回填、
+  /// 读路径命中，两侧共用同一实例与同一份预算。`None` 表示预算为 `0`
+  /// （显式关闭）或该表尚未打开。
+  page_cache: Option<RefCell<PageCache>>,
   /// 当前 index 缓存所属分支名；reopen 复用要求与当前分支一致（eng-67）。
   cache_branch: Option<String>,
   /// 当前 index 缓存所属 term；跨 term 文件 id 空间可能不同，必须丢弃（eng-67）。
@@ -217,7 +218,7 @@ impl Default for TableState {
       next_expire: 0,
       compression: None,
       index_cache: None,
-      write_cache: None,
+      page_cache: None,
       cache_branch: None,
       cache_term: 0,
       ttl_pending: false,
@@ -257,10 +258,10 @@ fn table_state_bytes(state: &TableState) -> usize {
       .index_cache
       .as_ref()
       .map_or(0, |cache| cache.borrow().byte_len())
-    // 写路径页缓存与 index 缓存同口径计入表级常驻字节：`root_meta_cache_size`
-    // 超限驱逐时两块一起归还，否则写缓存会成为预算外的隐形驻留。
+    // 页缓存与 index 缓存同口径计入表级常驻字节：`root_meta_cache_size`
+    // 超限驱逐时两块一起归还，否则页缓存会成为预算外的隐形驻留。
     + state
-      .write_cache
+      .page_cache
       .as_ref()
       .map_or(0, |cache| cache.borrow().byte_len())
     + branch_bytes
@@ -315,11 +316,11 @@ pub struct Store<I> {
   defer_ttl: bool,
   /// 每表 index page 缓存字节预算；`0` 表示不限制。
   index_cache_bytes: usize,
-  /// 每表写路径页缓存字节预算；`0` 表示**关闭**写缓存。
+  /// 每表页缓存（读写共用）字节预算；`0` 表示**关闭**页缓存。
   ///
   /// 与 index 缓存预算同源（对齐 C++ 单池 `buffer_pool_size` 的可行子集：两块
-  /// 各自受该值约束）。关闭时写路径直连 IO，与未引入本缓存时逐字节一致。
-  write_cache_bytes: usize,
+  /// 各自受该值约束）。关闭时读写路径都直连 IO，与未引入本缓存时逐字节一致。
+  page_cache_bytes: usize,
   /// 全 store 的 index 缓存聚合字节上限；`0` 表示不限制。
   ///
   /// 对齐 C++ `PageManager` 的单池记账：多表共享一份预算，按缓存的表数均分，

@@ -22,8 +22,9 @@ use crate::{
   read::{ReadPhase, run_read_phase},
   report::now_secs,
   resource::{
-    collect_cache_stats, collect_write_cache_stats, dir_size_bytes, dir_stats, drain_io_counters,
-    push_cache_stats, push_resource_metrics, push_store_breakdown, push_write_cache_stats,
+    collect_cache_stats, collect_read_cache_stats, collect_write_cache_stats, dir_size_bytes,
+    dir_stats, drain_io_counters, push_cache_stats, push_read_cache_stats, push_resource_metrics,
+    push_store_breakdown, push_write_cache_stats,
   },
   scan::{ScanPhase, run_scan_phase},
   ttl::clean_ttl_lane,
@@ -151,8 +152,8 @@ fn open_store_li(
       .with_manifest_limit(opts.manifest_limit as usize)
       .with_index_cache_bytes(opts.buffer_pool_size as usize)
       .with_index_cache_total_bytes(opts.buffer_pool_size as usize)
-      // 写路径页缓存（COW 路径免盘读）：与 index 缓存同源预算。
-      .with_write_cache_bytes(opts.buffer_pool_size as usize);
+      // 读写共用页缓存（COW 路径免盘读 / 读路径命中）：与 index 缓存同源预算。
+      .with_page_cache_bytes(opts.buffer_pool_size as usize);
       if matches!(workload, Workload::Compact | Workload::CompactOnly) {
         // 放大率阈值 1：只要文件里有死页就成为 compact 候选（lane 需要可观测的搬运）。
         store = store.with_file_amplify_factor(1);
@@ -267,12 +268,14 @@ pub(crate) fn bench_workload_ext(
         if control.resource {
           let cache_stats = collect_cache_stats(&store_li);
           let write_cache_stats = collect_write_cache_stats(&store_li);
+          let read_cache_stats = collect_read_cache_stats(&store_li);
           let counters = drain_io_counters(store_li);
           let stats = dir_stats(&root);
           push_resource_metrics(&mut metric_li, counters, stats.total_bytes);
           push_store_breakdown(&mut metric_li, stats);
           push_cache_stats(&mut metric_li, cache_stats);
           push_write_cache_stats(&mut metric_li, write_cache_stats);
+          push_read_cache_stats(&mut metric_li, read_cache_stats);
         }
         return metric_li;
       }
@@ -380,6 +383,7 @@ pub(crate) fn bench_workload_ext(
 
     let cache_stats = collect_cache_stats(&store_li);
     let write_cache_stats = collect_write_cache_stats(&store_li);
+    let read_cache_stats = collect_read_cache_stats(&store_li);
     let counters = drain_io_counters(store_li);
     if control.resource {
       let stats = dir_stats(&root);
@@ -387,6 +391,7 @@ pub(crate) fn bench_workload_ext(
       push_store_breakdown(&mut result_li, stats);
       push_cache_stats(&mut result_li, cache_stats);
       push_write_cache_stats(&mut result_li, write_cache_stats);
+      push_read_cache_stats(&mut result_li, read_cache_stats);
     }
     if control.mode == RunMode::Normal {
       let _ = fs::remove_dir_all(root);

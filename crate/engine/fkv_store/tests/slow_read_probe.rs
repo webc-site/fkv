@@ -172,7 +172,10 @@ async fn drive<F: Future>(mut fut: Pin<&mut F>) -> F::Output {
 #[test]
 fn slow_read_probe_is_request_scoped() {
   pollster::block_on(async {
-    let mut store = Store::new(ProbeIo::new(), PAGE_SIZE, RESTART_INTERVAL);
+    // 本文件断言的是「页读在 IO 层如何分段 / 交错」：必须关闭页缓存，否则写批
+    // 刚回填的页会让读请求直接命中、根本走不到 ProbeIo::read_page。
+    let mut store =
+      Store::new(ProbeIo::new(), PAGE_SIZE, RESTART_INTERVAL).with_page_cache_bytes(0);
     let tbl = tbl();
     // 第二条请求用**另一张表**：两表互不共享在飞 index / data 页，避免
     // l2-08 首访 single-flight 把两条请求的页读合并掉（合并后 B 就没有自己的
@@ -263,7 +266,10 @@ fn slow_read_probe_is_request_scoped() {
 #[test]
 fn merged_reader_reports_flight_wait() {
   pollster::block_on(async {
-    let mut store = Store::new(ProbeIo::new(), PAGE_SIZE, RESTART_INTERVAL);
+    // 本文件断言的是「页读在 IO 层如何分段 / 交错」：必须关闭页缓存，否则写批
+    // 刚回填的页会让读请求直接命中、根本走不到 ProbeIo::read_page。
+    let mut store =
+      Store::new(ProbeIo::new(), PAGE_SIZE, RESTART_INTERVAL).with_page_cache_bytes(0);
     let tbl = tbl();
     let batch = [
       BatchEntry::upsert(b"a".to_vec(), b"A".to_vec(), 1),

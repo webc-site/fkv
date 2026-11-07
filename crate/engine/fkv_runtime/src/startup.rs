@@ -145,8 +145,8 @@ fn build_shard_cfg(
     fd_limit: shard_fd_limit,
     alloc_mode,
     // 扩展键 `0` = 跟随 C++ `buffer_pool_size`（per shard，索引/数据共享）；
-    // index 缓存与写路径页缓存（write_cache）同取该值、各自独立计量
-    // （partition.rs `with_write_cache_bytes` 同源接线）；data 读路径仍无缓存。
+    // index 缓存与读写共用页缓存（page_cache）同取该值、各自独立计量
+    // （partition.rs `with_page_cache_bytes` 同源接线）；读路径由页缓存覆盖。
     index_cache_bytes: {
       let bytes = option.map_or(option_default.index_cache_bytes, |opts| {
         opts.index_cache_bytes

@@ -51,8 +51,11 @@ fn config(root: PathBuf, oom_retry_times: u32) -> ShardConfig {
     max_write_batch_pages: 32,
     max_inflight_write: 32 * 1024,
     fd_limit: 10_000,
-    index_cache_bytes: fkv_config::DEFAULT_INDEX_CACHE_BYTES as usize,
-    index_cache_total_bytes: fkv_config::DEFAULT_INDEX_CACHE_BYTES as usize,
+    // 本文件用 failpoint 把「真实页读」钉在注入点（`ReadPageHold`）上；页缓存
+    // 命中时不会发起页读（与 C++ buffer pool 命中即返回同语义），注入点也就
+    // 不会触发。这些用例测的是 OOM 重试与在读任务语义，不是缓存收益，故关掉。
+    index_cache_bytes: 0,
+    index_cache_total_bytes: 0,
     root_meta_cache_bytes: 0,
     io_queue_size: 4096,
     backend: Backend::default(),

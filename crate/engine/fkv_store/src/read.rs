@@ -16,9 +16,19 @@ use fkv_types::{NULL_PAGE, TableIdent, now_ms, slow_read};
 
 use crate::{
   FloorValue, GetEntry, KvEntry, KvEntryPage, LargeValue, LargeValueInto, ScanPageResult, Store,
+  page_cache::CachedReadIo,
 };
 
 impl<I: PageIo> Store<I> {
+  /// 读路径 IO：在真实 `PageIo` 外面包一层读写共用页缓存，未命中才回源磁盘。
+  ///
+  /// 缓存实例与写路径共用（`TableState::page_cache`）：写批刚写出的页，紧接着的
+  /// 读请求直接命中。表没有缓存实例（预算 `0` / 表未打开）时完全直通。
+  /// 只覆盖 `PageIo` 的页读；大 value 的 segment 读走 `SegmentIo`，不在此列。
+  fn read_io(&self, tbl: &TableIdent) -> CachedReadIo<'_, I> {
+    CachedReadIo::new(&self.io, self.page_cache(tbl), self.page_size)
+  }
+
   /// 读上下文：快照 + 字典 + 该表 index page 缓存与首访去重。
   ///
   /// 快照由请求入口取一次并在整个点读 / floor 内复用；上下文不携带当前
@@ -99,8 +109,9 @@ impl<I: PageIo> Store<I> {
         return Ok(None);
       }
       let entry_start = slow_read::start();
+      let io = self.read_io(tbl);
       let entry = read_entry(
-        &self.io,
+        &io,
         tbl,
         key,
         self.page_size,
@@ -236,8 +247,9 @@ impl<I: PageIo> Store<I> {
       }
       // TTL 过滤在叶子迭代器层完成：过期条目不读 overflow、不占分页配额。
       // 单次扫描从 root 下降到叶子后顺序推进，不再因过滤/字节超限重查整棵树。
+      let io = self.read_io(tbl);
       let task_page = scan_page_with_budget(
-        &self.io,
+        &io,
         self.scan_arg(tbl, &snapshot, begin, end, 0, now_ms),
         option,
         page,
@@ -317,8 +329,9 @@ impl<I: PageIo> Store<I> {
       // 两个上限都下推到叶子迭代器：`max_entries` 逐条限量（不整区间物化），
       // TTL 过滤在解 overflow / 解压之前完成，过期条目不读 value、不占配额。
       // 与 `scan_entry_page_at` 同一口径，见 eng-52 / eng-64 / perf-84。
+      let io = self.read_io(tbl);
       let entry_li = scan_entries_with_budget(
-        &self.io,
+        &io,
         self.scan_arg(tbl, &snapshot, begin, end, max_entries, now_ms),
         option,
         self.yield_budget_us,
@@ -359,8 +372,9 @@ impl<I: PageIo> Store<I> {
       }
       // 计数与物化扫描共用同一遍历：max_entries=0 不限量，TTL 过滤在叶子
       // 迭代器层完成，过期条目不计数也不占配额。
+      let io = self.read_io(tbl);
       scan_count_with_budget(
-        &self.io,
+        &io,
         self.scan_arg(tbl, &snapshot, begin, end, 0, now_ms),
         ScanOption::default(),
         self.yield_budget_us,
@@ -479,8 +493,9 @@ impl<I: PageIo + SegmentIo> Store<I> {
     key: &[u8],
     now_ms: u64,
   ) -> Result<Option<ReadEntry>> {
+    let io = self.read_io(tbl);
     read_entry(
-      &self.io,
+      &io,
       tbl,
       key,
       self.page_size,
@@ -534,8 +549,9 @@ impl<I: PageIo + SegmentIo> Store<I> {
       let Some(snapshot) = self.snapshot(tbl) else {
         return Err(KvError::NotFound);
       };
+      let io = self.read_io(tbl);
       let Some(entry) = read_floor_entry(
-        &self.io,
+        &io,
         tbl,
         key,
         self.page_size,

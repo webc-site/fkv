@@ -31,7 +31,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
     // 搬页走裸 IO（不过写路径装饰器）写新物理页，Pooled 下可能落到缓存里仍
     // 有条目的 id 上；本调用内部也没有写路径读，因此**在开批前**整体作废、
     // 覆盖成功 / 中途 IO 失败 / 零搬迁全部出口，不留一条陈旧条目。
-    self.clear_write_cache(tbl);
+    self.clear_page_cache(tbl);
     let (moved, batch) = {
       let mapper = self
         .table_map

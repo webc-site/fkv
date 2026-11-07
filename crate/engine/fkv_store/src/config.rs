@@ -49,7 +49,7 @@ impl<I: PageIo> Store<I> {
       index_cache_bytes: fkv_btree::DEFAULT_INDEX_CACHE_BYTES,
       index_cache_total_bytes: fkv_btree::DEFAULT_INDEX_CACHE_BYTES,
       index_cache_total_explicit: false,
-      write_cache_bytes: fkv_btree::DEFAULT_INDEX_CACHE_BYTES,
+      page_cache_bytes: fkv_btree::DEFAULT_INDEX_CACHE_BYTES,
       index_cache_ledger: Arc::new(CacheLedger::default()),
       index_cache_counter: Arc::new(CacheCounter::default()),
       index_flight: RefCell::new(PageFlight::default()),
@@ -108,22 +108,23 @@ impl<I: PageIo> Store<I> {
     self.index_cache_total_bytes
   }
 
-  /// 每表写路径页缓存字节预算（`0` = 关闭写缓存）。
+  /// 每表页缓存（读写共用）字节预算（`0` = 关闭页缓存）。
   ///
   /// 写路径的 COW 每批都要读回上一批刚写下的同一路径（root → 内部 index →
-  /// leaf index → data 页）：本缓存把这些页留在内存里，把「固定每批页读」
-  /// 变成命中（对齐 C++ `WriteTask` 经 buffer pool 的 swizzling 句柄）。
+  /// leaf index → data 页），读路径的每一页页读也要落盘。本缓存把这些页留
+  /// 在内存里，读写两侧共用同一实例：写出的页紧接着就能被读命中，读过的页
+  /// 也会被后续读请求命中（对齐 C++ 单池 buffer pool / swizzling 句柄）。
   ///
   /// 预算同源 `buffer_pool_size`（与 `index_cache_bytes` 一致的口径），
-  /// 超出即按 Clock 逐出；`0` 显式关闭，写路径退化为直连 IO，盘面逐字节不变。
-  pub fn with_write_cache_bytes(mut self, bytes: usize) -> Self {
-    self.write_cache_bytes = bytes;
+  /// 超出即按 Clock 逐出；`0` 显式关闭，读写路径都退化为直连 IO，盘面逐字节不变。
+  pub fn with_page_cache_bytes(mut self, bytes: usize) -> Self {
+    self.page_cache_bytes = bytes;
     self
   }
 
-  /// 当前写路径页缓存预算（`0` = 关闭）。
-  pub fn write_cache_bytes(&self) -> usize {
-    self.write_cache_bytes
+  /// 当前页缓存预算（`0` = 关闭）。
+  pub fn page_cache_bytes(&self) -> usize {
+    self.page_cache_bytes
   }
 
   /// 采纳共享的 index 缓存字节账本（shard 的每分区 Store 模式）。

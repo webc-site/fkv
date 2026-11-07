@@ -12,7 +12,11 @@ use fkv_types::{
   BranchFileRange, DEFAULT_SEGMENTS_PER_FILE_SHIFT, FilePageId, NULL_PAGE, PageId, TableIdent,
 };
 
-use crate::{Store, TableState, WriteCacheStat, table_state_bytes, write_cache::WritePageCache};
+use crate::{
+  PageCacheStat, Store, TableState,
+  page_cache::{CacheSide, PageCache},
+  table_state_bytes,
+};
 
 impl<I: PageIo> Store<I> {
   /// 新建一个共享计数器的表级 index 缓存。
@@ -154,6 +158,7 @@ impl<I: PageIo> Store<I> {
     // mapper 必须先就位：缓存 baseline 要按它的 live 代际初始化，否则空缓存
     // 会接受任意代际的回填（r7a-core-01/02）。
     self.ensure_index_cache(tbl);
+    self.ensure_page_cache(tbl);
     self.touch_table(tbl);
   }
 
@@ -390,23 +395,34 @@ impl<I: PageIo> Store<I> {
     }
   }
 
-  /// 确保该表有写路径页缓存；预算 `0`（显式关闭）时不建，写路径直连 IO。
-  pub(crate) fn ensure_write_cache(&mut self, tbl: &TableIdent) {
-    let capacity = self.write_cache_bytes;
+  /// 确保该表有页缓存（读写共用）；预算 `0`（显式关闭）时不建，两侧直连 IO。
+  ///
+  /// 表打开（`open_empty` / `reopen`）与首次写入都会调用：读路径只有 `&self`
+  /// 无法懒建实例，只读打开的 store（`--read-only-existing`）必须在这里建好。
+  pub(crate) fn ensure_page_cache(&mut self, tbl: &TableIdent) {
+    let capacity = self.page_cache_bytes;
     if capacity == 0 {
       return;
     }
     let state = self.table_state(tbl);
     state
-      .write_cache
-      .get_or_insert_with(|| RefCell::new(WritePageCache::new(capacity)));
+      .page_cache
+      .get_or_insert_with(|| RefCell::new(PageCache::new(capacity)));
   }
 
-  /// 消费 mapper 记录的已释放物理页，逐条失效写缓存（批次结算的收尾动作）。
+  /// 该表的页缓存句柄；未建（预算 `0` / 表未打开）时为 `None`。
+  pub(crate) fn page_cache(&self, tbl: &TableIdent) -> Option<&RefCell<PageCache>> {
+    self
+      .table_map
+      .get(tbl)
+      .and_then(|state| state.page_cache.as_ref())
+  }
+
+  /// 消费 mapper 记录的已释放物理页，逐条失效页缓存（批次结算的收尾动作）。
   ///
   /// 这是「已释放的物理页不可能命中缓存」的唯一执行点：Pooled 分配器会把这些
   /// id 复用给新页，失效后即便复用页在被写出之前被读到，也只能回源磁盘。
-  pub(crate) fn invalidate_freed_write_cache(&mut self, tbl: &TableIdent) {
+  pub(crate) fn invalidate_freed_page_cache(&mut self, tbl: &TableIdent) {
     let Some(state) = self.table_map.get_mut(tbl) else {
       return;
     };
@@ -417,7 +433,7 @@ impl<I: PageIo> Store<I> {
     if freed_li.is_empty() {
       return;
     }
-    let Some(cache) = state.write_cache.as_ref() else {
+    let Some(cache) = state.page_cache.as_ref() else {
       return;
     };
     let mut cache = cache.borrow_mut();
@@ -426,43 +442,55 @@ impl<I: PageIo> Store<I> {
     }
   }
 
-  /// 全量清空该表写缓存（compaction / reopen / 截断 / 批次回滚）。
+  /// 全量清空该表页缓存（compaction / reopen / 截断 / 批次回滚）。
   ///
   /// 这些路径要么走裸 IO 直接改写物理页（compaction），要么整体替换 / 回退
   /// 映射（reopen / truncate / abort），逐页跟踪得不偿失；清空后第一批按
   /// 未命中重新回填，正确性不依赖残留条目。
-  pub(crate) fn clear_write_cache(&self, tbl: &TableIdent) {
+  pub(crate) fn clear_page_cache(&self, tbl: &TableIdent) {
     let Some(state) = self.table_map.get(tbl) else {
       return;
     };
-    if let Some(cache) = state.write_cache.as_ref() {
+    if let Some(cache) = state.page_cache.as_ref() {
       cache.borrow_mut().clear();
     }
   }
 
-  /// 外部工具 / 测试直接改写 data 物理页后主动失效全部表的写缓存。
+  /// 外部工具 / 测试直接改写 data 物理页后主动失效全部表的页缓存。
   ///
-  /// 写缓存的硬不变量（见 [`crate::write_cache`]）只在「物理页只被写路径装饰器
+  /// 页缓存的硬不变量（见 [`crate::page_cache`]）只在「物理页只被读写装饰器
   /// 与自身已清空缓存的 compaction 改写」时成立。绕过 `Store` 直接对
   /// [`Self::page_io`] 落盘的旁路写打破了该前提（同一 `FilePageId` 的盘上字节
-  /// 已变而缓存不知），必须显式调用本方法，否则下一次写批会读到陈旧整页。
+  /// 已变而缓存不知），必须显式调用本方法，否则下一次读写会命中陈旧整页。
   /// 与 [`Self::invalidate_path_cache`] 同定位：外部改动后由调用方告知。
-  pub fn invalidate_write_cache(&self) {
+  pub fn invalidate_page_cache(&self) {
     for state in self.table_map.values() {
-      if let Some(cache) = state.write_cache.as_ref() {
+      if let Some(cache) = state.page_cache.as_ref() {
         cache.borrow_mut().clear();
       }
     }
   }
 
   /// 写路径页缓存的累计命中 / 未命中 / 逐出与当前占用；无缓存时全零。
-  pub fn write_cache_stat(&self) -> WriteCacheStat {
-    let mut stat = WriteCacheStat::default();
+  pub fn write_cache_stat(&self) -> PageCacheStat {
+    self.page_cache_stat(CacheSide::Write)
+  }
+
+  /// 读路径页缓存的累计命中 / 未命中 / 逐出与当前占用；无缓存时全零。
+  ///
+  /// 占用（`bytes` / `len` / `capacity`）与逐出是读写共用池的公共账目，
+  /// 与 [`Self::write_cache_stat`] 上报同一份值；`hit` / `miss` 分开计量。
+  pub fn read_cache_stat(&self) -> PageCacheStat {
+    self.page_cache_stat(CacheSide::Read)
+  }
+
+  fn page_cache_stat(&self, side: CacheSide) -> PageCacheStat {
+    let mut stat = PageCacheStat::default();
     for state in self.table_map.values() {
-      let Some(cache) = state.write_cache.as_ref() else {
+      let Some(cache) = state.page_cache.as_ref() else {
         continue;
       };
-      let cache = cache.borrow().stat();
+      let cache = cache.borrow().stat(side);
       stat.hit += cache.hit;
       stat.miss += cache.miss;
       stat.evict += cache.evict;

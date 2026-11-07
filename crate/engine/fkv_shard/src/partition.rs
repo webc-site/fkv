@@ -454,8 +454,8 @@ impl PartitionStoreMap {
       .with_index_cache_bytes(cfg.index_cache_bytes)
       .with_index_cache_total_bytes(cfg.index_cache_total_bytes)
       .with_index_cache_ledger(self.ledger.clone())
-      // 写路径页缓存与 index 缓存共用同一预算来源（同 SDK / bench 口径）。
-      .with_write_cache_bytes(cfg.index_cache_bytes)
+      // 读写共用页缓存与 index 缓存共用同一预算来源（同 SDK / bench 口径）。
+      .with_page_cache_bytes(cfg.index_cache_bytes)
       .with_pages_per_file_shift(cfg.pages_per_file_shift)
       .with_yield_budget_us(cfg.yield_budget_us)
       .with_alloc_mode(cfg.alloc_mode)

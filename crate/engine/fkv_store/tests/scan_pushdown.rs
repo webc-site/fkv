@@ -1,5 +1,9 @@
 //! perf-84：`scan*` 非分页入口的 `max_entries` 与 TTL 过滤必须下推到叶子迭代器，
 //! 不得整区间物化后再截断。用 `MemStore::read_num` 观察实际读页数。
+//!
+//! 本文件全部用例都显式关闭页缓存（`with_page_cache_bytes(0)`）：断言的物理量是
+//! 「某次扫描真的下盘读了几页」，命中缓存后读数为 0 会让下推证明失去意义。
+//! 缓存开关不影响扫描语义，只改变字节从哪来。
 
 use fkv_btree::BatchEntry;
 use fkv_io_mem::MemStore;
@@ -24,7 +28,7 @@ fn scan_max_entries_materializes_only_needed_pages() {
     const TOTAL: u32 = 1000;
     const LIMIT: usize = 10;
     let tbl = TableIdent::new("demo", 1).unwrap();
-    let mut store = Store::new(MemStore::new(512), 512, 16);
+    let mut store = Store::new(MemStore::new(512), 512, 16).with_page_cache_bytes(0);
     let batch: Vec<BatchEntry> = (0..TOTAL)
       .map(|index| {
         let expire_ts = if index % 7 == 0 { 100 } else { 0 };
@@ -72,7 +76,9 @@ fn scan_max_entries_materializes_only_needed_pages() {
 fn scan_without_ttl_filter_keeps_expired_entries() {
   pollster::block_on(async {
     let tbl = TableIdent::new("demo", 2).unwrap();
-    let mut store = Store::new(MemStore::new(512), 512, 16).with_ttl_read_filter(false);
+    let mut store = Store::new(MemStore::new(512), 512, 16)
+      .with_page_cache_bytes(0)
+      .with_ttl_read_filter(false);
     let batch: Vec<BatchEntry> = (0..100u32)
       .map(|index| entry(key_of(index), b"v", 100))
       .collect();
@@ -98,7 +104,7 @@ fn scan_keys_only_skips_overflow_chain() {
     // value 2000B，单页可用 500B → 每条约 4 个 overflow 页。
     const OVERFLOW_PAGES_PER_ENTRY: u64 = 4;
     let tbl = TableIdent::new("demo", 3).unwrap();
-    let mut store = Store::new(MemStore::new(512), 512, 16);
+    let mut store = Store::new(MemStore::new(512), 512, 16).with_page_cache_bytes(0);
     let batch: Vec<BatchEntry> = (0..TOTAL as u32)
       .map(|index| BatchEntry::upsert(key_of(index), vec![b'v'; 2000], 1))
       .collect();
@@ -148,7 +154,7 @@ fn scan_count_matches_materialized_scan_with_deletes() {
   pollster::block_on(async {
     const TOTAL: u32 = 600;
     let tbl = TableIdent::new("demo", 9).unwrap();
-    let mut store = Store::new(MemStore::new(512), 512, 16);
+    let mut store = Store::new(MemStore::new(512), 512, 16).with_page_cache_bytes(0);
 
     // 写入全量：每 5 条一个 2000B overflow 大 value，其余 8B。
     let put_li: Vec<BatchEntry> = (0..TOTAL)

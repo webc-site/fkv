@@ -14,8 +14,9 @@ use fkv_task_write::{PageLayout, WriteArg, parse_ttl_key, ttl_key, write_batch};
 use fkv_types::{NULL_PAGE, PageId, TableIdent, WriteOp, now_ms};
 
 use crate::{
-  CLEAN_EXPIRED_MAX_ENTRIES, CleanExpiredStat, Store, reborrow_segment,
-  write_cache::{CachedWriteIo, WritePageCache},
+  CLEAN_EXPIRED_MAX_ENTRIES, CleanExpiredStat, Store,
+  page_cache::{CachedWriteIo, PageCache},
+  reborrow_segment,
 };
 
 /// 单次 TTL 探测最多跳过的坏 key 数。
@@ -462,25 +463,25 @@ impl<I: PageIo + ManifestIo> Store<I> {
     // mapper 分配，避免 OOM 重试时半修改状态。
     // 提交推迟到 manifest 落盘成功之后，失败时 `abort_batch` 才能真正回滚（core-25）。
     let batch = self.begin_mapper_batch(tbl);
-    // 写缓存与 `put_at_inner` 同源：本路径也会 COW 重写 TTL / data 树，读到
+    // 页缓存与 `put_at_inner` 同源：本路径也会 COW 重写 TTL / data 树，读到
     // 上一批写出的页同样应命中；若改走裸 IO，`remap_page` 的池复用会绕过缓存
     // 回填，留下陈旧条目。
-    let write_cache_bytes = self.write_cache_bytes;
+    let page_cache_bytes = self.page_cache_bytes;
     let roots_result = {
       let state = self
         .table_map
         .get_mut(tbl)
         .ok_or(KvError::ResourceMissing)?;
-      let write_cache = state
-        .write_cache
-        .get_or_insert_with(|| RefCell::new(WritePageCache::new(write_cache_bytes)));
+      let page_cache = state
+        .page_cache
+        .get_or_insert_with(|| RefCell::new(PageCache::new(page_cache_bytes)));
       let mapper = state.mapper.as_mut().ok_or(KvError::ResourceMissing)?;
       let mut segment_mapper = state.segment_mapper.as_mut();
       let dict = state.compression.as_ref();
       let segment_size = self
         .large_value_layout
         .map_or(0, |layout| layout.segment_size());
-      let io = CachedWriteIo::new(&self.io, write_cache, self.page_size);
+      let io = CachedWriteIo::new(&self.io, page_cache, self.page_size);
       let result: Result<(PageId, PageId)> = async {
         let new_root = if data_delete_li.is_empty() {
           root_id

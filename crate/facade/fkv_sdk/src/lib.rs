@@ -82,7 +82,7 @@ impl KvStore {
       } else {
         AllocMode::Pooled
       })
-      // `0` = 跟随 C++ `buffer_pool_size`；与写路径页缓存同源（两块各自受该值约束）。
+      // `0` = 跟随 C++ `buffer_pool_size`；与页缓存同源（两块各自受该值约束）。
       .with_index_cache_bytes(if option.index_cache_bytes == 0 {
         option.buffer_pool_size
       } else {
@@ -93,9 +93,9 @@ impl KvStore {
       } else {
         option.index_cache_total_bytes
       } as usize)
-      // 写路径页缓存与 index 缓存共用同一预算来源（C++ 单池 `buffer_pool_size`
-      // 的可行子集）：每块各自受该值约束，超出即按 Clock 逐出。
-      .with_write_cache_bytes(if option.index_cache_bytes == 0 {
+      // 读写共用页缓存与 index 缓存共用同一预算来源（C++ 单池
+      // `buffer_pool_size` 的可行子集）：每块各自受该值约束，超出即按 Clock 逐出。
+      .with_page_cache_bytes(if option.index_cache_bytes == 0 {
         option.buffer_pool_size
       } else {
         option.index_cache_bytes
