@@ -32,7 +32,8 @@ manifest 失败时用 `abort_batch` 回滚 mapping / 分配器 / dirty 集合（
 
 `manifest_limit`（默认 8 MiB）超过时写新 snapshot 并整体替换
 （`switch_manifest`：临时文件 → sync → rename → fsync 目录）。
-字典刚训练出时强制写 snapshot 以持久化 `dict_bytes`。
+字典待持久化时（自动训练产出，或 `set_dictionary` 注入置脏）强制写
+snapshot 以持久化 `dict_bytes`（`manifest.rs` 的 `dict_dirty` 分支）。
 
 branch 模式同样走 log 追加；archive 是独立的 `manifest_<branch>_<term>_<tag>`。
 
