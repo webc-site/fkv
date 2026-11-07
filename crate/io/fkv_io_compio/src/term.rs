@@ -103,3 +103,31 @@ impl TermIo for CompioStore {
     .await?
   }
 }
+
+/// sem-70：term 文件内容解析边界的锁定单测（空 / 空白 / 前缀 / 正号 / 溢出
+/// 均严格拒绝；首尾空白容忍）。C++ 两个解析器（local 不 trim、空按 term 0
+/// 继续；cloud `stoull` 前缀语义）互相不一致属上游缺陷面，fkv 单解析器
+/// 全后端共用 + 严格拒绝是登记的期望行为，不向任一侧对齐。
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn parse_accepts_canonical_and_trimmed_decimal() {
+    assert_eq!(parse(b"5").unwrap(), 5);
+    assert_eq!(parse(b" 5\n").unwrap(), 5);
+    assert_eq!(parse(b"18446744073709551615").unwrap(), u64::MAX);
+  }
+
+  #[test]
+  fn parse_rejects_malformed_content() {
+    // 空文件 / 纯空白：Corrupted（C++ local 按 term 0 继续非对齐目标）。
+    assert_eq!(parse(b"").unwrap_err(), KvError::Corrupted);
+    assert_eq!(parse(b" \n\t").unwrap_err(), KvError::Corrupted);
+    // 前缀数字 / 正号：Corrupted（C++ cloud `stoull` 前缀语义非对齐目标）。
+    assert_eq!(parse(b"5x").unwrap_err(), KvError::Corrupted);
+    assert_eq!(parse(b"+5").unwrap_err(), KvError::Corrupted);
+    // 溢出 u64：Corrupted。
+    assert_eq!(parse(b"18446744073709551616").unwrap_err(), KvError::Corrupted);
+  }
+}

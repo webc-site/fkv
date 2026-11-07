@@ -1005,3 +1005,20 @@ fn request_timeout_keys_parse_and_resolve_by_mode() {
   assert_eq!(standby.request_timeout(), None);
   assert_eq!(standby.queue_timeout(), None);
 }
+
+/// sem-69：`data_file_size = 0` 对齐 C++ 字段级回退 8 MiB（`(parsed_size > 0)
+/// ? parsed_size : (8 * MB)`），两侧同 INI 派生同一布局；回退成单页即红。
+#[test]
+fn ini_data_file_size_zero_falls_back_to_8mb() {
+  let root = TempRoot::new("fkv_filesize_zero");
+  let path = root.join("config.ini");
+  write(
+    &path,
+    "[run]\nnum_threads = 1\n[permanent]\ndata_page_size = 4KB\ndata_file_size = 0\n",
+  )
+  .unwrap();
+  let mut opts = KvOption::default();
+  opts.load_from_ini(&path).unwrap();
+  // 8MB / 4KB = 2048 页 → shift 11（改回单页回退 shift 0 即红）。
+  assert_eq!(opts.pages_per_file_shift, 11);
+}

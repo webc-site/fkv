@@ -809,6 +809,10 @@ impl KvOption {
           self.pages_per_file_shift
         );
       } else {
+        // 对齐 C++ 字段级回退：`data_file_size = 0` 视作 8 MiB
+        // （`kv_options.cpp` 的 `(parsed_size > 0) ? parsed_size : (8 * MB)`），
+        // 同一份 INI 两侧派生出同一布局（sem-69）。
+        let size = if size == 0 { 8 * MB } else { size };
         let page_size = u64::from(self.data_page_size);
         if page_size == 0 {
           return Err(KvError::InvalidArgs);

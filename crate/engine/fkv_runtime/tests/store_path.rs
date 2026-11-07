@@ -204,8 +204,10 @@ fn global_archive_empty_root_is_empty_success() {
 #[test]
 fn global_archive_missing_root_is_empty_success() {
   let runtime_root = TempRoot::new("runtime_store_path_cfg");
-  let missing = TempRoot::new("runtime_store_path_missing").into_path();
-  fs::remove_dir_all(&missing).unwrap();
+  // 「缺失根」用活 TempRoot 下从未创建的子路径表达：attach 会经 term upsert
+  // 的 create_dir_all 重建根，挂在 runtime_root 内可随 Drop 清理（struct-43：
+  // 此前 into_path + remove_dir_all 的手法会让重建的根逃逸清理、逐轮泄漏）。
+  let missing = runtime_root.path().join("missing");
   let option = store_path_options(&[missing.as_path()], &[]);
   pollster::block_on(async {
     let runtime =
@@ -233,8 +235,9 @@ fn global_archive_missing_root_is_empty_success() {
 fn global_archive_missing_secondary_root_scans_readable_root() {
   let runtime_root = TempRoot::new("runtime_store_path_cfg");
   let root_a = TempRoot::new("runtime_store_path_a");
-  let missing = TempRoot::new("runtime_store_path_missing").into_path();
-  fs::remove_dir_all(&missing).unwrap();
+  // 缺失根挂在 runtime_root 下（不挂在 root_a 下，避免被根扫描当作分区目录），
+  // attach 重建后随 runtime_root 的 Drop 清理（struct-43）。
+  let missing = runtime_root.path().join("missing");
   let option = store_path_options(&[root_a.path(), missing.as_path()], &[1, 1]);
   pollster::block_on(async {
     let runtime =
