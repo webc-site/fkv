@@ -148,6 +148,9 @@ fn run(opt: Cli) -> Result<(), Box<dyn Error>> {
     mode,
     store_dir: opt.store_dir.clone(),
     resource: true,
+    buffer_pool_size: opt.buffer_pool_size,
+    read_count: opt.read_count,
+    scan_count: opt.scan_count,
   };
   let mut repeat_li = Vec::with_capacity(opt.repeat);
   for _ in 0..opt.repeat {

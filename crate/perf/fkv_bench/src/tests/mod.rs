@@ -11,18 +11,22 @@ use fastrand::Rng;
 use fkv_types::now_ms;
 
 use crate::{
-  cli::{DEFAULT_KV_SIZE, resolve_kv_size, value_len},
+  cli::{
+    DEFAULT_KV_SIZE, resolve_kv_size, resolve_kv_size_with_key, value_len, value_len_with_key,
+  },
   hist::LatencyHist,
   lane::{
-    WriteLane, claim_batch, delete_batch_num, key_bytes, once_batch_num, partition_key_num,
-    probe_key_bytes, write_entry, write_lane_li,
+    WriteLane, claim_batch, delete_batch_num, encode_key, key_bytes, once_batch_num,
+    partition_key_num, probe_key_bytes, write_entry, write_lane_li,
   },
-  read::{lane_seed, read_lane_li},
+  read::{lane_seed, read_lane_li, read_lane_li_with_count},
   report::{PerfData, aggregate_repeat, now_secs, parse_vmhwm},
   resource::{dir_stats, parse_proc_io},
   rng::{CppKeyGen, Mt19937},
   runner::{RunControl, RunMode, bench_workload, bench_workload_ext, window_duration},
-  scan::{decode_key, scan_kvs, scan_lane_li, scan_range},
+  scan::{
+    decode_key, decode_key_width, scan_kvs, scan_lane_li, scan_lane_li_with_count, scan_range,
+  },
   workload::{
     BenchArgs, ReadPlan, RngMode, Workload, WriteMix, delete_target, effective_rows, is_deleted,
     is_live, live_after, live_key_num, ttl_live_key_num,

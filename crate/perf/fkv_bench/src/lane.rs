@@ -2,7 +2,7 @@
 
 use std::{
   mem::size_of,
-  sync::atomic::{AtomicU64, Ordering},
+  sync::atomic::{AtomicU64, AtomicUsize, Ordering},
   time::{Duration, Instant},
 };
 
@@ -18,8 +18,23 @@ use crate::{
   workload::{RngMode, WriteMix, delete_target, is_deleted},
 };
 
-/// key 编码宽度：8 字节大端 uint64，对齐 C++ `EncodeFixed64(ToBigEndian(key))`。
+/// key 编码尾部的 uint64 宽度（大端）。历史 `simple_bench` 口径 key 就
+/// 恰好是这 8 字节；redb 口径的 24B key 在这 8 字节前补零。
 pub(crate) const KEY_BYTES: usize = size_of::<u64>();
+/// 允许的最大 key 宽度（24B redb 档位的上界，再宽没有对应 benchmark 需求）。
+pub(crate) const MAX_KEY_BYTES: usize = 64;
+
+/// 进程级 key 宽度，由 `--key-size` 在启动时设置一次（默认 8，保持历史口径）。
+/// benchmark 是单进程工具，读路径每请求都要用它编码，放进原子量避免把宽度
+/// 穿过十几层调用签名；运行期不再改变。
+static KEY_WIDTH: AtomicUsize = AtomicUsize::new(KEY_BYTES);
+
+/// 设置 key 宽度；仅允许 `[KEY_BYTES, MAX_KEY_BYTES]`，由 CLI 校验后调用。
+pub(crate) fn set_key_width(width: usize) {
+  debug_assert!((KEY_BYTES..=MAX_KEY_BYTES).contains(&width));
+  KEY_WIDTH.store(width, Ordering::Relaxed);
+}
+
 /// 分区 `part` 的写状态：key 数与累计写入条数（覆盖写后按 `written % count` 回绕）。
 #[derive(Debug, Clone, Copy, Default)]
 pub(crate) struct PartState {
@@ -67,15 +82,31 @@ pub(crate) fn write_entry(
   }
   entry
 }
-/// key 编码：8 字节大端 uint64；无需分配，且字典序与数值序一致。
-pub(crate) fn key_bytes(index: usize) -> [u8; KEY_BYTES] {
-  (index as u64).to_be_bytes()
+
+/// 当前 key 宽度（字节）。
+pub(crate) fn key_width() -> usize {
+  KEY_WIDTH.load(Ordering::Relaxed)
+}
+
+/// key 编码：宽度为 [`key_width`] 字节，**末尾 8 字节**是大端 uint64 下标，
+/// 前面补零。宽度为 8 时与历史 `simple_bench` 逐字节一致；宽度为 24 时
+/// 字典序仍与下标序一致（C++ FFI 用同一编码，见 `cpp/bench_ffi`）。
+pub(crate) fn key_bytes(index: usize) -> Vec<u8> {
+  encode_key(index, key_width())
+}
+
+/// 按显式宽度编码 key（纯函数，测试用；运行期走 [`key_bytes`] 的进程级宽度）。
+pub(crate) fn encode_key(index: usize, width: usize) -> Vec<u8> {
+  debug_assert!(width >= KEY_BYTES);
+  let mut key = vec![0u8; width];
+  key[width - KEY_BYTES..].copy_from_slice(&(index as u64).to_be_bytes());
+  key
 }
 
 /// 读 / scan 的探测 key：`--rng cpp` 使用原始 key 下标（`CppKeyGen` 写在
 /// `[0, rows)`），只有 `--rng grid` 才乘 `key_interval`。把这一步集中在这里，
 /// 避免读路径误用 grid 的稀疏步长，查到从未写过的 key。
-pub(crate) fn probe_key_bytes(index: usize, mix: WriteMix) -> [u8; KEY_BYTES] {
+pub(crate) fn probe_key_bytes(index: usize, mix: WriteMix) -> Vec<u8> {
   if mix.rng.is_grid() {
     key_bytes(index * mix.key_interval)
   } else {

@@ -10,7 +10,7 @@ use futures::future::join_all;
 
 use crate::{
   hist::{LatencyHist, push_latency},
-  lane::{KEY_BYTES, PartState, partition_key_num, probe_key_bytes},
+  lane::{KEY_BYTES, PartState, key_width, partition_key_num, probe_key_bytes},
   workload::{WriteMix, live_after, live_key_num},
 };
 
@@ -29,6 +29,8 @@ pub(crate) struct ScanLane {
   pub(crate) part: usize,
   /// 固定 RNG 种子，按链编号派生，保证并发下仍可复现。
   pub(crate) seed: u64,
+  /// 本链固定页请求次数；`None`＝按窗口 / 每链一页（历史行为）。
+  pub(crate) scans: Option<u64>,
 }
 
 /// scan 链 RNG 种子：从 [`SCAN_SEED`] 按链编号派生。
@@ -41,14 +43,35 @@ fn scan_lane_seed(lane_id: u64) -> u64 {
 /// 空分区（`rows < partitions`）仍建链：C++ 每个分区都持有全量键空间，
 /// 扫描空表会得到空页，但延迟样本与并发度口径一致。`partitions` 由调用方
 /// 钳到 `>= 1`（与 [`partition_key_num`] 同前提）。
+#[cfg(test)]
 pub(crate) fn scan_lane_li(partitions: usize, read_per_part: usize) -> Vec<ScanLane> {
+  scan_lane_li_with_count(partitions, read_per_part, 0)
+}
+
+/// 同 [`scan_lane_li`]，但把固定总页请求次数 `scan_count` 均分到全部 scan 链。
+/// `scan_count == 0` 时保持历史语义（固定次数模式每链一页 / 时间窗）。
+pub(crate) fn scan_lane_li_with_count(
+  partitions: usize,
+  read_per_part: usize,
+  scan_count: u64,
+) -> Vec<ScanLane> {
   let num = partitions.saturating_mul(read_per_part);
-  (0..num)
+  let mut lane_li: Vec<ScanLane> = (0..num)
     .map(|id| ScanLane {
       part: id % partitions,
       seed: scan_lane_seed(id as u64),
+      scans: None,
     })
-    .collect()
+    .collect();
+  if scan_count > 0 && !lane_li.is_empty() {
+    let lanes = lane_li.len() as u64;
+    let base = scan_count / lanes;
+    let rem = scan_count % lanes;
+    for (index, lane) in lane_li.iter_mut().enumerate() {
+      lane.scans = Some(base + u64::from((index as u64) < rem));
+    }
+  }
+  lane_li
 }
 
 /// `--scan-bytes` 折算成窗口内的 key 个数，对齐 C++
@@ -78,9 +101,17 @@ pub(crate) fn scan_range(rows: usize, kvs: Option<usize>, rng: &mut Rng) -> (usi
   (start, Some(start + kvs))
 }
 
-/// 把 8 字节大端 key 解回全局下标；非本 bench 编码的 key 返回 `None`。
+/// 把 key 解回全局下标；末尾 8 字节是大端 uint64，宽度必须与 `--key-size` 一致。
 pub(crate) fn decode_key(key: &[u8]) -> Option<usize> {
-  let bytes: [u8; KEY_BYTES] = key.try_into().ok()?;
+  decode_key_width(key, key_width())
+}
+
+/// 按显式宽度解码 key（纯函数，测试用）。
+pub(crate) fn decode_key_width(key: &[u8], width: usize) -> Option<usize> {
+  if key.len() != width {
+    return None;
+  }
+  let bytes: [u8; KEY_BYTES] = key[width - KEY_BYTES..].try_into().ok()?;
   usize::try_from(u64::from_be_bytes(bytes)).ok()
 }
 
@@ -128,7 +159,13 @@ async fn run_scan_lane(
   let mut rng = Rng::with_seed(lane.seed);
   let started = Instant::now();
   let timed = !plan.window.is_zero();
+  let mut issued = 0u64;
   loop {
+    if let Some(target) = lane.scans
+      && issued >= target
+    {
+      break;
+    }
     let (start, end) = scan_range(plan.rows, plan.kvs, &mut rng);
     let begin = probe_key_bytes(start, mix);
     let end_key = end.map(|end| probe_key_bytes(end, mix));
@@ -184,6 +221,10 @@ async fn run_scan_lane(
         );
       }
     }
+    issued += 1;
+    if lane.scans.is_some() {
+      continue;
+    }
     if timed {
       if started.elapsed() >= plan.window {
         break;
@@ -207,6 +248,8 @@ pub(crate) struct ScanPhase<'a> {
   pub(crate) window: Duration,
   pub(crate) scan_bytes: u64,
   pub(crate) write_batchs: usize,
+  /// 固定总页请求次数；0＝历史语义（窗口 / 每链一页）。
+  pub(crate) scan_count: u64,
 }
 
 /// 跑完 scan 阶段：主计量（随机窗口页请求）与附加的全表遍历指标。
@@ -222,11 +265,13 @@ pub(crate) async fn run_scan_phase(phase: ScanPhase<'_>) -> Vec<(String, f64, &'
     window,
     scan_bytes,
     write_batchs,
+    scan_count,
   } = phase;
   let mut result_li = Vec::new();
   // 主计量：`partitions * read_per_part` 条 scan 链并发，每请求一页（256 条）、
   // 随机起点（对齐 C++ `ScanLoop` 的 Scanner / SetPagination(256, 0)）。
-  // 时间窗模式持续发请求；固定次数模式每链只发 1 个页请求。
+  // 时间窗模式持续发请求；固定次数模式默认每链只发 1 个页请求，redb 口径用
+  // `--scan-count` 把总页请求数固定为 500,000 并均分到各链。
   let plan = ScanPlan {
     rows,
     partitions,
@@ -235,7 +280,7 @@ pub(crate) async fn run_scan_phase(phase: ScanPhase<'_>) -> Vec<(String, f64, &'
     kvs: scan_kvs(scan_bytes, value_size),
     window,
   };
-  let lane_li = scan_lane_li(partitions, read_per_part);
+  let lane_li = scan_lane_li_with_count(partitions, read_per_part, scan_count);
   let started = Instant::now();
   let lane_result_li = join_all(lane_li.iter().map(|lane| {
     let (tbl, store) = &store_li[lane.part];

@@ -188,3 +188,20 @@ fn delete_batch_num_covers_once_per_partition() {
   assert_eq!(delete_batch_num(64, 2, 8), 8);
   assert_eq!(delete_batch_num(1, 4, 8), 1);
 }
+
+/// 24B redb 口径：前 16 字节补零、末尾 8B 大端下标；字典序仍与下标序一致，
+/// 且能无损解码回原下标。
+#[test]
+fn twenty_four_byte_keys_round_trip_and_order() {
+  let key = encode_key(0x0102_0304, 24);
+  assert_eq!(key.len(), 24);
+  assert_eq!(&key[..16], &[0u8; 16]);
+  assert_eq!(&key[16..], &0x0102_0304u64.to_be_bytes());
+  assert_eq!(decode_key_width(&key, 24), Some(0x0102_0304));
+
+  assert!(encode_key(1, 24) < encode_key(2, 24));
+  assert!(encode_key(255, 24) < encode_key(256, 24));
+  // 宽度不匹配时拒绝解码（读 / scan 会据此跳过非本 bench 的 key）。
+  assert_eq!(decode_key_width(&key, 8), None);
+  assert_eq!(decode_key_width(&encode_key(7, 8), 24), None);
+}

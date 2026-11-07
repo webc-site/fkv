@@ -31,6 +31,8 @@ pub(crate) struct ReadLane {
   pub(crate) count: usize,
   /// 固定 RNG 种子，按链编号派生，保证并发下仍可复现。
   pub(crate) seed: u64,
+  /// 本链的固定读次数；`None`＝按窗口 / 每链读一遍（历史行为）。
+  pub(crate) reads: Option<u64>,
 }
 
 /// 读链 RNG 种子：从全局 [`READ_SEED`] 按链编号派生，链间互不相同。
@@ -43,6 +45,17 @@ pub(crate) fn lane_seed(lane_id: u64) -> u64 {
 /// 总读次数 = `read_per_part * Σ count`，而 `Σ count == rows`，故与串行版
 /// `rows * read_per_part` 完全一致，只改变在飞并发度。
 pub(crate) fn read_lane_li(rows: usize, partitions: usize, read_per_part: usize) -> Vec<ReadLane> {
+  read_lane_li_with_count(rows, partitions, read_per_part, 0)
+}
+
+/// 同 [`read_lane_li`]，但把固定总读次数 `read_count` 均分到全部读链上
+/// （余数给前几条链）。`read_count == 0` 时保持历史语义（每链读一遍）。
+pub(crate) fn read_lane_li_with_count(
+  rows: usize,
+  partitions: usize,
+  read_per_part: usize,
+  read_count: u64,
+) -> Vec<ReadLane> {
   let mut lane_li = Vec::with_capacity(partitions.saturating_mul(read_per_part));
   for part in 0..partitions {
     let count = partition_key_num(rows, partitions, part);
@@ -55,7 +68,16 @@ pub(crate) fn read_lane_li(rows: usize, partitions: usize, read_per_part: usize)
         step: partitions,
         count,
         seed: lane_seed((part * read_per_part + lane) as u64),
+        reads: None,
       });
+    }
+  }
+  if read_count > 0 && !lane_li.is_empty() {
+    let lanes = lane_li.len() as u64;
+    let base = read_count / lanes;
+    let rem = read_count % lanes;
+    for (index, lane) in lane_li.iter_mut().enumerate() {
+      lane.reads = Some(base + u64::from((index as u64) < rem));
     }
   }
   lane_li
@@ -111,6 +133,11 @@ pub(crate) async fn run_read_lane(
   let timed = !window.is_zero();
   let mut done = 0usize;
   loop {
+    if let Some(target) = lane.reads
+      && done as u64 >= target
+    {
+      break;
+    }
     let pos = rng.usize(0..lane.count);
     let index = shard_index(lane.part, lane.step, pos);
     let req_start = Instant::now();
@@ -141,6 +168,9 @@ pub(crate) async fn run_read_lane(
       assert_eq!(got.len(), value_size);
     }
     done += 1;
+    if lane.reads.is_some() {
+      continue;
+    }
     if timed {
       if started.elapsed() >= window {
         break;
@@ -171,6 +201,8 @@ pub(crate) struct ReadPhase<'a> {
   pub(crate) value_size: usize,
   pub(crate) mix: WriteMix,
   pub(crate) window: Duration,
+  /// 固定总读次数；0＝历史语义（窗口 / 每链一遍）。
+  pub(crate) read_count: u64,
 }
 
 /// 跑完并发点读阶段：`partitions * read_per_part` 条链并发在飞，返回吞吐与分位指标。
@@ -184,12 +216,14 @@ pub(crate) async fn run_read_phase(phase: ReadPhase<'_>) -> Vec<(String, f64, &'
     value_size,
     mix,
     window,
+    read_count,
   } = phase;
   // 点读：`partitions * read_per_part` 条读链并发在飞，对齐 C++ 的
   // `read_per_part * partitions` 个并发读者。每链绑定一个分区、独立 RNG，
   // 各链结果先记入本链直方图再合并；固定次数模式总读次数 `rows * read_per_part`，
   // 时间窗模式持续随机读直到窗口耗尽（对齐 C++ `test_secs` 稳态口径）。
-  let lane_li = read_lane_li(rows, partitions, read_per_part);
+  // redb 口径用 `--read-count` 把总次数固定为 1,000,000 并均分到各链。
+  let lane_li = read_lane_li_with_count(rows, partitions, read_per_part, read_count);
   let started = Instant::now();
   let lane_result_li = join_all(lane_li.iter().map(|lane| {
     let (tbl, store) = &store_li[lane.part];

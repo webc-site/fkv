@@ -56,6 +56,12 @@ pub(crate) struct RunControl {
   pub(crate) resource: bool,
   /// 读 / scan 阶段独立重复次数；写阶段只跑一次。
   pub(crate) trials: usize,
+  /// 总缓存预算（字节）；0＝沿用 `KvOption::default()` 的历史口径。
+  pub(crate) buffer_pool_size: u64,
+  /// 固定点读总次数；0＝历史语义（窗口 / 每链一遍）。
+  pub(crate) read_count: u64,
+  /// 固定 scan 页请求总次数；0＝历史语义（窗口 / 每链一页）。
+  pub(crate) scan_count: u64,
 }
 
 /// 阶段开关：load-only 只写，read-only-existing 不写，其余跟随 workload。
@@ -118,9 +124,18 @@ fn open_store_li(
   partitions: usize,
   pages_per_file_shift: u8,
   workload: Workload,
+  cache_bytes: u64,
 ) -> Vec<(TableIdent, Store<CompioStore>)> {
   let opts = KvOption::default();
   let page_size = opts.data_page_size as usize;
+  // 缓存预算：0＝沿用 KvOption 默认（index 128 MiB + data page 128 MiB），
+  // 保持历史口径；>0 时作为一个**总预算**由 index / data page 各占一半，
+  // 与 C++ FFI 的 `buffer_pool_size`（index + data page 共享）同量级。
+  let (index_cache, page_cache) = if cache_bytes > 0 {
+    (cache_bytes / 2, cache_bytes / 2)
+  } else {
+    (opts.buffer_pool_size, opts.buffer_pool_size)
+  };
   (0..partitions)
     .map(|part| {
       let tbl = TableIdent::new("bench", part as u32 + 1).unwrap();
@@ -150,10 +165,10 @@ fn open_store_li(
       .with_file_amplify_factor(opts.file_amplify_factor)
       .with_segment_amplify_factor(opts.segment_file_amplify_factor)
       .with_manifest_limit(opts.manifest_limit as usize)
-      .with_index_cache_bytes(opts.buffer_pool_size as usize)
-      .with_index_cache_total_bytes(opts.buffer_pool_size as usize)
+      .with_index_cache_bytes(index_cache as usize)
+      .with_index_cache_total_bytes(index_cache as usize)
       // 读写共用页缓存（COW 路径免盘读 / 读路径命中）：与 index 缓存同源预算。
-      .with_page_cache_bytes(opts.buffer_pool_size as usize);
+      .with_page_cache_bytes(page_cache as usize);
       if matches!(workload, Workload::Compact | Workload::CompactOnly) {
         // 放大率阈值 1：只要文件里有死页就成为 compact 候选（lane 需要可观测的搬运）。
         store = store.with_file_amplify_factor(1);
@@ -232,6 +247,7 @@ pub(crate) fn bench_workload_ext(
       partitions,
       pages_per_file_shift,
       args.workload,
+      control.buffer_pool_size,
     );
 
     // compact lane 有独立的准备 / 并发 / 计量流程，不经过通用写读阶段。
@@ -261,7 +277,7 @@ pub(crate) fn bench_workload_ext(
           false,
           None,
           PhasePlan::load_only(),
-          1,
+          PhaseCounts::write_only(),
         )
         .await;
         save_state(&root, &args, &state_li);
@@ -324,7 +340,7 @@ pub(crate) fn bench_workload_ext(
           false,
           None,
           PhasePlan::load_only(),
-          1,
+          PhaseCounts::write_only(),
         )
         .await;
         result_li.extend(metric_li);
@@ -340,7 +356,11 @@ pub(crate) fn bench_workload_ext(
             true,
             Some(&state_li),
             PhasePlan::from_workload(args.workload),
-            1,
+            PhaseCounts {
+              trials: 1,
+              read: control.read_count,
+              scan: control.scan_count,
+            },
           )
           .await;
         }
@@ -351,7 +371,11 @@ pub(crate) fn bench_workload_ext(
           false,
           Some(&state_li),
           PhasePlan::from_workload(args.workload),
-          control.trials,
+          PhaseCounts {
+            trials: control.trials,
+            read: control.read_count,
+            scan: control.scan_count,
+          },
         )
         .await;
         result_li.extend(metric_li);
@@ -364,7 +388,20 @@ pub(crate) fn bench_workload_ext(
               "fkv_bench: --warmup-secs 对 ttl-write lane 无效（TTL 回收计量会重复计数），已忽略"
             );
           } else {
-            let _ = run_pipeline(&mut store_li, &args, warmup_window, true, None, plan, 1).await;
+            let _ = run_pipeline(
+              &mut store_li,
+              &args,
+              warmup_window,
+              true,
+              None,
+              plan,
+              PhaseCounts {
+                trials: 1,
+                read: control.read_count,
+                scan: control.scan_count,
+              },
+            )
+            .await;
           }
         }
         let (metric_li, _) = run_pipeline(
@@ -374,7 +411,11 @@ pub(crate) fn bench_workload_ext(
           false,
           None,
           plan,
-          control.trials,
+          PhaseCounts {
+            trials: control.trials,
+            read: control.read_count,
+            scan: control.scan_count,
+          },
         )
         .await;
         result_li.extend(metric_li);
@@ -400,6 +441,25 @@ pub(crate) fn bench_workload_ext(
   })
 }
 
+/// 阶段重复 / 固定次数参数。`trials` 只作用于读 / scan 阶段。
+#[derive(Debug, Clone, Copy)]
+struct PhaseCounts {
+  trials: usize,
+  read: u64,
+  scan: u64,
+}
+
+impl PhaseCounts {
+  /// 写 / load 阶段：只跑一次，不使用固定读 / scan 次数。
+  const fn write_only() -> Self {
+    Self {
+      trials: 1,
+      read: 0,
+      scan: 0,
+    }
+  }
+}
+
 /// 跑一遍完整阶段序列；`warmup` 为真时写阶段按 `window` 持续写、指标由调用方丢弃。
 ///
 /// `preset` 为 `Some` 时跳过写阶段（`--read-only-existing`），直接用保存的
@@ -411,7 +471,7 @@ async fn run_pipeline(
   warmup: bool,
   preset: Option<&[PartState]>,
   plan: PhasePlan,
-  trials: usize,
+  counts: PhaseCounts,
 ) -> (Vec<(String, f64, &'static str)>, Vec<PartState>) {
   let BenchArgs {
     rows,
@@ -571,8 +631,8 @@ async fn run_pipeline(
   }
 
   if plan.read {
-    let mut trial_li = Vec::with_capacity(trials.max(1));
-    for _ in 0..trials.max(1) {
+    let mut trial_li = Vec::with_capacity(counts.trials.max(1));
+    for _ in 0..counts.trials.max(1) {
       trial_li.push(
         run_read_phase(ReadPhase {
           store_li,
@@ -583,6 +643,7 @@ async fn run_pipeline(
           value_size,
           mix,
           window,
+          read_count: counts.read,
         })
         .await,
       );
@@ -591,8 +652,8 @@ async fn run_pipeline(
   }
 
   if plan.scan {
-    let mut trial_li = Vec::with_capacity(trials.max(1));
-    for _ in 0..trials.max(1) {
+    let mut trial_li = Vec::with_capacity(counts.trials.max(1));
+    for _ in 0..counts.trials.max(1) {
       trial_li.push(
         run_scan_phase(ScanPhase {
           store_li,
@@ -605,6 +666,7 @@ async fn run_pipeline(
           window,
           scan_bytes,
           write_batchs,
+          scan_count: counts.scan,
         })
         .await,
       );

@@ -17,3 +17,15 @@ fn resolve_kv_size_pair_semantics() {
   assert_eq!(value_len(DEFAULT_KV_SIZE), 120);
   assert_eq!(value_len(9), 1);
 }
+
+/// redb 口径：24B key + 174B KV → 150B value；按 key 宽度校验整对宽度。
+#[test]
+fn resolve_kv_size_honors_the_key_width() {
+  assert_eq!(resolve_kv_size_with_key(Some("174"), 24), Ok(174));
+  assert_eq!(value_len_with_key(174, 24), 150);
+  // 整对宽度必须大于 key 宽度。
+  assert!(resolve_kv_size_with_key(Some("24"), 24).is_err());
+  assert!(resolve_kv_size_with_key(Some("10"), 24).is_err());
+  // 8B key 的历史口径不变。
+  assert_eq!(value_len_with_key(128, 8), value_len(128));
+}

@@ -6,7 +6,7 @@ use clap_args::{ArgAction, arg, clap::Command};
 use fkv_types::now_ms;
 
 use crate::{
-  lane::KEY_BYTES,
+  lane::{KEY_BYTES, MAX_KEY_BYTES, set_key_width},
   report::git_head,
   ttl::DEFAULT_TTL_MS,
   workload::{RngMode, Workload, effective_rows},
@@ -20,6 +20,11 @@ pub(crate) const DEFAULT_TEST_SECS: f64 = 60.0;
 /// `DEFINE_uint32(kv_size, 128, "size of a pair of KV")` 的默认值
 /// （rev-01 落地前的默认 64 是 value 字节口径，已断代）。
 pub(crate) const DEFAULT_KV_SIZE: usize = 128;
+/// `--key-size` 缺省：8B 大端 uint64（历史 / C++ simple_bench 口径）。
+pub(crate) const DEFAULT_KEY_SIZE: usize = KEY_BYTES;
+/// `--buffer-pool-size` 缺省 0：沿用 `KvOption::default()` 的 128 MiB，
+/// 保持历史行为。>0 时作为**总缓存预算**（index + data page 各一半）。
+pub(crate) const DEFAULT_BUFFER_POOL_SIZE: u64 = 0;
 
 /// `--scan-bytes` 缺省：0＝扫到表尾，对齐 C++ `DEFINE_uint64(scan_bytes, 0, ...)`。
 pub(crate) const DEFAULT_SCAN_BYTES: u64 = 0;
@@ -44,6 +49,12 @@ pub(crate) struct Cli {
   pub(crate) batch_size: usize,
   pub(crate) kv_size: usize,
   pub(crate) value_size: usize,
+  /// 总缓存预算（字节）；0＝沿用 `KvOption::default()`（128 MiB index + page）。
+  pub(crate) buffer_pool_size: u64,
+  /// 固定点读总次数；0＝按 `--test-secs` / 每链读一遍（历史行为）。
+  pub(crate) read_count: u64,
+  /// 固定 scan 页请求总次数；0＝按 `--test-secs` / 每链一页（历史行为）。
+  pub(crate) scan_count: u64,
   pub(crate) read_per_part: usize,
   pub(crate) partitions: usize,
   pub(crate) key_interval: usize,
@@ -104,7 +115,28 @@ fn command(cmd: Command) -> Command {
           ))
           .action(ArgAction::Set),
       )
-      .arg(arg!(--"max-key" <N> "最大 key 数，默认 10000000").action(ArgAction::Set))
+      .arg(
+        arg!(--"key-size" <BYTES>)
+          .help(format!(
+            "key 宽度字节，默认 {DEFAULT_KEY_SIZE}（8B 大端 uint64）；24 为 redb 口径，末尾 8B 仍是下标大端编码、前面补零"
+          ))
+          .action(ArgAction::Set),
+      )
+      .arg(
+        arg!(--"buffer-pool-size" <BYTES> "总缓存预算（字节）；0＝沿用 KvOption 默认（128 MiB index + 128 MiB data page），>0 时 index / data page 各占一半")
+          .action(ArgAction::Set),
+      )
+      .arg(
+        arg!(--"read-count" <N> "固定点读总次数（跨全部读链均分）；0＝按 --test-secs 或每链读一遍（历史行为）")
+          .action(ArgAction::Set),
+      )
+      .arg(
+        arg!(--"scan-count" <N> "固定 scan 页请求总次数（跨全部 scan 链均分）；0＝按 --test-secs 或每链一页（历史行为）")
+          .action(ArgAction::Set),
+      )
+      .arg(
+        arg!(--"max-key" <N> "最大 key 数，默认 10000000").action(ArgAction::Set),
+      )
       .arg(arg!(--"read-per-part" <N> "每分区读取次数，默认 4").action(ArgAction::Set))
       .arg(
         arg!(--partitions <N> "分区数，默认 1；分区是全局键空间的分片（C++ simple_bench 为每分区一份全量副本，严格对等需 1）")
@@ -200,10 +232,36 @@ pub(crate) fn parse() -> Result<Option<Cli>, Box<dyn Error>> {
     .and_then(|value| value.parse::<usize>().ok())
     .unwrap_or(100)
     .max(1);
-  // `--kv-size` 是整对 KV 宽度（含 8B key），`<= 8` 报参数错误；value 取差值，
-  // 对齐 C++ `simple_bench.cpp:113` `value.resize(FLAGS_kv_size - sizeof(uint64_t))`。
-  let kv_size = resolve_kv_size(arg_match.get_one::<String>("kv-size").map(String::as_str))?;
-  let value_size = value_len(kv_size);
+  // key 宽度先于 kv-size 解析：`--kv-size` 是整对宽度，value 长度依赖 key 宽度。
+  let key_size = arg_match
+    .get_one::<String>("key-size")
+    .and_then(|value| value.parse::<usize>().ok())
+    .unwrap_or(DEFAULT_KEY_SIZE);
+  if !(KEY_BYTES..=MAX_KEY_BYTES).contains(&key_size) {
+    return Err(
+      format!("--key-size {key_size} 非法：必须在 [{KEY_BYTES}, {MAX_KEY_BYTES}] 字节内").into(),
+    );
+  }
+  // 进程级 key 宽度：读 / scan / 写路径统一从这里编码。
+  set_key_width(key_size);
+  // `--kv-size` 是整对 KV 宽度（含 key），`<= key_size` 报参数错误；value 取差值。
+  let kv_size = resolve_kv_size_with_key(
+    arg_match.get_one::<String>("kv-size").map(String::as_str),
+    key_size,
+  )?;
+  let value_size = value_len_with_key(kv_size, key_size);
+  let buffer_pool_size = arg_match
+    .get_one::<String>("buffer-pool-size")
+    .and_then(|value| value.parse::<u64>().ok())
+    .unwrap_or(DEFAULT_BUFFER_POOL_SIZE);
+  let read_count = arg_match
+    .get_one::<String>("read-count")
+    .and_then(|value| value.parse::<u64>().ok())
+    .unwrap_or(0);
+  let scan_count = arg_match
+    .get_one::<String>("scan-count")
+    .and_then(|value| value.parse::<u64>().ok())
+    .unwrap_or(0);
   let read_per_part = arg_match
     .get_one::<String>("read-per-part")
     .and_then(|value| value.parse::<usize>().ok())
@@ -358,6 +416,9 @@ pub(crate) fn parse() -> Result<Option<Cli>, Box<dyn Error>> {
     batch_size,
     kv_size,
     value_size,
+    buffer_pool_size,
+    read_count,
+    scan_count,
     read_per_part,
     partitions,
     key_interval,
@@ -388,21 +449,35 @@ pub(crate) fn parse() -> Result<Option<Cli>, Box<dyn Error>> {
 /// `kv_size <= 8` 拒绝并报参数错误，对齐 C++ `simple_bench.cpp:550`
 /// `CHECK(FLAGS_kv_size > sizeof(uint64_t))`（pair 口径下 value = kv_size - 8，
 /// 再小就下溢）。非法数值沿用本文件其余参数的口径：按缺省值处理。
+#[cfg(test)]
 pub(crate) fn resolve_kv_size(arg: Option<&str>) -> Result<usize, String> {
+  resolve_kv_size_with_key(arg, KEY_BYTES)
+}
+
+/// 按 key 宽度解析 `--kv-size`：整对宽度必须大于 key 宽度。
+pub(crate) fn resolve_kv_size_with_key(
+  arg: Option<&str>,
+  key_size: usize,
+) -> Result<usize, String> {
   let kv_size = arg
     .and_then(|value| value.parse::<usize>().ok())
     .unwrap_or(DEFAULT_KV_SIZE);
-  if kv_size <= KEY_BYTES {
+  if kv_size <= key_size {
     return Err(format!(
-      "--kv-size {kv_size} 非法：kv_size 是整对 KV 宽度（含 {KEY_BYTES}B key），必须 > {KEY_BYTES}（对齐 C++ simple_bench 的 CHECK）"
+      "--kv-size {kv_size} 非法：kv_size 是整对 KV 宽度（含 {key_size}B key），必须 > {key_size}"
     ));
   }
   Ok(kv_size)
 }
 
-/// value 字节数 = 整对 KV 宽度 - key 宽度，对齐 C++ `simple_bench.cpp:113`
-/// `value.resize(FLAGS_kv_size - sizeof(uint64_t))`；调用方先经
-/// [`resolve_kv_size`] 保证 `kv_size > KEY_BYTES`，不会下溢。
+/// value 字节数 = 整对 KV 宽度 - key 宽度；caller 先经 [`resolve_kv_size_with_key`]
+/// 保证 `kv_size > key_size`，不会下溢。
+pub(crate) fn value_len_with_key(kv_size: usize, key_size: usize) -> usize {
+  kv_size - key_size
+}
+
+/// 8B key 的历史口径（仅测试使用）。
+#[cfg(test)]
 pub(crate) fn value_len(kv_size: usize) -> usize {
-  kv_size - KEY_BYTES
+  value_len_with_key(kv_size, KEY_BYTES)
 }

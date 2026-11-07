@@ -16,6 +16,20 @@ fn scan_lanes_match_cpp_scanner_num() {
   assert_eq!(scan_lane_li(8, 2).len(), 16);
 }
 
+/// redb 口径：总页请求数固定为 `--scan-count`，跨全部 scan 链均分。
+#[test]
+fn scan_count_is_shared_across_lanes() {
+  let lane_li = scan_lane_li_with_count(1, 4, 500_000);
+  let total: u64 = lane_li.iter().filter_map(|lane| lane.scans).sum();
+  assert_eq!(total, 500_000);
+  assert_eq!(
+    lane_li.iter().map(|lane| lane.scans).collect::<Vec<_>>(),
+    vec![Some(125_000); 4]
+  );
+  // None 保持历史语义（固定次数模式每链一页）。
+  assert!(scan_lane_li(1, 4).iter().all(|lane| lane.scans.is_none()));
+}
+
 /// `--scan-bytes` 折算：0＝扫尾；否则 `max(1, bytes / value_size)`。
 #[test]
 fn scan_kvs_matches_cpp_conversion() {

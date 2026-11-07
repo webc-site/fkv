@@ -25,3 +25,25 @@ fn read_lanes_match_cpp_reader_num() {
   // 空分区不建链。
   assert_eq!(read_lane_li(1, 4, 2).len(), 2);
 }
+
+/// redb 口径：总读次数固定为 `--read-count`，跨全部读链均分（余数给前几条）。
+#[test]
+fn read_count_is_shared_across_lanes() {
+  let lane_li = read_lane_li_with_count(1_000_000, 1, 8, 1_000_000);
+  assert_eq!(lane_li.len(), 8);
+  let total: u64 = lane_li.iter().filter_map(|lane| lane.reads).sum();
+  assert_eq!(total, 1_000_000);
+  assert_eq!(lane_li[0].reads, Some(125_000));
+
+  // 余数按链顺序分配；None 保持历史语义（每链读一遍）。
+  let lane_li = read_lane_li_with_count(1000, 1, 3, 10);
+  assert_eq!(
+    lane_li.iter().map(|lane| lane.reads).collect::<Vec<_>>(),
+    vec![Some(4), Some(3), Some(3)]
+  );
+  assert!(
+    read_lane_li(1000, 1, 3)
+      .iter()
+      .all(|lane| lane.reads.is_none())
+  );
+}
