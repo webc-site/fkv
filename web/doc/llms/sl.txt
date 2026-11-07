@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/sl/README.md) : Komponenta objave v blogu
+[BoxX](../../src/webc/BoxX/i18n/sl/README.md) : Ustvarite in prikažite pojavno plast z gumbom za zapiranje
+[Code](../../src/webc/Code/i18n/sl/README.md) : kodni gumb
+[Copy](../../src/webc/Copy/i18n/sl/README.md) : Kopiraj besedilo v odložišče
+[Edit](../../src/webc/Edit/i18n/sl/README.md) : gumb za urejanje
+[HtmDemo](../../src/webc/HtmDemo/i18n/sl/README.md) : Spletno odpravljanje napak v kodi HTML in JS
+[I18n](../../src/webc/I18n/i18n/sl/README.md) : Gumbi in pojavna okna za preklapljanje med jeziki vmesnika
+[Nav](../../src/webc/Nav/i18n/sl/README.md) : Zgornja navigacijska vrstica, ki se samodejno strne ali razširi, ko se stran premika
+[NavL](../../src/webc/NavL/i18n/sl/README.md) : Samodejno preklopi navigacijski meni in gumb za vrnitev
+[NavMenu](../../src/webc/NavMenu/i18n/sl/README.md) : Navigacijski meni prilagojen različnim velikostim zaslona
+[SelectBtn](../../src/webc/SelectBtn/i18n/sl/README.md) : Kombinacija spustnega izbirnega polja in gumba
+[Side](../../src/webc/Side/i18n/sl/README.md) : Stransko izvlečne plošče predalov
+[TabSelect](../../src/webc/TabSelect/i18n/sl/README.md) : Zavihek s spustnim izborom
+[Toc](../../src/webc/Toc/i18n/sl/README.md) : Komponenta navigacije po imeniku
+[Btn](../../src/webc/Btn/i18n/sl/README.md) : Navaden gumb in gumb z okroglo ikono
+[Card](../../src/webc/Card/i18n/sl/README.md) : Kartica kapsule s puščico desno, prikazano v obesu
+[H1Txt](../../src/webc/H1Txt/i18n/sl/README.md) : Naslov in opis teksture
+[Ing](../../src/webc/Ing/i18n/sl/README.md) : Indikator stanja nalaganja ali obdelave
+[Kv](../../src/webc/Kv/i18n/sl/README.md) : par ključev vrednosti
+[Lg](../../src/webc/Lg/i18n/sl/README.md) : Učinek osvetlitve ozadja in robov iz motnega stekla
+[MdCss](../../src/webc/MdCss/i18n/sl/README.md) : Slogi tipografije, optimizirani za bralno izkušnjo
+[NavALi](../../src/webc/NavALi/i18n/sl/README.md) : Slog seznama povezav navigacijske vrstice
+[O](../../src/webc/O/i18n/sl/README.md) : Narišite logotip z votlo piko pred elementom
+[Toast](../../src/webc/Toast/i18n/sl/README.md) : Pojavno okno s pozivom na robu strani
+[404](../../src/webc/404/i18n/sl/README.md) : Pot ne obstaja stran s sporočilom o napaki
+[Back](../../src/webc/Back/i18n/sl/README.md) : gumb nazaj
+[Box](../../src/webc/Box/i18n/sl/README.md) : Ustvarite in prikažite pojavno plast
+[CardLi](../../src/webc/CardLi/i18n/sl/README.md) : Asinhrono nalaganje in prikaz seznama kartic
+[Md](../../src/webc/Md/i18n/sl/README.md) : Varno razčlenite in upodabljajte Markdown besedilo v HTML.
+[Pophover](../../src/webc/Pophover/i18n/sl/README.md) : poziv za plavajoči oblaček
+[Scroll](../../src/webc/Scroll/i18n/sl/README.md) : virtualni drsni trak
+[Select](../../src/webc/Select/i18n/sl/README.md) : Spustni izbor, širina se prilagodi trenutnemu elementu
+[Tab](../../src/webc/Tab/i18n/sl/README.md) : Preklopljivi zavihki
+[fkv](../sl/doc/README.md)
+[Arhitektura](../sl/doc/architecture.md)
+[Crate](../sl/doc/crates.md)
+[test](../sl/doc/testing.md)
+[Zmogljivost](../sl/doc/performance.md)

@@ -1,0 +1,4 @@
+default: 預設按鈕
+main: 主要按鈕
+link: 連結按鈕
+icon: 圖示按鈕 (.BtnC)

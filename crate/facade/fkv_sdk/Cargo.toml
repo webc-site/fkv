@@ -1,0 +1,54 @@
+[package]
+name = "fkv_sdk"
+description = "put/get/delete/scan 便捷 API"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_btree]
+version = "0.1.0"
+path = "../../core/fkv_btree"
+
+[dependencies.fkv_config]
+version = "0.1.0"
+path = "../../foundation/fkv_config"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_io_compio]
+version = "0.1.0"
+path = "../../io/fkv_io_compio"
+
+[dependencies.fkv_large]
+version = "0.1.0"
+path = "../../core/fkv_large"
+
+[dependencies.fkv_store]
+version = "0.1.0"
+path = "../../engine/fkv_store"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dev-dependencies.compio]
+workspace = true
+features = [ "runtime", "fs", "io", "macros", "time" ]
+
+[dev-dependencies.fkv_testkit]
+path = "../fkv_testkit"
+version = "0.1.0"

@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/is/README.md) : Hluti bloggfærslu
+[BoxX](../../src/webc/BoxX/i18n/is/README.md) : Búðu til og sýndu sprettiglugga með lokahnappi
+[Code](../../src/webc/Code/i18n/is/README.md) : kóða hnappinn
+[Copy](../../src/webc/Copy/i18n/is/README.md) : Afritaðu texta á klemmuspjald
+[Edit](../../src/webc/Edit/i18n/is/README.md) : breyta hnappi
+[HtmDemo](../../src/webc/HtmDemo/i18n/is/README.md) : Villuleit HTML og JS kóða á netinu
+[I18n](../../src/webc/I18n/i18n/is/README.md) : Hnappar og sprettigluggar til að skipta um tungumál viðmóts
+[Nav](../../src/webc/Nav/i18n/is/README.md) : Efsta leiðsögustikan sem hrynur sjálfkrafa saman eða stækkar þegar síðan flettir
+[NavL](../../src/webc/NavL/i18n/is/README.md) : Skiptu sjálfkrafa um leiðsöguvalmynd og afturhnapp
+[NavMenu](../../src/webc/NavMenu/i18n/is/README.md) : Leiðsöguvalmynd aðlagaður mismunandi skjástærðum
+[SelectBtn](../../src/webc/SelectBtn/i18n/is/README.md) : Sambland af fellivalkassa og hnappi
+[Side](../../src/webc/Side/i18n/is/README.md) : Skúffuplötur sem renna út frá hliðinni
+[TabSelect](../../src/webc/TabSelect/i18n/is/README.md) : Flipasíða með fellivalmynd
+[Toc](../../src/webc/Toc/i18n/is/README.md) : Listaleiðsöguhluti
+[Btn](../../src/webc/Btn/i18n/is/README.md) : Venjulegur hnappur og hringlaga táknhnappur
+[Card](../../src/webc/Card/i18n/is/README.md) : Hylkisspjald með hægri ör sem birtist í dreifu
+[H1Txt](../../src/webc/H1Txt/i18n/is/README.md) : Áferðarheiti og lýsing
+[Ing](../../src/webc/Ing/i18n/is/README.md) : Vísir um hleðslu eða vinnslustöðu
+[Kv](../../src/webc/Kv/i18n/is/README.md) : lykilgildi par
+[Lg](../../src/webc/Lg/i18n/is/README.md) : Bakgrunnur úr matt gleri og hápunktur á brún
+[MdCss](../../src/webc/MdCss/i18n/is/README.md) : Leturgerð stíll fínstilltur fyrir lestrarupplifun
+[NavALi](../../src/webc/NavALi/i18n/is/README.md) : Stíll stýristikunnar tenglalista
+[O](../../src/webc/O/i18n/is/README.md) : Teiknaðu holur punktur lógó fyrir framan þáttinn
+[Toast](../../src/webc/Toast/i18n/is/README.md) : Hvetjandi sprettigluggi á jaðri síðunnar
+[404](../../src/webc/404/i18n/is/README.md) : Slóð er ekki til villuboðasíða
+[Back](../../src/webc/Back/i18n/is/README.md) : afturhnappur
+[Box](../../src/webc/Box/i18n/is/README.md) : Búðu til og sýndu sprettigluggalag
+[CardLi](../../src/webc/CardLi/i18n/is/README.md) : Hlaða og birta kortalista ósamstillt
+[Md](../../src/webc/Md/i18n/is/README.md) : Þjálfa og skila Markdown texta á öruggan hátt í HTML.
+[Pophover](../../src/webc/Pophover/i18n/is/README.md) : fljótandi kúla hvetja
+[Scroll](../../src/webc/Scroll/i18n/is/README.md) : sýndarskrollslá
+[Select](../../src/webc/Select/i18n/is/README.md) : Val á fellivalmynd, breiddin lagar sig að núverandi hlut
+[Tab](../../src/webc/Tab/i18n/is/README.md) : Skiptanlegur flipar
+[fkv](../is/doc/README.md)
+[Arkitektúr](../is/doc/architecture.md)
+[Crate](../is/doc/crates.md)
+[próf](../is/doc/testing.md)
+[Afköst](../is/doc/performance.md)

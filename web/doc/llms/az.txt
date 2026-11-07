@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/az/README.md) : Bloq yazısı komponenti
+[BoxX](../../src/webc/BoxX/i18n/az/README.md) : Bağlama düyməsi ilə pop-up qat yaradın və göstərin
+[Code](../../src/webc/Code/i18n/az/README.md) : kod düyməsi
+[Copy](../../src/webc/Copy/i18n/az/README.md) : Mətni panoya kopyalayın
+[Edit](../../src/webc/Edit/i18n/az/README.md) : redaktə düyməsi
+[HtmDemo](../../src/webc/HtmDemo/i18n/az/README.md) : HTML və JS kodunun onlayn sazlanması
+[I18n](../../src/webc/I18n/i18n/az/README.md) : İnterfeys dillərini dəyişmək üçün düymələr və açılan pəncərələr
+[Nav](../../src/webc/Nav/i18n/az/README.md) : Səhifə sürüşdürüldükdə avtomatik çökən və ya genişlənən üst naviqasiya paneli
+[NavL](../../src/webc/NavL/i18n/az/README.md) : Naviqasiya menyusunu və qayıt düyməsini avtomatik dəyişdirin
+[NavMenu](../../src/webc/NavMenu/i18n/az/README.md) : Müxtəlif ekran ölçülərinə uyğunlaşdırılmış naviqasiya menyusu
+[SelectBtn](../../src/webc/SelectBtn/i18n/az/README.md) : Açılan seçim qutusu və düymənin birləşməsi
+[Side](../../src/webc/Side/i18n/az/README.md) : Yan tərəfdən sürüşən çekmece panelləri
+[TabSelect](../../src/webc/TabSelect/i18n/az/README.md) : Açılan seçim ilə tab səhifəsi
+[Toc](../../src/webc/Toc/i18n/az/README.md) : Kataloq Naviqasiya Komponenti
+[Btn](../../src/webc/Btn/i18n/az/README.md) : Adi düymə və dəyirmi ikon düyməsi
+[Card](../../src/webc/Card/i18n/az/README.md) : Sağ ox ilə kapsul kartı asma şəklində göstərilir
+[H1Txt](../../src/webc/H1Txt/i18n/az/README.md) : Doku adı və təsviri
+[Ing](../../src/webc/Ing/i18n/az/README.md) : Yükləmə və ya emal statusunun göstəricisi
+[Kv](../../src/webc/Kv/i18n/az/README.md) : əsas dəyər cütü
+[Lg](../../src/webc/Lg/i18n/az/README.md) : Buzlu şüşə fon və kənar vurğu effekti
+[MdCss](../../src/webc/MdCss/i18n/az/README.md) : Oxu təcrübəsi üçün optimallaşdırılmış tipoqrafiya üslubları
+[NavALi](../../src/webc/NavALi/i18n/az/README.md) : Naviqasiya paneli keçid siyahısı stili
+[O](../../src/webc/O/i18n/az/README.md) : Elementin qarşısında içi boş nöqtəli loqo çəkin
+[Toast](../../src/webc/Toast/i18n/az/README.md) : Səhifənin kənarında açılan pəncərə
+[404](../../src/webc/404/i18n/az/README.md) : Yol xəta mesajı səhifəsi mövcud deyil
+[Back](../../src/webc/Back/i18n/az/README.md) : geri düyməsi
+[Box](../../src/webc/Box/i18n/az/README.md) : Açılan təbəqə yaradın və göstərin
+[CardLi](../../src/webc/CardLi/i18n/az/README.md) : Kart siyahısını asinxron şəkildə yükləyin və göstərin
+[Md](../../src/webc/Md/i18n/az/README.md) : Markdown mətnini HTML-də təhlükəsiz şəkildə təhlil edin və göstərin.
+[Pophover](../../src/webc/Pophover/i18n/az/README.md) : üzən bubble sorğusu
+[Scroll](../../src/webc/Scroll/i18n/az/README.md) : virtual sürüşmə çubuğu
+[Select](../../src/webc/Select/i18n/az/README.md) : Açılan seçim, eni cari elementə uyğunlaşır
+[Tab](../../src/webc/Tab/i18n/az/README.md) : Dəyişdirilə bilən nişanlar
+[fkv](../az/doc/README.md)
+[Memarlıq](../az/doc/architecture.md)
+[Crate](../az/doc/crates.md)
+[test](../az/doc/testing.md)
+[Performans](../az/doc/performance.md)

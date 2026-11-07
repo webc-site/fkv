@@ -1,0 +1,126 @@
+[package]
+name = "fkv_shard"
+description = "work loop、admission、写队列、定时器"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.compio]
+workspace = true
+features = [ "fs", "io", "macros", "time" ]
+
+[dependencies.crossfire]
+workspace = true
+
+[dependencies.fkv_api]
+version = "0.1.0"
+path = "../fkv_api"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../../io/fkv_io"
+
+[dependencies.fkv_io_compio]
+version = "0.1.0"
+path = "../../io/fkv_io_compio"
+
+[dependencies.fkv_standby]
+version = "0.1.0"
+path = "../../io/fkv_standby"
+
+[dependencies.fkv_large]
+version = "0.1.0"
+path = "../../core/fkv_large"
+
+[dependencies.fkv_metrics]
+version = "0.1.0"
+path = "../../foundation/fkv_metrics"
+
+[dependencies.log]
+workspace = true
+
+[dependencies.fkv_store]
+version = "0.1.0"
+path = "../fkv_store"
+
+[dependencies.fkv_task_reopen]
+version = "0.1.0"
+path = "../fkv_task_reopen"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.futures-channel]
+workspace = true
+
+[dependencies.futures]
+workspace = true
+default-features = false
+features = [ "std" ]
+
+[dependencies.fkv_cloud]
+version = "0.1.0"
+path = "../fkv_cloud"
+
+[dependencies.fkv_io_mem]
+version = "0.1.0"
+path = "../../io/fkv_io_mem"
+
+[dependencies.fkv_object]
+version = "0.1.0"
+path = "../../io/fkv_object"
+
+[dependencies.fkv_object_s3]
+version = "0.1.0"
+path = "../../io/fkv_object_s3"
+
+[dependencies.fkv_task_prewarm]
+version = "0.1.0"
+path = "../fkv_task_prewarm"
+
+[dependencies.gxhash]
+workspace = true
+
+[dependencies.fkv_btree]
+version = "0.1.0"
+path = "../../core/fkv_btree"
+
+[dependencies.futures-timer]
+workspace = true
+
+[dev-dependencies.fkv_config]
+version = "0.1.0"
+path = "../../foundation/fkv_config"
+
+[dev-dependencies.fkv_error]
+path = "../../foundation/fkv_error"
+version = "0.1.0"
+
+[dev-dependencies.fkv_failpoint]
+path = "../../foundation/fkv_failpoint"
+version = "0.1.0"
+
+[dev-dependencies.fkv_page]
+path = "../../format/fkv_page"
+version = "0.1.0"
+
+[dev-dependencies.fkv_testkit]
+path = "../../facade/fkv_testkit"
+version = "0.1.0"

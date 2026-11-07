@@ -1,0 +1,9 @@
+css: gaya murni
+base: Komponen dhasar
+webc: Komponen komposit
+js: Pustaka skrip
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: lapisan popup
+  ^Nav(?![a-z]): pandhu arah
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kertu

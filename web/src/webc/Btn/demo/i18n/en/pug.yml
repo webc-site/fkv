@@ -1,0 +1,4 @@
+default: Default button
+main: Main Button
+link: Link Button
+icon: Icon Button (.BtnC)

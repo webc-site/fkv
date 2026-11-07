@@ -1,0 +1,18 @@
+[package]
+name = "fkv_object"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "ObjectStore trait、list、conditional put"
+
+[dependencies]
+bytes.workspace = true
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+gxhash.workspace = true
+parking_lot.workspace = true
+
+[dev-dependencies]
+pollster.workspace = true
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

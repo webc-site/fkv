@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/km/README.md) : សមាសធាតុប្រកាសប្លុក
+[BoxX](../../src/webc/BoxX/i18n/km/README.md) : បង្កើត និងបង្ហាញស្រទាប់លេចឡើងដោយប្រើប៊ូតុងបិទ
+[Code](../../src/webc/Code/i18n/km/README.md) : ប៊ូតុងកូដ
+[Copy](../../src/webc/Copy/i18n/km/README.md) : ចម្លងអត្ថបទទៅក្ដារតម្បៀតខ្ទាស់
+[Edit](../../src/webc/Edit/i18n/km/README.md) : ប៊ូតុងកែសម្រួល
+[HtmDemo](../../src/webc/HtmDemo/i18n/km/README.md) : បំបាត់កំហុស HTML និង JS លើបណ្តាញ
+[I18n](../../src/webc/I18n/i18n/km/README.md) : ប៊ូតុង និងបង្អួចលេចឡើងសម្រាប់ប្តូរភាសាចំណុចប្រទាក់
+[Nav](../../src/webc/Nav/i18n/km/README.md) : របាររុករកកំពូលដែលបង្រួម ឬពង្រីកដោយស្វ័យប្រវត្តិ នៅពេលទំព័ររមូរ
+[NavL](../../src/webc/NavL/i18n/km/README.md) : ប្តូរម៉ឺនុយរុករក និងប៊ូតុងត្រឡប់ដោយស្វ័យប្រវត្តិ
+[NavMenu](../../src/webc/NavMenu/i18n/km/README.md) : ម៉ឺនុយ​រុករក​សម្រប​តាម​ទំហំ​អេក្រង់​ផ្សេងៗ
+[SelectBtn](../../src/webc/SelectBtn/i18n/km/README.md) : ការរួមបញ្ចូលគ្នានៃប្រអប់ជ្រើសរើសទម្លាក់ចុះ និងប៊ូតុង
+[Side](../../src/webc/Side/i18n/km/README.md) : បន្ទះក្តារដែលរុញចេញពីចំហៀង
+[TabSelect](../../src/webc/TabSelect/i18n/km/README.md) : ទំព័រផ្ទាំងដែលមានជម្រើសទម្លាក់ចុះ
+[Toc](../../src/webc/Toc/i18n/km/README.md) : សមាសធាតុរុករកថត
+[Btn](../../src/webc/Btn/i18n/km/README.md) : ប៊ូតុងធម្មតា និងប៊ូតុងរូបតំណាងមូល
+[Card](../../src/webc/Card/i18n/km/README.md) : កាត Capsule ដែលមានព្រួញខាងស្តាំបង្ហាញនៅក្នុងការព្យួរ
+[H1Txt](../../src/webc/H1Txt/i18n/km/README.md) : ចំណងជើងវាយនភាព និងការពិពណ៌នា
+[Ing](../../src/webc/Ing/i18n/km/README.md) : សូចនាករនៃស្ថានភាពផ្ទុកឬដំណើរការ
+[Kv](../../src/webc/Kv/i18n/km/README.md) : គូតម្លៃសំខាន់
+[Lg](../../src/webc/Lg/i18n/km/README.md) : ផ្ទៃខាងក្រោយកញ្ចក់សាយ និងឥទ្ធិពលបន្លិចគែម
+[MdCss](../../src/webc/MdCss/i18n/km/README.md) : រចនាប័ទ្មវាយអក្សរត្រូវបានធ្វើឱ្យប្រសើរសម្រាប់បទពិសោធន៍អាន
+[NavALi](../../src/webc/NavALi/i18n/km/README.md) : រចនាប័ទ្មបញ្ជីតំណរបាររុករក
+[O](../../src/webc/O/i18n/km/README.md) : គូររូបសញ្ញាចំណុចប្រហោងនៅពីមុខធាតុ
+[Toast](../../src/webc/Toast/i18n/km/README.md) : ជម្រុញបង្អួចលេចឡើងនៅគែមទំព័រ
+[404](../../src/webc/404/i18n/km/README.md) : ផ្លូវមិនមានទំព័រសារកំហុសទេ។
+[Back](../../src/webc/Back/i18n/km/README.md) : ប៊ូតុងថយក្រោយ
+[Box](../../src/webc/Box/i18n/km/README.md) : បង្កើត និងបង្ហាញស្រទាប់លេចឡើង
+[CardLi](../../src/webc/CardLi/i18n/km/README.md) : ផ្ទុក និងបង្ហាញបញ្ជីកាតដោយអសមកាល
+[Md](../../src/webc/Md/i18n/km/README.md) : ញែកដោយសុវត្ថិភាព និងបង្ហាញអត្ថបទ Markdown ទៅជា HTML ។
+[Pophover](../../src/webc/Pophover/i18n/km/README.md) : ប្រអប់បញ្ចូលពពុះអណ្តែត
+[Scroll](../../src/webc/Scroll/i18n/km/README.md) : របាររមូរនិម្មិត
+[Select](../../src/webc/Select/i18n/km/README.md) : ការជ្រើសរើសទម្លាក់ចុះ ទទឹងសម្របទៅនឹងធាតុបច្ចុប្បន្ន
+[Tab](../../src/webc/Tab/i18n/km/README.md) : ផ្ទាំងដែលអាចប្តូរបាន។
+[fkv](../km/doc/README.md)
+[ស្ថាបត្យកម្ម](../km/doc/architecture.md)
+[Crate](../km/doc/crates.md)
+[សាកល្បង](../km/doc/testing.md)
+[ប្រសិទ្ធភាព](../km/doc/performance.md)

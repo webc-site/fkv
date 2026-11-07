@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/tr/README.md) : Blog yazısı bileşeni
+[BoxX](../../src/webc/BoxX/i18n/tr/README.md) : Kapat düğmesiyle açılır bir katman oluşturun ve görüntüleyin
+[Code](../../src/webc/Code/i18n/tr/README.md) : kod düğmesi
+[Copy](../../src/webc/Copy/i18n/tr/README.md) : Metni panoya kopyala
+[Edit](../../src/webc/Edit/i18n/tr/README.md) : düzenle düğmesi
+[HtmDemo](../../src/webc/HtmDemo/i18n/tr/README.md) : HTML ve JS kodunda çevrimiçi hata ayıklama
+[I18n](../../src/webc/I18n/i18n/tr/README.md) : Arayüz dillerini değiştirmek için düğmeler ve açılır pencereler
+[Nav](../../src/webc/Nav/i18n/tr/README.md) : Sayfa kaydırıldığında otomatik olarak daraltılan veya genişleyen üst gezinme çubuğu
+[NavL](../../src/webc/NavL/i18n/tr/README.md) : Gezinme menüsünü ve geri dönüş düğmesini otomatik olarak değiştir
+[NavMenu](../../src/webc/NavMenu/i18n/tr/README.md) : Farklı ekran boyutlarına uyarlanmış gezinme menüsü
+[SelectBtn](../../src/webc/SelectBtn/i18n/tr/README.md) : Açılır seçim kutusu ve düğmenin birleşimi
+[Side](../../src/webc/Side/i18n/tr/README.md) : Yandan dışarı kayan çekmece panelleri
+[TabSelect](../../src/webc/TabSelect/i18n/tr/README.md) : Açılır seçimli sekme sayfası
+[Toc](../../src/webc/Toc/i18n/tr/README.md) : Dizin Gezinme Bileşeni
+[Btn](../../src/webc/Btn/i18n/tr/README.md) : Sıradan düğme ve yuvarlak simge düğmesi
+[Card](../../src/webc/Card/i18n/tr/README.md) : Askıda sağ ok gösterilen kapsül kartı
+[H1Txt](../../src/webc/H1Txt/i18n/tr/README.md) : Doku başlığı ve açıklaması
+[Ing](../../src/webc/Ing/i18n/tr/README.md) : Yükleme veya işleme durumu göstergesi
+[Kv](../../src/webc/Kv/i18n/tr/README.md) : anahtar değer çifti
+[Lg](../../src/webc/Lg/i18n/tr/README.md) : Buzlu cam arka plan ve kenar vurgulama efekti
+[MdCss](../../src/webc/MdCss/i18n/tr/README.md) : Okuma deneyimi için optimize edilmiş tipografi stilleri
+[NavALi](../../src/webc/NavALi/i18n/tr/README.md) : Gezinme çubuğu bağlantı listesi stili
+[O](../../src/webc/O/i18n/tr/README.md) : Öğenin önüne içi boş bir nokta logosu çizin
+[Toast](../../src/webc/Toast/i18n/tr/README.md) : Sayfanın kenarındaki açılır pencereyi sor
+[404](../../src/webc/404/i18n/tr/README.md) : Yol mevcut değil hata mesajı sayfası
+[Back](../../src/webc/Back/i18n/tr/README.md) : geri düğmesi
+[Box](../../src/webc/Box/i18n/tr/README.md) : Açılır katman oluşturma ve görüntüleme
+[CardLi](../../src/webc/CardLi/i18n/tr/README.md) : Kart listesini eşzamansız olarak yükleme ve görüntüleme
+[Md](../../src/webc/Md/i18n/tr/README.md) : Markdown metnini güvenli bir şekilde ayrıştırın ve HTML'ye dönüştürün.
+[Pophover](../../src/webc/Pophover/i18n/tr/README.md) : yüzen kabarcık istemi
+[Scroll](../../src/webc/Scroll/i18n/tr/README.md) : sanal kaydırma çubuğu
+[Select](../../src/webc/Select/i18n/tr/README.md) : Açılan seçim, genişlik geçerli öğeye uyarlanır
+[Tab](../../src/webc/Tab/i18n/tr/README.md) : Değiştirilebilir sekmeler
+[fkv](../tr/doc/README.md)
+[Mimarlık](../tr/doc/architecture.md)
+[Crate](../tr/doc/crates.md)
+[test](../tr/doc/testing.md)
+[Performans](../tr/doc/performance.md)

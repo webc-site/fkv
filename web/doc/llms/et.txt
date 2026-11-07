@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/et/README.md) : Blogipostituse komponent
+[BoxX](../../src/webc/BoxX/i18n/et/README.md) : Looge ja kuvage sulgemisnupuga hüpikaknakiht
+[Code](../../src/webc/Code/i18n/et/README.md) : koodi nupp
+[Copy](../../src/webc/Copy/i18n/et/README.md) : Kopeerige tekst lõikelauale
+[Edit](../../src/webc/Edit/i18n/et/README.md) : redigeerimisnupp
+[HtmDemo](../../src/webc/HtmDemo/i18n/et/README.md) : HTML- ja JS-koodi silumine võrgus
+[I18n](../../src/webc/I18n/i18n/et/README.md) : Nupud ja hüpikaknad liidese keelte vahetamiseks
+[Nav](../../src/webc/Nav/i18n/et/README.md) : Ülemine navigeerimisriba, mis lehe kerimisel automaatselt aheneb või laieneb
+[NavL](../../src/webc/NavL/i18n/et/README.md) : Lülitage automaatselt navigeerimismenüü ja naasmisnupp
+[NavMenu](../../src/webc/NavMenu/i18n/et/README.md) : Erinevatele ekraanisuurustele kohandatud navigeerimismenüü
+[SelectBtn](../../src/webc/SelectBtn/i18n/et/README.md) : Rippmenüü valikukasti ja nupu kombinatsioon
+[Side](../../src/webc/Side/i18n/et/README.md) : Küljelt välja libisevad sahtlipaneelid
+[TabSelect](../../src/webc/TabSelect/i18n/et/README.md) : Vahekaart rippmenüü valikuga
+[Toc](../../src/webc/Toc/i18n/et/README.md) : Kataloogide navigeerimise komponent
+[Btn](../../src/webc/Btn/i18n/et/README.md) : Tavaline nupp ja ümmargune ikooninupp
+[Card](../../src/webc/Card/i18n/et/README.md) : Suspensioonis kuvatud paremnoolega kapslikaart
+[H1Txt](../../src/webc/H1Txt/i18n/et/README.md) : Tekstuuri pealkiri ja kirjeldus
+[Ing](../../src/webc/Ing/i18n/et/README.md) : Laadimise või töötlemise oleku indikaator
+[Kv](../../src/webc/Kv/i18n/et/README.md) : võtmeväärtuste paar
+[Lg](../../src/webc/Lg/i18n/et/README.md) : Mattklaasist taust ja servade esiletõstmise efekt
+[MdCss](../../src/webc/MdCss/i18n/et/README.md) : Lugemiskogemuse jaoks optimeeritud tüpograafiastiilid
+[NavALi](../../src/webc/NavALi/i18n/et/README.md) : Navigeerimisriba linkide loendi stiil
+[O](../../src/webc/O/i18n/et/README.md) : Joonistage elemendi ette õõnsa punktiga logo
+[Toast](../../src/webc/Toast/i18n/et/README.md) : Viip hüpikaken lehe servas
+[404](../../src/webc/404/i18n/et/README.md) : Veateateleht ei ole teed
+[Back](../../src/webc/Back/i18n/et/README.md) : tagasi nupp
+[Box](../../src/webc/Box/i18n/et/README.md) : Looge ja kuvage hüpikaknakiht
+[CardLi](../../src/webc/CardLi/i18n/et/README.md) : Laadige ja kuvage kaartide loend asünkroonselt
+[Md](../../src/webc/Md/i18n/et/README.md) : Parsige ja renderdage Markdowni tekst turvaliselt HTML-i.
+[Pophover](../../src/webc/Pophover/i18n/et/README.md) : ujuva mulli viip
+[Scroll](../../src/webc/Scroll/i18n/et/README.md) : virtuaalne kerimisriba
+[Select](../../src/webc/Select/i18n/et/README.md) : Rippmenüü valik, laius kohandub praeguse elemendiga
+[Tab](../../src/webc/Tab/i18n/et/README.md) : Vahetatavad vahelehed
+[fkv](../et/doc/README.md)
+[Arhitektuur](../et/doc/architecture.md)
+[Crate](../et/doc/crates.md)
+[katsetada](../et/doc/testing.md)
+[Jõudlus](../et/doc/performance.md)

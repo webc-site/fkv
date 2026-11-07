@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/fa/README.md) : جزء پست وبلاگ
+[BoxX](../../src/webc/BoxX/i18n/fa/README.md) : یک لایه بازشو با دکمه بستن ایجاد و نمایش دهید
+[Code](../../src/webc/Code/i18n/fa/README.md) : دکمه کد
+[Copy](../../src/webc/Copy/i18n/fa/README.md) : متن را در کلیپ بورد کپی کنید
+[Edit](../../src/webc/Edit/i18n/fa/README.md) : دکمه ویرایش
+[HtmDemo](../../src/webc/HtmDemo/i18n/fa/README.md) : اشکال زدایی کدهای HTML و JS به صورت آنلاین
+[I18n](../../src/webc/I18n/i18n/fa/README.md) : دکمه ها و پنجره های پاپ آپ برای تغییر زبان های رابط
+[Nav](../../src/webc/Nav/i18n/fa/README.md) : نوار پیمایش بالا که به طور خودکار با پیمایش صفحه جمع می‌شود یا بزرگ می‌شود
+[NavL](../../src/webc/NavL/i18n/fa/README.md) : تغییر خودکار منوی ناوبری و دکمه بازگشت
+[NavMenu](../../src/webc/NavMenu/i18n/fa/README.md) : منوی ناوبری متناسب با اندازه های مختلف صفحه نمایش
+[SelectBtn](../../src/webc/SelectBtn/i18n/fa/README.md) : ترکیبی از جعبه انتخاب کشویی و دکمه
+[Side](../../src/webc/Side/i18n/fa/README.md) : پانل های کشو که از کناره بیرون می آیند
+[TabSelect](../../src/webc/TabSelect/i18n/fa/README.md) : صفحه برگه با انتخاب کشویی
+[Toc](../../src/webc/Toc/i18n/fa/README.md) : مؤلفه ناوبری دایرکتوری
+[Btn](../../src/webc/Btn/i18n/fa/README.md) : دکمه معمولی و دکمه آیکون گرد
+[Card](../../src/webc/Card/i18n/fa/README.md) : کارت کپسول با فلش سمت راست در حالت تعلیق نمایش داده می شود
+[H1Txt](../../src/webc/H1Txt/i18n/fa/README.md) : عنوان بافت و توضیحات
+[Ing](../../src/webc/Ing/i18n/fa/README.md) : نشانگر وضعیت بارگیری یا پردازش
+[Kv](../../src/webc/Kv/i18n/fa/README.md) : جفت ارزش کلیدی
+[Lg](../../src/webc/Lg/i18n/fa/README.md) : پس زمینه شیشه مات و جلوه برجسته لبه
+[MdCss](../../src/webc/MdCss/i18n/fa/README.md) : سبک های تایپوگرافی برای تجربه خواندن بهینه شده است
+[NavALi](../../src/webc/NavALi/i18n/fa/README.md) : سبک لیست پیوند نوار پیمایش
+[O](../../src/webc/O/i18n/fa/README.md) : یک لوگو نقطه توخالی در جلوی عنصر بکشید
+[Toast](../../src/webc/Toast/i18n/fa/README.md) : پنجره پاپ آپ را در لبه صفحه نمایش دهید
+[404](../../src/webc/404/i18n/fa/README.md) : مسیر وجود ندارد صفحه پیام خطا
+[Back](../../src/webc/Back/i18n/fa/README.md) : دکمه برگشت
+[Box](../../src/webc/Box/i18n/fa/README.md) : ایجاد و نمایش لایه بازشو
+[CardLi](../../src/webc/CardLi/i18n/fa/README.md) : لیست کارت را به صورت ناهمزمان بارگیری و نمایش دهید
+[Md](../../src/webc/Md/i18n/fa/README.md) : متن Markdown را با خیال راحت تجزیه و رندر کنید.
+[Pophover](../../src/webc/Pophover/i18n/fa/README.md) : اعلان حباب شناور
+[Scroll](../../src/webc/Scroll/i18n/fa/README.md) : نوار پیمایش مجازی
+[Select](../../src/webc/Select/i18n/fa/README.md) : انتخاب کشویی، عرض با مورد فعلی سازگار می شود
+[Tab](../../src/webc/Tab/i18n/fa/README.md) : زبانه های قابل تعویض
+[fkv](../fa/doc/README.md)
+[معماری](../fa/doc/architecture.md)
+[Crate](../fa/doc/crates.md)
+[تست کنید](../fa/doc/testing.md)
+[عملکرد](../fa/doc/performance.md)

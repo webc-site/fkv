@@ -1,0 +1,27 @@
+nav.Nav
+  align-items center
+  box-sizing border-box
+  display flex
+  justify-content space-between
+  margin 0 auto
+  pointer-events none
+  position sticky
+  top var(--top)
+  width 100%
+  z-index 9999
+
+  &.D, &.I
+    transition top 0.3s
+
+  &.D
+    top 0
+
+  > c-nav
+    pointer-events auto
+
+c-nav
+  align-items center
+  box-sizing border-box
+  display flex
+  gap 12px
+  padding 16px

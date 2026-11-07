@@ -1,0 +1,9 @@
+hoverMe: 悬浮提示
+tip: 这是一个气泡提示 
+top: 上
+bottom: 下
+left: 左
+right: 右
+auto: 自动
+longText: 长文本
+longTip: 包含长文本和长链接自动折行：https://github.com/webc-site/webc.site/blob/main/src/webc/Pophover.js

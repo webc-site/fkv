@@ -1,0 +1,136 @@
+main.demo.Lg
+  .Md
+    h1
+      c-t basicTitle
+    p
+      strong
+        c-t bold
+      | &nbsp;
+      em
+        c-t italic
+    p
+      del
+        c-t del
+    p
+      code inline_code
+      |
+      c-t inlineCode
+    p.
+      <c-t>linkPrefix</c-t> : <a href="https://un.org"><c-t>link</c-t></a><c-t>linkSuffix</c-t>
+    h2
+      c-t listTitle
+    blockquote
+      p
+        c-t quoteSingle
+    blockquote
+      p
+        c-t quoteMultiLine1
+      p
+        c-t quoteMultiLine2
+    blockquote.q.note
+      b.qt
+        i.qi
+        | NOTE
+      p
+        code &gt; [!NOTE]
+        |
+        c-t note
+    blockquote.q.tip
+      b.qt
+        i.qi
+        | TIP
+      p
+        code &gt; [!TIP]
+        |
+        c-t tip
+    blockquote.q.important
+      b.qt
+        i.qi
+        | IMPORTANT
+      p
+        code &gt; [!IMPORTANT]
+        |
+        c-t important
+    blockquote.q.warning
+      b.qt
+        i.qi
+        | WARNING
+      p
+        code &gt; [!WARNING]
+        |
+        c-t warning
+    blockquote.q.caution
+      b.qt
+        i.qi
+        | CAUTION
+      p
+        code &gt; [!CAUTION]
+        |
+        c-t caution
+    h2
+      c-t taskTitle
+    ul
+      li
+        input(type="checkbox" disabled)
+        |
+        c-t todoItem
+      li
+        input(type="checkbox" disabled checked)
+        |
+        c-t doneItem
+    ul
+      li
+        c-t ulItem1
+        ul
+          li
+            c-t ulSubItem1
+          li
+            c-t ulSubItem2
+      li
+        c-t ulItem2
+    ol
+      li
+        c-t olItem1
+        ol
+          li
+            c-t olSubItem1
+          li
+            c-t olSubItem2
+      li
+        c-t olItem2
+    h2
+      c-t tableTitle
+    table
+      thead
+        tr
+          th
+            c-t col1
+          th
+            c-t col2
+          th
+            c-t col3
+      tbody
+        tr
+          td
+            c-t row1Col1
+          td
+            c-t row1Col2
+          td 100
+        tr
+          td
+            c-t row2Col1
+          td
+            c-t row2Col2
+          td 95
+    hr
+    h2
+      c-t codeTitle
+    pre
+      code.language-javascript.
+        const hello = () => {
+          console.log("Hello, WebC!");
+        };
+    h2
+      c-t imageTitle
+    p
+      img(src="https://i-01.eu.org/demo-green.avif" alt="Demo Image")

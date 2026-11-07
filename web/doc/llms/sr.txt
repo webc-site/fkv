@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/sr/README.md) : Компонента поста на блогу
+[BoxX](../../src/webc/BoxX/i18n/sr/README.md) : Направите и прикажите искачући слој помоћу дугмета за затварање
+[Code](../../src/webc/Code/i18n/sr/README.md) : дугме кода
+[Copy](../../src/webc/Copy/i18n/sr/README.md) : Копирајте текст у међуспремник
+[Edit](../../src/webc/Edit/i18n/sr/README.md) : дугме за уређивање
+[HtmDemo](../../src/webc/HtmDemo/i18n/sr/README.md) : Отклањање грешака у ХТМЛ и ЈС коду на мрежи
+[I18n](../../src/webc/I18n/i18n/sr/README.md) : Дугмад и искачући прозори за промену језика интерфејса
+[Nav](../../src/webc/Nav/i18n/sr/README.md) : Горња трака за навигацију која се аутоматски скупља или шири када се страница помера
+[NavL](../../src/webc/NavL/i18n/sr/README.md) : Аутоматски пребаците навигациони мени и дугме за повратак
+[NavMenu](../../src/webc/NavMenu/i18n/sr/README.md) : Навигациони мени прилагођен различитим величинама екрана
+[SelectBtn](../../src/webc/SelectBtn/i18n/sr/README.md) : Комбинација падајућег оквира за избор и дугмета
+[Side](../../src/webc/Side/i18n/sr/README.md) : Панели фиока који се извлаче са стране
+[TabSelect](../../src/webc/TabSelect/i18n/sr/README.md) : Страница картице са падајућим избором
+[Toc](../../src/webc/Toc/i18n/sr/README.md) : Компонента за навигацију директоријума
+[Btn](../../src/webc/Btn/i18n/sr/README.md) : Обично дугме и дугме округле иконе
+[Card](../../src/webc/Card/i18n/sr/README.md) : Капсула картица са стрелицом удесно приказаном у суспензији
+[H1Txt](../../src/webc/H1Txt/i18n/sr/README.md) : Наслов и опис текстуре
+[Ing](../../src/webc/Ing/i18n/sr/README.md) : Индикатор статуса утовара или обраде
+[Kv](../../src/webc/Kv/i18n/sr/README.md) : пар кључна вредност
+[Lg](../../src/webc/Lg/i18n/sr/README.md) : Ефекат истицања позадине и ивица од мат стакла
+[MdCss](../../src/webc/MdCss/i18n/sr/README.md) : Типографски стилови оптимизовани за искуство читања
+[NavALi](../../src/webc/NavALi/i18n/sr/README.md) : Стил листе линкова траке за навигацију
+[O](../../src/webc/O/i18n/sr/README.md) : Нацртајте логотип шупље тачке испред елемента
+[Toast](../../src/webc/Toast/i18n/sr/README.md) : Промпт искачући прозор на ивици странице
+[404](../../src/webc/404/i18n/sr/README.md) : Путања не постоји страница са поруком о грешци
+[Back](../../src/webc/Back/i18n/sr/README.md) : дугме за повратак
+[Box](../../src/webc/Box/i18n/sr/README.md) : Креирајте и прикажите искачући слој
+[CardLi](../../src/webc/CardLi/i18n/sr/README.md) : Учитајте и прикажите листу картица асинхроно
+[Md](../../src/webc/Md/i18n/sr/README.md) : Безбедно анализирајте и прикажите Маркдовн текст у ХТМЛ.
+[Pophover](../../src/webc/Pophover/i18n/sr/README.md) : плутајући балон промпт
+[Scroll](../../src/webc/Scroll/i18n/sr/README.md) : виртуелна трака за померање
+[Select](../../src/webc/Select/i18n/sr/README.md) : Падајући избор, ширина се прилагођава тренутној ставци
+[Tab](../../src/webc/Tab/i18n/sr/README.md) : Променљиве картице
+[fkv](../sr/doc/README.md)
+[Архитектура](../sr/doc/architecture.md)
+[Crate](../sr/doc/crates.md)
+[тест](../sr/doc/testing.md)
+[Перформансе](../sr/doc/performance.md)

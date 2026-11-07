@@ -1,0 +1,46 @@
+open: 打開側邊欄
+userName: 極客行者
+userTitle: 資深網頁設計師
+statFollowers: 訂閱者
+statFollowing: 關注
+statProjects: 專案
+groupCore: 核心功能
+groupSystem: 系統管理
+groupData: 數據分析
+groupCollaboration: 團隊協同
+widgetTitle: 儲存空間使用率
+widgetTasks: 我的待辦事項
+task1: 完成 Side 互動開發
+task2: 設計 Liquid 視覺美學
+task3: 優化組件易用性與細節
+navHome: 儀表板主頁
+navProfile: 個人中心
+navSettings: 系統設定
+navMessages: 站內訊息
+navNotifications: 通知提醒
+navPrivacy: 隱私安全
+navHelp: 幫助與回饋
+navAnalytics: 分析報告
+navCloud: 雲端儲存空間
+navTeam: 團隊成員
+navTasks: 任務協同
+logout: 登出登入
+upgradeTitle: 升級至專業版
+upgradeDesc: 解鎖無限雲端存儲與高級協作
+upgradeBtn: 立即升級
+task4: 審核 PR 提交並合併分支
+task5: 撰寫 WebC 新版本發布日誌
+widgetOnline: 線上團隊成員
+member1: 麗莎
+member2: 大衛
+member3: 安娜
+statusOnline: 網路
+statusOffline: 離線
+statusBusy: 忙碌
+widgetFiles: 最近文件
+file1: 產品設計規格 v2.4.pdf
+file2: 2026 Q3 規劃草案.docx
+file3: 組件動效演示.mp4
+tagDesign: 設計
+tagDev: 開發
+tagPm: 產品

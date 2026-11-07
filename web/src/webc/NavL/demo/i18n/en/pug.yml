@@ -1,0 +1,7 @@
+desc: Automatically determine and switch to display the navigation menu or back button based on the current route
+desktop_title: Desktop display
+desktop_desc: When in the declared menu route, display the menu items tiles; otherwise display the back button
+mobile_title: Mobile display
+mobile_desc: When in the declared menu route, collapses into an icon button and supports sliding out the menu; otherwise displays a back button
+normal_state: Navigation status (c-nav-menu)
+back_state: Fallback status (c-back)

@@ -1,0 +1,11 @@
+FROM rust:nightly-bookworm
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    clang libclang-dev cmake ninja-build pkg-config liburing-dev libzstd-dev \
+    libboost-all-dev libjsoncpp-dev libssl-dev libaio-dev rsync \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN rustup component add rustfmt clippy rustc-dev llvm-tools-preview \
+ && cargo install cargo-nextest --locked
+
+WORKDIR /work

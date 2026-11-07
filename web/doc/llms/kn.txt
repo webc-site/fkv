@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/kn/README.md) : ಬ್ಲಾಗ್ ಪೋಸ್ಟ್ ಘಟಕ
+[BoxX](../../src/webc/BoxX/i18n/kn/README.md) : ಕ್ಲೋಸ್ ಬಟನ್‌ನೊಂದಿಗೆ ಪಾಪ್ಅಪ್ ಲೇಯರ್ ಅನ್ನು ರಚಿಸಿ ಮತ್ತು ಪ್ರದರ್ಶಿಸಿ
+[Code](../../src/webc/Code/i18n/kn/README.md) : ಕೋಡ್ ಬಟನ್
+[Copy](../../src/webc/Copy/i18n/kn/README.md) : ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಪಠ್ಯವನ್ನು ನಕಲಿಸಿ
+[Edit](../../src/webc/Edit/i18n/kn/README.md) : ಎಡಿಟ್ ಬಟನ್
+[HtmDemo](../../src/webc/HtmDemo/i18n/kn/README.md) : HTML ಮತ್ತು JS ಕೋಡ್ ಅನ್ನು ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ಡೀಬಗ್ ಮಾಡಲಾಗುತ್ತಿದೆ
+[I18n](../../src/webc/I18n/i18n/kn/README.md) : ಇಂಟರ್ಫೇಸ್ ಭಾಷೆಗಳನ್ನು ಬದಲಾಯಿಸಲು ಗುಂಡಿಗಳು ಮತ್ತು ಪಾಪ್-ಅಪ್ ವಿಂಡೋಗಳು
+[Nav](../../src/webc/Nav/i18n/kn/README.md) : ಪುಟ ಸ್ಕ್ರಾಲ್ ಮಾಡಿದಾಗ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಕುಸಿಯುವ ಅಥವಾ ವಿಸ್ತರಿಸುವ ಉನ್ನತ ನ್ಯಾವಿಗೇಷನ್ ಬಾರ್
+[NavL](../../src/webc/NavL/i18n/kn/README.md) : ನ್ಯಾವಿಗೇಷನ್ ಮೆನು ಮತ್ತು ರಿಟರ್ನ್ ಬಟನ್ ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಬದಲಾಯಿಸಿ
+[NavMenu](../../src/webc/NavMenu/i18n/kn/README.md) : ನ್ಯಾವಿಗೇಶನ್ ಮೆನು ವಿವಿಧ ಪರದೆಯ ಗಾತ್ರಗಳಿಗೆ ಅಳವಡಿಸಲಾಗಿದೆ
+[SelectBtn](../../src/webc/SelectBtn/i18n/kn/README.md) : ಡ್ರಾಪ್-ಡೌನ್ ಆಯ್ಕೆ ಬಾಕ್ಸ್ ಮತ್ತು ಬಟನ್ ಸಂಯೋಜನೆ
+[Side](../../src/webc/Side/i18n/kn/README.md) : ಬದಿಯಿಂದ ಸ್ಲೈಡ್ ಮಾಡುವ ಡ್ರಾಯರ್ ಫಲಕಗಳು
+[TabSelect](../../src/webc/TabSelect/i18n/kn/README.md) : ಡ್ರಾಪ್-ಡೌನ್ ಆಯ್ಕೆಯೊಂದಿಗೆ ಟ್ಯಾಬ್ ಪುಟ
+[Toc](../../src/webc/Toc/i18n/kn/README.md) : ಡೈರೆಕ್ಟರಿ ನ್ಯಾವಿಗೇಶನ್ ಕಾಂಪೊನೆಂಟ್
+[Btn](../../src/webc/Btn/i18n/kn/README.md) : ಸಾಮಾನ್ಯ ಬಟನ್ ಮತ್ತು ಸುತ್ತಿನ ಐಕಾನ್ ಬಟನ್
+[Card](../../src/webc/Card/i18n/kn/README.md) : ಅಮಾನತಿನಲ್ಲಿ ಪ್ರದರ್ಶಿಸಲಾದ ಬಲ ಬಾಣದ ಕ್ಯಾಪ್ಸುಲ್ ಕಾರ್ಡ್
+[H1Txt](../../src/webc/H1Txt/i18n/kn/README.md) : ವಿನ್ಯಾಸ ಶೀರ್ಷಿಕೆ ಮತ್ತು ವಿವರಣೆ
+[Ing](../../src/webc/Ing/i18n/kn/README.md) : ಲೋಡ್ ಅಥವಾ ಪ್ರಕ್ರಿಯೆ ಸ್ಥಿತಿಯ ಸೂಚಕ
+[Kv](../../src/webc/Kv/i18n/kn/README.md) : ಪ್ರಮುಖ ಮೌಲ್ಯದ ಜೋಡಿ
+[Lg](../../src/webc/Lg/i18n/kn/README.md) : ಫ್ರಾಸ್ಟೆಡ್ ಗ್ಲಾಸ್ ಹಿನ್ನೆಲೆ ಮತ್ತು ಅಂಚಿನ ಹೈಲೈಟ್ ಪರಿಣಾಮ
+[MdCss](../../src/webc/MdCss/i18n/kn/README.md) : ಓದುವ ಅನುಭವಕ್ಕಾಗಿ ಮುದ್ರಣಕಲೆ ಶೈಲಿಗಳನ್ನು ಹೊಂದುವಂತೆ ಮಾಡಲಾಗಿದೆ
+[NavALi](../../src/webc/NavALi/i18n/kn/README.md) : ನ್ಯಾವಿಗೇಶನ್ ಬಾರ್ ಲಿಂಕ್ ಪಟ್ಟಿ ಶೈಲಿ
+[O](../../src/webc/O/i18n/kn/README.md) : ಅಂಶದ ಮುಂದೆ ಟೊಳ್ಳಾದ ಡಾಟ್ ಲೋಗೋವನ್ನು ಎಳೆಯಿರಿ
+[Toast](../../src/webc/Toast/i18n/kn/README.md) : ಪುಟದ ಅಂಚಿನಲ್ಲಿ ಪ್ರಾಂಪ್ಟ್ ಪಾಪ್-ಅಪ್ ವಿಂಡೋ
+[404](../../src/webc/404/i18n/kn/README.md) : ಮಾರ್ಗವು ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ದೋಷ ಸಂದೇಶ ಪುಟ
+[Back](../../src/webc/Back/i18n/kn/README.md) : ಹಿಂದಿನ ಬಟನ್
+[Box](../../src/webc/Box/i18n/kn/README.md) : ಪಾಪ್ಅಪ್ ಪದರವನ್ನು ರಚಿಸಿ ಮತ್ತು ಪ್ರದರ್ಶಿಸಿ
+[CardLi](../../src/webc/CardLi/i18n/kn/README.md) : ಕಾರ್ಡ್ ಪಟ್ಟಿಯನ್ನು ಅಸಮಕಾಲಿಕವಾಗಿ ಲೋಡ್ ಮಾಡಿ ಮತ್ತು ಪ್ರದರ್ಶಿಸಿ
+[Md](../../src/webc/Md/i18n/kn/README.md) : ಮಾರ್ಕ್‌ಡೌನ್ ಪಠ್ಯವನ್ನು HTML ಗೆ ಸುರಕ್ಷಿತವಾಗಿ ಪಾರ್ಸ್ ಮಾಡಿ ಮತ್ತು ರೆಂಡರ್ ಮಾಡಿ.
+[Pophover](../../src/webc/Pophover/i18n/kn/README.md) : ತೇಲುವ ಬಬಲ್ ಪ್ರಾಂಪ್ಟ್
+[Scroll](../../src/webc/Scroll/i18n/kn/README.md) : ವರ್ಚುವಲ್ ಸ್ಕ್ರಾಲ್ ಬಾರ್
+[Select](../../src/webc/Select/i18n/kn/README.md) : ಡ್ರಾಪ್-ಡೌನ್ ಆಯ್ಕೆ, ಅಗಲವು ಪ್ರಸ್ತುತ ಐಟಂಗೆ ಹೊಂದಿಕೊಳ್ಳುತ್ತದೆ
+[Tab](../../src/webc/Tab/i18n/kn/README.md) : ಬದಲಾಯಿಸಬಹುದಾದ ಟ್ಯಾಬ್‌ಗಳು
+[fkv](../kn/doc/README.md)
+[ವಾಸ್ತುಶಿಲ್ಪ](../kn/doc/architecture.md)
+[Crate](../kn/doc/crates.md)
+[ಪರೀಕ್ಷೆ](../kn/doc/testing.md)
+[ಕಾರ್ಯಕ್ಷಮತೆ](../kn/doc/performance.md)

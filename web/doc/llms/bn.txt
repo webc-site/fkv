@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/bn/README.md) : ব্লগ পোস্ট উপাদান
+[BoxX](../../src/webc/BoxX/i18n/bn/README.md) : একটি বন্ধ বোতাম দিয়ে একটি পপআপ স্তর তৈরি করুন এবং প্রদর্শন করুন৷
+[Code](../../src/webc/Code/i18n/bn/README.md) : কোড বোতাম
+[Copy](../../src/webc/Copy/i18n/bn/README.md) : ক্লিপবোর্ডে পাঠ্য অনুলিপি করুন
+[Edit](../../src/webc/Edit/i18n/bn/README.md) : সম্পাদনা বোতাম
+[HtmDemo](../../src/webc/HtmDemo/i18n/bn/README.md) : অনলাইনে HTML এবং JS কোড ডিবাগ করা
+[I18n](../../src/webc/I18n/i18n/bn/README.md) : ইন্টারফেস ভাষা পরিবর্তনের জন্য বোতাম এবং পপ-আপ উইন্ডো
+[Nav](../../src/webc/Nav/i18n/bn/README.md) : শীর্ষ নেভিগেশন বার যা পৃষ্ঠাটি স্ক্রোল করার সময় স্বয়ংক্রিয়ভাবে ভেঙে যায় বা প্রসারিত হয়
+[NavL](../../src/webc/NavL/i18n/bn/README.md) : স্বয়ংক্রিয়ভাবে নেভিগেশন মেনু এবং রিটার্ন বোতাম পরিবর্তন করুন
+[NavMenu](../../src/webc/NavMenu/i18n/bn/README.md) : নেভিগেশন মেনু বিভিন্ন স্ক্রীন আকারে অভিযোজিত
+[SelectBtn](../../src/webc/SelectBtn/i18n/bn/README.md) : ড্রপ-ডাউন নির্বাচন বাক্স এবং বোতামের সমন্বয়
+[Side](../../src/webc/Side/i18n/bn/README.md) : ড্রয়ার প্যানেল যে পাশ থেকে স্লাইড আউট
+[TabSelect](../../src/webc/TabSelect/i18n/bn/README.md) : ড্রপ-ডাউন নির্বাচন সহ ট্যাব পৃষ্ঠা
+[Toc](../../src/webc/Toc/i18n/bn/README.md) : ডিরেক্টরি নেভিগেশন উপাদান
+[Btn](../../src/webc/Btn/i18n/bn/README.md) : সাধারণ বোতাম এবং বৃত্তাকার আইকন বোতাম
+[Card](../../src/webc/Card/i18n/bn/README.md) : সাসপেনশনে প্রদর্শিত ডান তীর সহ ক্যাপসুল কার্ড
+[H1Txt](../../src/webc/H1Txt/i18n/bn/README.md) : টেক্সচার শিরোনাম এবং বিবরণ
+[Ing](../../src/webc/Ing/i18n/bn/README.md) : লোডিং বা প্রসেসিং স্ট্যাটাসের সূচক
+[Kv](../../src/webc/Kv/i18n/bn/README.md) : মূল মান জোড়া
+[Lg](../../src/webc/Lg/i18n/bn/README.md) : ফ্রস্টেড গ্লাস পটভূমি এবং প্রান্ত হাইলাইট প্রভাব
+[MdCss](../../src/webc/MdCss/i18n/bn/README.md) : টাইপোগ্রাফি শৈলী পড়ার অভিজ্ঞতার জন্য অপ্টিমাইজ করা হয়েছে
+[NavALi](../../src/webc/NavALi/i18n/bn/README.md) : নেভিগেশন বার লিঙ্ক তালিকা শৈলী
+[O](../../src/webc/O/i18n/bn/README.md) : উপাদানের সামনে একটি ফাঁপা ডট লোগো আঁকুন
+[Toast](../../src/webc/Toast/i18n/bn/README.md) : পৃষ্ঠার প্রান্তে প্রম্পট পপ-আপ উইন্ডো
+[404](../../src/webc/404/i18n/bn/README.md) : পথ ত্রুটি বার্তা পৃষ্ঠা বিদ্যমান নেই
+[Back](../../src/webc/Back/i18n/bn/README.md) : পিছনের বোতাম
+[Box](../../src/webc/Box/i18n/bn/README.md) : পপআপ স্তর তৈরি করুন এবং প্রদর্শন করুন
+[CardLi](../../src/webc/CardLi/i18n/bn/README.md) : অ্যাসিঙ্ক্রোনাসভাবে কার্ড তালিকা লোড এবং প্রদর্শন করুন
+[Md](../../src/webc/Md/i18n/bn/README.md) : HTML-এ মার্কডাউন পাঠ্যকে নিরাপদে পার্স করুন এবং রেন্ডার করুন।
+[Pophover](../../src/webc/Pophover/i18n/bn/README.md) : ভাসমান বুদ্বুদ প্রম্পট
+[Scroll](../../src/webc/Scroll/i18n/bn/README.md) : ভার্চুয়াল স্ক্রল বার
+[Select](../../src/webc/Select/i18n/bn/README.md) : ড্রপ-ডাউন নির্বাচন, প্রস্থ বর্তমান আইটেমের সাথে খাপ খায়
+[Tab](../../src/webc/Tab/i18n/bn/README.md) : পরিবর্তনযোগ্য ট্যাব
+[fkv](../bn/doc/README.md)
+[স্থাপত্য](../bn/doc/architecture.md)
+[Crate](../bn/doc/crates.md)
+[পরীক্ষা](../bn/doc/testing.md)
+[পারফরম্যান্স](../bn/doc/performance.md)

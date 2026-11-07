@@ -1,0 +1,9 @@
+css: ແບບບໍລິສຸດ
+base: ອົງປະກອບພື້ນຖານ
+webc: ອົງປະກອບປະກອບ
+js: ຄັງສະຄຣິບ
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: ຊັ້ນປັອບອັບ
+  ^Nav(?![a-z]): ການນໍາທາງ
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): ບັດ

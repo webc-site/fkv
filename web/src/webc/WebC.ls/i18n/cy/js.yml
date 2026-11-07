@@ -1,0 +1,9 @@
+css: arddull pur
+base: Cydrannau sylfaenol
+webc: Cydran gyfansawdd
+js: Llyfrgell sgriptiau
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: haenen naid
+  ^Nav(?![a-z]): mordwyo
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): cerdyn

@@ -1,0 +1,9 @@
+css: 纯样式
+base: 基础组件
+webc: 复合组件
+js: 脚本库
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: 弹出层
+  ^Nav(?![a-z]): 导航
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): 卡片

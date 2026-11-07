@@ -1,0 +1,9 @@
+css: saf üslub
+base: Əsas komponentlər
+webc: Kompozit komponent
+js: Skript kitabxanası
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: popup təbəqəsi
+  ^Nav(?![a-z]): naviqasiya
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kart

@@ -1,0 +1,7 @@
+desc: 根據目前路由自動判定並切換展示導航選單或回退按鈕
+desktop_title: 桌面端展示
+desktop_desc: 當處於宣告的選單路由時，平鋪展示選單項目；否則展示回退按鈕
+mobile_title: 行動端展示
+mobile_desc: 當處於聲明的選單路由時，折疊為圖示按鈕並支援滑出選單；否則展示回退按鈕
+normal_state: 導航狀態 (c-nav-menu)
+back_state: 回退狀態 (c-back)

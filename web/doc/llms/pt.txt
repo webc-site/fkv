@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/pt/README.md) : Componente de postagem de blog
+[BoxX](../../src/webc/BoxX/i18n/pt/README.md) : Crie e exiba uma camada pop-up com um botão Fechar
+[Code](../../src/webc/Code/i18n/pt/README.md) : botão de código
+[Copy](../../src/webc/Copy/i18n/pt/README.md) : Copiar texto para a área de transferência
+[Edit](../../src/webc/Edit/i18n/pt/README.md) : botão editar
+[HtmDemo](../../src/webc/HtmDemo/i18n/pt/README.md) : Depurando código HTML e JS online
+[I18n](../../src/webc/I18n/i18n/pt/README.md) : Botões e janelas pop-up para alternar idiomas da interface
+[Nav](../../src/webc/Nav/i18n/pt/README.md) : Barra de navegação superior que se recolhe ou expande automaticamente quando a página rola
+[NavL](../../src/webc/NavL/i18n/pt/README.md) : Alternar automaticamente o menu de navegação e o botão de retorno
+[NavMenu](../../src/webc/NavMenu/i18n/pt/README.md) : Menu de navegação adaptado a diferentes tamanhos de tela
+[SelectBtn](../../src/webc/SelectBtn/i18n/pt/README.md) : Combinação de caixa de seleção suspensa e botão
+[Side](../../src/webc/Side/i18n/pt/README.md) : Painéis de gaveta que deslizam lateralmente
+[TabSelect](../../src/webc/TabSelect/i18n/pt/README.md) : Página da guia com seleção suspensa
+[Toc](../../src/webc/Toc/i18n/pt/README.md) : Componente de navegação de diretório
+[Btn](../../src/webc/Btn/i18n/pt/README.md) : Botão comum e botão de ícone redondo
+[Card](../../src/webc/Card/i18n/pt/README.md) : Cartão cápsula com seta para a direita exibida em suspensão
+[H1Txt](../../src/webc/H1Txt/i18n/pt/README.md) : Título e descrição da textura
+[Ing](../../src/webc/Ing/i18n/pt/README.md) : Indicador de status de carregamento ou processamento
+[Kv](../../src/webc/Kv/i18n/pt/README.md) : par de valores-chave
+[Lg](../../src/webc/Lg/i18n/pt/README.md) : Fundo de vidro fosco e efeito de destaque de borda
+[MdCss](../../src/webc/MdCss/i18n/pt/README.md) : Estilos de tipografia otimizados para experiência de leitura
+[NavALi](../../src/webc/NavALi/i18n/pt/README.md) : Estilo de lista de links da barra de navegação
+[O](../../src/webc/O/i18n/pt/README.md) : Desenhe um logotipo de ponto vazio na frente do elemento
+[Toast](../../src/webc/Toast/i18n/pt/README.md) : Janela pop-up de prompt na borda da página
+[404](../../src/webc/404/i18n/pt/README.md) : Caminho não existe página de mensagem de erro
+[Back](../../src/webc/Back/i18n/pt/README.md) : botão voltar
+[Box](../../src/webc/Box/i18n/pt/README.md) : Criar e exibir camada pop-up
+[CardLi](../../src/webc/CardLi/i18n/pt/README.md) : Carregar e exibir lista de cartões de forma assíncrona
+[Md](../../src/webc/Md/i18n/pt/README.md) : Analise e renderize texto Markdown em HTML com segurança.
+[Pophover](../../src/webc/Pophover/i18n/pt/README.md) : prompt de bolha flutuante
+[Scroll](../../src/webc/Scroll/i18n/pt/README.md) : barra de rolagem virtual
+[Select](../../src/webc/Select/i18n/pt/README.md) : Seleção suspensa, a largura se adapta ao item atual
+[Tab](../../src/webc/Tab/i18n/pt/README.md) : Guias alternáveis
+[fkv](../pt/doc/README.md)
+[Arquitetura](../pt/doc/architecture.md)
+[Crate](../pt/doc/crates.md)
+[teste](../pt/doc/testing.md)
+[Desempenho](../pt/doc/performance.md)

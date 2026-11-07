@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/de/README.md) : Blog-Beitragskomponente
+[BoxX](../../src/webc/BoxX/i18n/de/README.md) : Erstellen Sie eine Popup-Ebene mit einer Schaltfläche zum Schließen und zeigen Sie sie an
+[Code](../../src/webc/Code/i18n/de/README.md) : Code-Taste
+[Copy](../../src/webc/Copy/i18n/de/README.md) : Text in die Zwischenablage kopieren
+[Edit](../../src/webc/Edit/i18n/de/README.md) : Bearbeiten-Schaltfläche
+[HtmDemo](../../src/webc/HtmDemo/i18n/de/README.md) : HTML- und JS-Code online debuggen
+[I18n](../../src/webc/I18n/i18n/de/README.md) : Schaltflächen und Popup-Fenster zum Wechseln der Schnittstellensprachen
+[Nav](../../src/webc/Nav/i18n/de/README.md) : Obere Navigationsleiste, die beim Scrollen der Seite automatisch minimiert oder erweitert wird
+[NavL](../../src/webc/NavL/i18n/de/README.md) : Navigationsmenü und Zurück-Taste automatisch wechseln
+[NavMenu](../../src/webc/NavMenu/i18n/de/README.md) : Navigationsmenü angepasst an verschiedene Bildschirmgrößen
+[SelectBtn](../../src/webc/SelectBtn/i18n/de/README.md) : Kombination aus Dropdown-Auswahlfeld und Schaltfläche
+[Side](../../src/webc/Side/i18n/de/README.md) : Seitlich herausziehbare Schubladenpaneele
+[TabSelect](../../src/webc/TabSelect/i18n/de/README.md) : Registerkartenseite mit Dropdown-Auswahl
+[Toc](../../src/webc/Toc/i18n/de/README.md) : Verzeichnisnavigationskomponente
+[Btn](../../src/webc/Btn/i18n/de/README.md) : Gewöhnlicher Knopf und runder Symbolknopf
+[Card](../../src/webc/Card/i18n/de/README.md) : Kapselkarte mit Pfeil nach rechts in der Schwebe
+[H1Txt](../../src/webc/H1Txt/i18n/de/README.md) : Titel und Beschreibung der Textur
+[Ing](../../src/webc/Ing/i18n/de/README.md) : Anzeige des Lade- oder Bearbeitungsstatus
+[Kv](../../src/webc/Kv/i18n/de/README.md) : Schlüssel-Wert-Paar
+[Lg](../../src/webc/Lg/i18n/de/README.md) : Mattierter Glashintergrund und Rand-Highlight-Effekt
+[MdCss](../../src/webc/MdCss/i18n/de/README.md) : Für das Leseerlebnis optimierte Typografiestile
+[NavALi](../../src/webc/NavALi/i18n/de/README.md) : Stil der Linkliste der Navigationsleiste
+[O](../../src/webc/O/i18n/de/README.md) : Zeichnen Sie ein hohles Punktlogo vor das Element
+[Toast](../../src/webc/Toast/i18n/de/README.md) : Eingabeaufforderungs-Popup-Fenster am Rand der Seite
+[404](../../src/webc/404/i18n/de/README.md) : Fehlermeldungsseite „Pfad existiert nicht“.
+[Back](../../src/webc/Back/i18n/de/README.md) : Zurück-Taste
+[Box](../../src/webc/Box/i18n/de/README.md) : Popup-Ebene erstellen und anzeigen
+[CardLi](../../src/webc/CardLi/i18n/de/README.md) : Kartenliste asynchron laden und anzeigen
+[Md](../../src/webc/Md/i18n/de/README.md) : Analysieren und rendern Sie Markdown-Text sicher in HTML.
+[Pophover](../../src/webc/Pophover/i18n/de/README.md) : Eingabeaufforderung für schwebende Blasen
+[Scroll](../../src/webc/Scroll/i18n/de/README.md) : virtuelle Bildlaufleiste
+[Select](../../src/webc/Select/i18n/de/README.md) : Dropdown-Auswahl, Breite passt sich dem aktuellen Artikel an
+[Tab](../../src/webc/Tab/i18n/de/README.md) : Umschaltbare Registerkarten
+[fkv](../de/doc/README.md)
+[Architektur](../de/doc/architecture.md)
+[Crate](../de/doc/crates.md)
+[prüfen](../de/doc/testing.md)
+[Leistung](../de/doc/performance.md)

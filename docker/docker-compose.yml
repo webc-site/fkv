@@ -1,0 +1,73 @@
+name: fkv
+
+services:
+  rustfs:
+    image: rustfs/rustfs:1.0.4
+    command: ["server", "/data"]
+    environment:
+      RUSTFS_ADDRESS: 0.0.0.0:9900
+      RUSTFS_ACCESS_KEY: minioadmin
+      RUSTFS_SECRET_KEY: minioadmin
+      RUSTFS_CONSOLE_ENABLE: "false"
+    ports:
+      - "9900:9900"
+    volumes:
+      # 具名卷避免 GitHub runner 上 bind mount 的 root 属主导致 RustFS
+      # `Permission denied`；`docker compose down -v` 会清理。
+      - rustfs_data:/data
+
+  rustfs-init:
+    image: amazon/aws-cli:latest
+    depends_on:
+      - rustfs
+    environment:
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+      AWS_DEFAULT_REGION: us-east-1
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        until aws --endpoint-url http://rustfs:9900 s3api list-buckets >/dev/null 2>&1; do sleep 1; done
+        aws --endpoint-url http://rustfs:9900 s3api head-bucket --bucket fkv-test >/dev/null 2>&1 ||
+          aws --endpoint-url http://rustfs:9900 s3api create-bucket --bucket fkv-test
+
+  test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.test
+    volumes:
+      - ..:/work
+    working_dir: /work
+    environment:
+      EKV_S3_ENDPOINT: http://rustfs:9900
+      EKV_S3_BUCKET: fkv-test
+      EKV_S3_ACCESS_KEY: minioadmin
+      EKV_S3_SECRET_KEY: minioadmin
+    depends_on:
+      rustfs:
+        condition: service_started
+      rustfs-init:
+        condition: service_completed_successfully
+    security_opt:
+      - seccomp:unconfined
+    ulimits:
+      memlock: -1
+    command: ["cargo", "nextest", "run", "--workspace", "--all-features", "--exclude", "fkv_ledger"]
+
+  bench:
+    profiles: ["bench"]
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.test
+    volumes:
+      - ..:/work
+      - ../.data/bench:/data
+    working_dir: /work
+    security_opt:
+      - seccomp:unconfined
+    ulimits:
+      memlock: -1
+    command: ["cargo", "bench", "--workspace", "--exclude", "fkv_ledger"]
+
+volumes:
+  rustfs_data:

@@ -1,0 +1,86 @@
+name: nvme
+
+# 只跑真正需要本地 NVMe / SSD 的少量测试。
+#
+# 普通测试在 ci.yml 的 GitHub 托管 runner 上跑；这里在 GitHub 托管 runner
+# 只构建 `fkv_nvme_tests` 一个小 crate（约 7 MB 的 .tar.zst），再交给带本地
+# NVMe 的 Blacksmith runner 下载执行，避免上传整个 workspace 的测试二进制。
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 1"
+  push:
+    paths:
+      - "crate/test/fkv_nvme_test/**"
+      - ".github/workflows/nvme.yml"
+
+concurrency:
+  group: nvme-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build-nvme-archive
+    runs-on: ubuntu-latest
+    env:
+      # 只传功能测试二进制，不需要 DWARF；archive 从 ~40 MB 降到 ~18 MB。
+      CARGO_PROFILE_DEV_DEBUG: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - run: bash scripts/ci/install.sh
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      # nextest archive 输出 .tar.zst（zstd），比 zip/gzip 快且体积小。
+      - run: |
+          cargo nextest archive -p fkv_nvme_test \
+            --archive-file fkv-nvme-tests.tar.zst
+      - uses: actions/upload-artifact@v7
+        with:
+          name: fkv-nvme-tests
+          path: fkv-nvme-tests.tar.zst
+          retention-days: 1
+
+  test:
+    name: test-nvme
+    needs: build
+    # 默认 Blacksmith；没有 NVMe 的 runner 会在测试里被 FKV_REQUIRE_NVME=1 拒绝。
+    runs-on: ${{ vars.FKV_NVME_RUNNER || 'blacksmith-4vcpu-ubuntu-2604' }}
+    timeout-minutes: 8
+    env:
+      FKV_REQUIRE_NVME: "1"
+      # 允许仓库变量覆盖；未设置时在 prepare step 里回落到 $RUNNER_TEMP。
+      FKV_NVME_ROOT: ${{ vars.FKV_NVME_ROOT }}
+    steps:
+      # archive 已编好，只 checkout 一份源码供 nextest 解析包路径（几秒），
+      # 不再安装 Rust 工具链。
+      - uses: actions/checkout@v7
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      - uses: actions/download-artifact@v7
+        with:
+          name: fkv-nvme-tests
+          path: .
+      - name: prepare NVMe directory
+        run: |
+          export FKV_NVME_ROOT="${FKV_NVME_ROOT:-$RUNNER_TEMP/nvme-data}"
+          mkdir -p "$FKV_NVME_ROOT"
+          echo "FKV_NVME_ROOT=$FKV_NVME_ROOT" >> "$GITHUB_ENV"
+          echo "pagesize=$(getconf PAGESIZE)"
+          findmnt -T "$FKV_NVME_ROOT" -no SOURCE,FSTYPE,TRAN || true
+          df -h "$FKV_NVME_ROOT"
+      - name: run NVMe tests
+        run: |
+          mkdir -p "${{ github.workspace }}/.nextest-archive"
+          cargo nextest run \
+            --archive-file fkv-nvme-tests.tar.zst \
+            --workspace-remap "${{ github.workspace }}" \
+            --extract-to "${{ github.workspace }}/.nextest-archive" \
+            --extract-overwrite \
+            --no-fail-fast

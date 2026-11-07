@@ -1,0 +1,59 @@
+[workspace]
+resolver = "3"
+members = ["crate/*/*"]
+default-members = ["crate/*/*"]
+exclude = ["fuzz", ".data"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+rust-version = "1.95"
+publish = false
+
+# 外部依赖的唯一版本声明。crate 侧用 `dep.workspace = true` 继承；
+# 需要额外 feature 时在 crate 侧补 `features = [...]`（feature 取并集）。
+# 增删依赖用 `cargo add`，版本收敛时手工编辑此处与 crate 清单。
+[workspace.dependencies]
+bytes = "1"
+clap_args = { version = "0.1.9", features = ["macro"] }
+coarsetime = "0.1.38"
+compio = "0.19.2"
+criterion = "0.8"
+crossfire = "3.1.22"
+fastrand = "2.5.0"
+futures = "0.3.34"
+futures-channel = "0.3.34"
+futures-timer = "3"
+gxhash = "3.5.0"
+io-uring = "0.7.15"
+itoa = "1.0.18"
+libc = "0.2"
+log = { version = "0.4.35", features = ["std"] }
+# 压缩盘面逐字节可复现：编码器输出随版本变化，精确 pin。
+mzstd = "=0.2.11"
+object_store = { version = "0.14.2", features = ["aws"] }
+parking_lot = "0.13.0"
+pollster = "1.0.1"
+rusty_alloc_default = "0.1.4"
+serde = { version = "1.0.229", features = ["derive"] }
+sonic-rs = "0.5.10"
+tokio = { version = "1.54.1", features = ["rt"] }
+xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
+# 字典训练 / 对拍参考实现。zstd-sys 2.1.2 内嵌 zstd 1.5.7（C++ 部署版本），
+# 三者都精确 pin；`fkv_compress/tests/zstd_parity.rs` 断言运行时版本为 1.5.7。
+zstd = "=0.14.3"
+zstd-sys = "=2.1.2"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
+overflow-checks = false
+
+[profile.bench]
+opt-level = 3
+lto = "fat"
+codegen-units = 1

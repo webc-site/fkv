@@ -1,0 +1,34 @@
+[package]
+name = "fkv_manifest"
+description = "manifest snapshot / log / branch metadata"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_codec]
+version = "0.1.0"
+path = "../../foundation/fkv_codec"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dev-dependencies.fkv_mapping]
+path = "../../core/fkv_mapping"
+version = "0.1.0"

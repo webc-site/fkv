@@ -1,0 +1,10 @@
+*.log
+*.rlib
+.codegraph/
+node_modules/
+target/
+.data/
+data/
+*.db
+/fkv_bench-linux-*
+/perf-run-*.json

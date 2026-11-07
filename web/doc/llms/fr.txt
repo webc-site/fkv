@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/fr/README.md) : Composant d'article de blog
+[BoxX](../../src/webc/BoxX/i18n/fr/README.md) : Créer et afficher un calque contextuel avec un bouton de fermeture
+[Code](../../src/webc/Code/i18n/fr/README.md) : bouton de code
+[Copy](../../src/webc/Copy/i18n/fr/README.md) : Copier le texte dans le presse-papiers
+[Edit](../../src/webc/Edit/i18n/fr/README.md) : bouton modifier
+[HtmDemo](../../src/webc/HtmDemo/i18n/fr/README.md) : Débogage du code HTML et JS en ligne
+[I18n](../../src/webc/I18n/i18n/fr/README.md) : Boutons et fenêtres contextuelles pour changer de langue d'interface
+[Nav](../../src/webc/Nav/i18n/fr/README.md) : Barre de navigation supérieure qui se réduit ou se développe automatiquement lorsque la page défile
+[NavL](../../src/webc/NavL/i18n/fr/README.md) : Changer automatiquement le menu de navigation et le bouton de retour
+[NavMenu](../../src/webc/NavMenu/i18n/fr/README.md) : Menu de navigation adapté aux différentes tailles d'écran
+[SelectBtn](../../src/webc/SelectBtn/i18n/fr/README.md) : Combinaison d'une zone de sélection déroulante et d'un bouton
+[Side](../../src/webc/Side/i18n/fr/README.md) : Panneaux de tiroirs coulissants sur le côté
+[TabSelect](../../src/webc/TabSelect/i18n/fr/README.md) : Page à onglet avec sélection déroulante
+[Toc](../../src/webc/Toc/i18n/fr/README.md) : Composant de navigation dans l'annuaire
+[Btn](../../src/webc/Btn/i18n/fr/README.md) : Bouton ordinaire et bouton icône ronde
+[Card](../../src/webc/Card/i18n/fr/README.md) : Carte capsule avec flèche droite affichée en suspension
+[H1Txt](../../src/webc/H1Txt/i18n/fr/README.md) : Titre et description de la texture
+[Ing](../../src/webc/Ing/i18n/fr/README.md) : Indicateur d'état de chargement ou de traitement
+[Kv](../../src/webc/Kv/i18n/fr/README.md) : paire clé-valeur
+[Lg](../../src/webc/Lg/i18n/fr/README.md) : Fond en verre dépoli et effet de surbrillance des bords
+[MdCss](../../src/webc/MdCss/i18n/fr/README.md) : Styles de typographie optimisés pour l'expérience de lecture
+[NavALi](../../src/webc/NavALi/i18n/fr/README.md) : Style de liste de liens de la barre de navigation
+[O](../../src/webc/O/i18n/fr/README.md) : Dessinez un logo en point creux devant l'élément
+[Toast](../../src/webc/Toast/i18n/fr/README.md) : Fenêtre contextuelle d'invite au bord de la page
+[404](../../src/webc/404/i18n/fr/README.md) : Le chemin n'existe pas sur la page de message d'erreur
+[Back](../../src/webc/Back/i18n/fr/README.md) : bouton retour
+[Box](../../src/webc/Box/i18n/fr/README.md) : Créer et afficher une couche contextuelle
+[CardLi](../../src/webc/CardLi/i18n/fr/README.md) : Charger et afficher la liste des cartes de manière asynchrone
+[Md](../../src/webc/Md/i18n/fr/README.md) : Analysez et restituez en toute sécurité le texte Markdown au format HTML.
+[Pophover](../../src/webc/Pophover/i18n/fr/README.md) : invite de bulle flottante
+[Scroll](../../src/webc/Scroll/i18n/fr/README.md) : barre de défilement virtuelle
+[Select](../../src/webc/Select/i18n/fr/README.md) : Sélection déroulante, la largeur s'adapte à l'élément actuel
+[Tab](../../src/webc/Tab/i18n/fr/README.md) : Onglets commutables
+[fkv](../fr/doc/README.md)
+[Architecture](../fr/doc/architecture.md)
+[Crate](../fr/doc/crates.md)
+[test](../fr/doc/testing.md)
+[Performances](../fr/doc/performance.md)

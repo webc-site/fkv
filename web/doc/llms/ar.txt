@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/ar/README.md) : مكون مشاركة المدونة
+[BoxX](../../src/webc/BoxX/i18n/ar/README.md) : قم بإنشاء وعرض طبقة منبثقة باستخدام زر الإغلاق
+[Code](../../src/webc/Code/i18n/ar/README.md) : زر الكود
+[Copy](../../src/webc/Copy/i18n/ar/README.md) : نسخ النص إلى الحافظة
+[Edit](../../src/webc/Edit/i18n/ar/README.md) : زر التحرير
+[HtmDemo](../../src/webc/HtmDemo/i18n/ar/README.md) : تصحيح أخطاء كود HTML وJS عبر الإنترنت
+[I18n](../../src/webc/I18n/i18n/ar/README.md) : الأزرار والنوافذ المنبثقة لتبديل لغات الواجهة
+[Nav](../../src/webc/Nav/i18n/ar/README.md) : شريط التنقل العلوي الذي يتم طيه أو توسيعه تلقائيًا عند تمرير الصفحة
+[NavL](../../src/webc/NavL/i18n/ar/README.md) : تبديل قائمة التنقل وزر العودة تلقائيًا
+[NavMenu](../../src/webc/NavMenu/i18n/ar/README.md) : قائمة التنقل تتكيف مع أحجام الشاشات المختلفة
+[SelectBtn](../../src/webc/SelectBtn/i18n/ar/README.md) : مزيج من مربع الاختيار المنسدل والزر
+[Side](../../src/webc/Side/i18n/ar/README.md) : ألواح الأدراج التي تنزلق للخارج من الجانب
+[TabSelect](../../src/webc/TabSelect/i18n/ar/README.md) : صفحة علامة التبويب مع تحديد القائمة المنسدلة
+[Toc](../../src/webc/Toc/i18n/ar/README.md) : مكون التنقل في الدليل
+[Btn](../../src/webc/Btn/i18n/ar/README.md) : زر عادي وزر أيقونة مستديرة
+[Card](../../src/webc/Card/i18n/ar/README.md) : بطاقة كبسولة مع سهم لليمين معروضة في التعليق
+[H1Txt](../../src/webc/H1Txt/i18n/ar/README.md) : عنوان الملمس والوصف
+[Ing](../../src/webc/Ing/i18n/ar/README.md) : مؤشر لحالة التحميل أو المعالجة
+[Kv](../../src/webc/Kv/i18n/ar/README.md) : زوج القيمة الرئيسية
+[Lg](../../src/webc/Lg/i18n/ar/README.md) : خلفية زجاجية بلوري وتأثير تسليط الضوء على الحافة
+[MdCss](../../src/webc/MdCss/i18n/ar/README.md) : أنماط الطباعة الأمثل لتجربة القراءة
+[NavALi](../../src/webc/NavALi/i18n/ar/README.md) : نمط قائمة ارتباط شريط التنقل
+[O](../../src/webc/O/i18n/ar/README.md) : ارسم شعارًا بنقطة مجوفة أمام العنصر
+[Toast](../../src/webc/Toast/i18n/ar/README.md) : نافذة منبثقة موجهة على حافة الصفحة
+[404](../../src/webc/404/i18n/ar/README.md) : المسار غير موجود في صفحة رسالة الخطأ
+[Back](../../src/webc/Back/i18n/ar/README.md) : زر العودة
+[Box](../../src/webc/Box/i18n/ar/README.md) : إنشاء وعرض الطبقة المنبثقة
+[CardLi](../../src/webc/CardLi/i18n/ar/README.md) : تحميل وعرض قائمة البطاقات بشكل غير متزامن
+[Md](../../src/webc/Md/i18n/ar/README.md) : تحليل نص Markdown وتقديمه بأمان إلى HTML.
+[Pophover](../../src/webc/Pophover/i18n/ar/README.md) : موجه الفقاعة العائمة
+[Scroll](../../src/webc/Scroll/i18n/ar/README.md) : شريط التمرير الظاهري
+[Select](../../src/webc/Select/i18n/ar/README.md) : اختيار القائمة المنسدلة، يتكيف العرض مع العنصر الحالي
+[Tab](../../src/webc/Tab/i18n/ar/README.md) : علامات تبويب قابلة للتحويل
+[fkv](../ar/doc/README.md)
+[بنيان](../ar/doc/architecture.md)
+[Crate](../ar/doc/crates.md)
+[امتحان](../ar/doc/testing.md)
+[أداء](../ar/doc/performance.md)

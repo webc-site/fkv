@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/af/README.md) : Blogplasing-komponent
+[BoxX](../../src/webc/BoxX/i18n/af/README.md) : Skep en vertoon 'n opspringlaag met 'n toemaakknoppie
+[Code](../../src/webc/Code/i18n/af/README.md) : kode knoppie
+[Copy](../../src/webc/Copy/i18n/af/README.md) : Kopieer teks na knipbord
+[Edit](../../src/webc/Edit/i18n/af/README.md) : wysig knoppie
+[HtmDemo](../../src/webc/HtmDemo/i18n/af/README.md) : Ontfout HTML- en JS-kode aanlyn
+[I18n](../../src/webc/I18n/i18n/af/README.md) : Knoppies en opspringvensters om koppelvlaktale te verander
+[Nav](../../src/webc/Nav/i18n/af/README.md) : Boonste navigasiebalk wat outomaties invou of uitbrei wanneer die bladsy blaai
+[NavL](../../src/webc/NavL/i18n/af/README.md) : Skakel outomaties navigasiekieslys en terugkeer-knoppie
+[NavMenu](../../src/webc/NavMenu/i18n/af/README.md) : Navigasiekieslys aangepas vir verskillende skermgroottes
+[SelectBtn](../../src/webc/SelectBtn/i18n/af/README.md) : Kombinasie van aftreklys seleksie boks en knoppie
+[Side](../../src/webc/Side/i18n/af/README.md) : Laaiepanele wat van die kant af uitskuif
+[TabSelect](../../src/webc/TabSelect/i18n/af/README.md) : Bladsy met aftreklys
+[Toc](../../src/webc/Toc/i18n/af/README.md) : Gidsnavigasiekomponent
+[Btn](../../src/webc/Btn/i18n/af/README.md) : Gewone knoppie en ronde ikoonknoppie
+[Card](../../src/webc/Card/i18n/af/README.md) : Kapsulekaart met regspyltjie vertoon in suspensie
+[H1Txt](../../src/webc/H1Txt/i18n/af/README.md) : Tekstuur titel en beskrywing
+[Ing](../../src/webc/Ing/i18n/af/README.md) : Aanwyser van laai of verwerking status
+[Kv](../../src/webc/Kv/i18n/af/README.md) : sleutelwaardepaar
+[Lg](../../src/webc/Lg/i18n/af/README.md) : Matglas agtergrond en rand hoogtepunt effek
+[MdCss](../../src/webc/MdCss/i18n/af/README.md) : Tipografiestyle geoptimaliseer vir leeservaring
+[NavALi](../../src/webc/NavALi/i18n/af/README.md) : Navigasiebalkskakellysstyl
+[O](../../src/webc/O/i18n/af/README.md) : Teken 'n hol kolletjie-logo voor die element
+[Toast](../../src/webc/Toast/i18n/af/README.md) : Vinnige opspringvenster aan die rand van die bladsy
+[404](../../src/webc/404/i18n/af/README.md) : Pad bestaan ​​nie foutboodskapbladsy nie
+[Back](../../src/webc/Back/i18n/af/README.md) : terug knoppie
+[Box](../../src/webc/Box/i18n/af/README.md) : Skep en vertoon opspringlaag
+[CardLi](../../src/webc/CardLi/i18n/af/README.md) : Laai en vertoon kaartlys asinchronies
+[Md](../../src/webc/Md/i18n/af/README.md) : Ontleed en lewer Markdown-teks veilig na HTML.
+[Pophover](../../src/webc/Pophover/i18n/af/README.md) : drywende borrel-opdrag
+[Scroll](../../src/webc/Scroll/i18n/af/README.md) : virtuele skuifbalk
+[Select](../../src/webc/Select/i18n/af/README.md) : Aftreklys seleksie, breedte pas by huidige item aan
+[Tab](../../src/webc/Tab/i18n/af/README.md) : Skakelbare oortjies
+[fkv](../af/doc/README.md)
+[Argitektuur](../af/doc/architecture.md)
+[Crate](../af/doc/crates.md)
+[toets](../af/doc/testing.md)
+[Werkverrigting](../af/doc/performance.md)

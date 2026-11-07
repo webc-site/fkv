@@ -1,0 +1,9 @@
+language: 语言
+os: 系统
+about: 关于
+jsInfo: JavaScript 是一种广泛用于客户端 Web 开发的脚本语言。
+rsInfo: Rust 是一种系统编程语言，注重安全、速度和并发。
+pyInfo: Python 是一种面向对象的解释型计算机程序设计语言。
+macInfo: macOS 是苹果公司开发的基于 Unix 的图形操作系统。
+winInfo: Windows 是微软公司开发的广泛使用的个人电脑操作系统。
+aboutInfo: 我们致力于开发高质量的开源前端组件，欢迎参与。

@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/sv/README.md) : Blogginläggskomponent
+[BoxX](../../src/webc/BoxX/i18n/sv/README.md) : Skapa och visa ett popup-lager med en stängningsknapp
+[Code](../../src/webc/Code/i18n/sv/README.md) : kodknapp
+[Copy](../../src/webc/Copy/i18n/sv/README.md) : Kopiera text till urklipp
+[Edit](../../src/webc/Edit/i18n/sv/README.md) : redigera knappen
+[HtmDemo](../../src/webc/HtmDemo/i18n/sv/README.md) : Felsökning av HTML och JS-kod online
+[I18n](../../src/webc/I18n/i18n/sv/README.md) : Knappar och popup-fönster för att byta gränssnittsspråk
+[Nav](../../src/webc/Nav/i18n/sv/README.md) : Översta navigeringsfältet som automatiskt kollapsar eller expanderar när sidan rullar
+[NavL](../../src/webc/NavL/i18n/sv/README.md) : Växla automatiskt navigationsmeny och returknapp
+[NavMenu](../../src/webc/NavMenu/i18n/sv/README.md) : Navigationsmeny anpassad till olika skärmstorlekar
+[SelectBtn](../../src/webc/SelectBtn/i18n/sv/README.md) : Kombination av rullgardinsvalsruta och knapp
+[Side](../../src/webc/Side/i18n/sv/README.md) : Lådpaneler som glider ut från sidan
+[TabSelect](../../src/webc/TabSelect/i18n/sv/README.md) : Fliksida med rullgardinsval
+[Toc](../../src/webc/Toc/i18n/sv/README.md) : Katalognavigeringskomponent
+[Btn](../../src/webc/Btn/i18n/sv/README.md) : Vanlig knapp och rund ikonknapp
+[Card](../../src/webc/Card/i18n/sv/README.md) : Kapselkort med högerpil visas i suspension
+[H1Txt](../../src/webc/H1Txt/i18n/sv/README.md) : Textur titel och beskrivning
+[Ing](../../src/webc/Ing/i18n/sv/README.md) : Indikator för laddnings- eller bearbetningsstatus
+[Kv](../../src/webc/Kv/i18n/sv/README.md) : nyckelvärdespar
+[Lg](../../src/webc/Lg/i18n/sv/README.md) : Frostat glasbakgrund och kantmarkeringseffekt
+[MdCss](../../src/webc/MdCss/i18n/sv/README.md) : Typografistilar optimerade för läsupplevelse
+[NavALi](../../src/webc/NavALi/i18n/sv/README.md) : Länkliststil i navigeringsfältet
+[O](../../src/webc/O/i18n/sv/README.md) : Rita en ihålig pricklogotyp framför elementet
+[Toast](../../src/webc/Toast/i18n/sv/README.md) : Snabbfönster i kanten av sidan
+[404](../../src/webc/404/i18n/sv/README.md) : Sökvägen finns inte felmeddelandesida
+[Back](../../src/webc/Back/i18n/sv/README.md) : tillbaka-knappen
+[Box](../../src/webc/Box/i18n/sv/README.md) : Skapa och visa popup-lager
+[CardLi](../../src/webc/CardLi/i18n/sv/README.md) : Ladda och visa kortlistan asynkront
+[Md](../../src/webc/Md/i18n/sv/README.md) : Analysera och återge Markdown-text på ett säkert sätt till HTML.
+[Pophover](../../src/webc/Pophover/i18n/sv/README.md) : flytande bubbla prompt
+[Scroll](../../src/webc/Scroll/i18n/sv/README.md) : virtuell rullningslist
+[Select](../../src/webc/Select/i18n/sv/README.md) : Rullgardinsval, bredd anpassar sig till aktuellt objekt
+[Tab](../../src/webc/Tab/i18n/sv/README.md) : Växlingsbara flikar
+[fkv](../sv/doc/README.md)
+[Arkitektur](../sv/doc/architecture.md)
+[Crate](../sv/doc/crates.md)
+[testa](../sv/doc/testing.md)
+[Prestanda](../sv/doc/performance.md)

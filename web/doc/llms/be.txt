@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/be/README.md) : Кампанент паведамлення ў блогу
+[BoxX](../../src/webc/BoxX/i18n/be/README.md) : Стварыце і пакажыце ўсплывальны пласт з кнопкай закрыцця
+[Code](../../src/webc/Code/i18n/be/README.md) : кнопка кода
+[Copy](../../src/webc/Copy/i18n/be/README.md) : Скапіраваць тэкст у буфер абмену
+[Edit](../../src/webc/Edit/i18n/be/README.md) : кнопка рэдагавання
+[HtmDemo](../../src/webc/HtmDemo/i18n/be/README.md) : Адладка кода HTML і JS онлайн
+[I18n](../../src/webc/I18n/i18n/be/README.md) : Кнопкі і ўсплывальныя вокны для пераключэння моў інтэрфейсу
+[Nav](../../src/webc/Nav/i18n/be/README.md) : Верхняя панэль навігацыі, якая аўтаматычна згортваецца або пашыраецца пры пракрутцы старонкі
+[NavL](../../src/webc/NavL/i18n/be/README.md) : Аўтаматычнае пераключэнне меню навігацыі і кнопкі вяртання
+[NavMenu](../../src/webc/NavMenu/i18n/be/README.md) : Меню навігацыі адаптавана да розных памераў экрана
+[SelectBtn](../../src/webc/SelectBtn/i18n/be/README.md) : Камбінацыя выпадальнага поля выбару і кнопкі
+[Side](../../src/webc/Side/i18n/be/README.md) : Панэлі скрынь, якія рассоўваюцца збоку
+[TabSelect](../../src/webc/TabSelect/i18n/be/README.md) : Укладка з выпадальным выбарам
+[Toc](../../src/webc/Toc/i18n/be/README.md) : Кампанент навігацыі па каталогу
+[Btn](../../src/webc/Btn/i18n/be/README.md) : Звычайная кнопка і кнопка з круглым значком
+[Card](../../src/webc/Card/i18n/be/README.md) : Картка капсулы са стрэлкай управа, якая адлюстроўваецца ў падвесцы
+[H1Txt](../../src/webc/H1Txt/i18n/be/README.md) : Назва і апісанне тэкстуры
+[Ing](../../src/webc/Ing/i18n/be/README.md) : Індыкатар стану загрузкі або апрацоўкі
+[Kv](../../src/webc/Kv/i18n/be/README.md) : пара ключ-значэнне
+[Lg](../../src/webc/Lg/i18n/be/README.md) : Фон з матавага шкла і эфект падсвечвання краёў
+[MdCss](../../src/webc/MdCss/i18n/be/README.md) : Стылі друкарні, аптымізаваныя для чытання
+[NavALi](../../src/webc/NavALi/i18n/be/README.md) : Стыль спісу спасылак панэлі навігацыі
+[O](../../src/webc/O/i18n/be/README.md) : Намалюйце лагатып з пустой кропкай перад элементам
+[Toast](../../src/webc/Toast/i18n/be/README.md) : Усплывальнае акно падказкі на краі старонкі
+[404](../../src/webc/404/i18n/be/README.md) : Шлях не існуе старонкі паведамлення пра памылку
+[Back](../../src/webc/Back/i18n/be/README.md) : кнопка назад
+[Box](../../src/webc/Box/i18n/be/README.md) : Стварэнне і адлюстраванне ўсплывальнага пласта
+[CardLi](../../src/webc/CardLi/i18n/be/README.md) : Загрузка і адлюстраванне спісу карт асінхронна
+[Md](../../src/webc/Md/i18n/be/README.md) : Бяспечны аналіз і візуалізацыя тэксту Markdown у HTML.
+[Pophover](../../src/webc/Pophover/i18n/be/README.md) : падказка з плаваючай бурбалкай
+[Scroll](../../src/webc/Scroll/i18n/be/README.md) : віртуальная паласа пракруткі
+[Select](../../src/webc/Select/i18n/be/README.md) : Выбар у выпадальным меню, шырыня адаптуецца да бягучага элемента
+[Tab](../../src/webc/Tab/i18n/be/README.md) : Пераключальныя ўкладкі
+[fkv](../be/doc/README.md)
+[Архітэктура](../be/doc/architecture.md)
+[Crate](../be/doc/crates.md)
+[тэст](../be/doc/testing.md)
+[Прадукцыйнасць](../be/doc/performance.md)

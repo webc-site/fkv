@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/sq/README.md) : Komponenti i postimit në blog
+[BoxX](../../src/webc/BoxX/i18n/sq/README.md) : Krijoni dhe shfaqni një shtresë kërcyese me një buton mbylljeje
+[Code](../../src/webc/Code/i18n/sq/README.md) : butonin e kodit
+[Copy](../../src/webc/Copy/i18n/sq/README.md) : Kopjo tekstin në kujtesën e fragmenteve
+[Edit](../../src/webc/Edit/i18n/sq/README.md) : butoni i redaktimit
+[HtmDemo](../../src/webc/HtmDemo/i18n/sq/README.md) : Korrigjimi i kodit HTML dhe JS në internet
+[I18n](../../src/webc/I18n/i18n/sq/README.md) : Butonat dhe dritaret kërcyese për ndërrimin e gjuhëve të ndërfaqes
+[Nav](../../src/webc/Nav/i18n/sq/README.md) : Shiriti i sipërm i navigimit që paloset ose zgjerohet automatikisht kur faqja lëviz
+[NavL](../../src/webc/NavL/i18n/sq/README.md) : Ndërroni automatikisht menunë e navigimit dhe butonin e kthimit
+[NavMenu](../../src/webc/NavMenu/i18n/sq/README.md) : Menuja e navigimit e përshtatur për madhësi të ndryshme ekrani
+[SelectBtn](../../src/webc/SelectBtn/i18n/sq/README.md) : Kombinimi i kutisë dhe butonit të zgjedhjes me zbritje
+[Side](../../src/webc/Side/i18n/sq/README.md) : Panelet e sirtarëve që rrëshqasin nga ana
+[TabSelect](../../src/webc/TabSelect/i18n/sq/README.md) : Faqja e skedës me përzgjedhje rënëse
+[Toc](../../src/webc/Toc/i18n/sq/README.md) : Komponenti i navigimit të drejtorisë
+[Btn](../../src/webc/Btn/i18n/sq/README.md) : Butoni i zakonshëm dhe butoni i ikonës së rrumbullakët
+[Card](../../src/webc/Card/i18n/sq/README.md) : Karta e kapsulës me shigjetën djathtas shfaqet në pezullim
+[H1Txt](../../src/webc/H1Txt/i18n/sq/README.md) : Titulli dhe përshkrimi i teksturës
+[Ing](../../src/webc/Ing/i18n/sq/README.md) : Treguesi i statusit të ngarkimit ose përpunimit
+[Kv](../../src/webc/Kv/i18n/sq/README.md) : çifti i vlerave kryesore
+[Lg](../../src/webc/Lg/i18n/sq/README.md) : Sfondi i xhamit të mbuluar me brymë dhe efekti i theksimit të skajeve
+[MdCss](../../src/webc/MdCss/i18n/sq/README.md) : Stilet e tipografisë të optimizuara për përvojën e leximit
+[NavALi](../../src/webc/NavALi/i18n/sq/README.md) : Stili i listës së lidhjeve të shiritit të navigimit
+[O](../../src/webc/O/i18n/sq/README.md) : Vizatoni një logo me pikë të zbrazët përpara elementit
+[Toast](../../src/webc/Toast/i18n/sq/README.md) : Prompt pop-up dritare në skaj të faqes
+[404](../../src/webc/404/i18n/sq/README.md) : Faqja e mesazhit të gabimit të rrugës nuk ekziston
+[Back](../../src/webc/Back/i18n/sq/README.md) : butoni prapa
+[Box](../../src/webc/Box/i18n/sq/README.md) : Krijoni dhe shfaqni një shtresë kërcyese
+[CardLi](../../src/webc/CardLi/i18n/sq/README.md) : Ngarko dhe shfaq listën e kartave në mënyrë asinkrone
+[Md](../../src/webc/Md/i18n/sq/README.md) : Analizoni dhe jepni në mënyrë të sigurt tekstin Markdown në HTML.
+[Pophover](../../src/webc/Pophover/i18n/sq/README.md) : kërkesë flluskë lundruese
+[Scroll](../../src/webc/Scroll/i18n/sq/README.md) : shiriti i lëvizjes virtuale
+[Select](../../src/webc/Select/i18n/sq/README.md) : Zgjedhja me drop-down, gjerësia përshtatet me artikullin aktual
+[Tab](../../src/webc/Tab/i18n/sq/README.md) : Skedat e ndërrueshme
+[fkv](../sq/doc/README.md)
+[Arkitekturë](../sq/doc/architecture.md)
+[Crate](../sq/doc/crates.md)
+[provë](../sq/doc/testing.md)
+[Performanca](../sq/doc/performance.md)

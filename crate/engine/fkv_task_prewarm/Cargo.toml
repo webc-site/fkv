@@ -1,0 +1,66 @@
+[package]
+name = "fkv_task_prewarm"
+description = "云缓存预热"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_cloud]
+version = "0.1.0"
+path = "../fkv_cloud"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../../io/fkv_io"
+
+[dependencies.fkv_object]
+version = "0.1.0"
+path = "../../io/fkv_object"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.futures]
+workspace = true
+
+[dependencies.futures-timer]
+workspace = true
+
+[dev-dependencies.bytes]
+workspace = true
+
+[dev-dependencies.fkv_btree]
+path = "../../core/fkv_btree"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_mem]
+path = "../../io/fkv_io_mem"
+version = "0.1.0"
+
+[dev-dependencies.fkv_large]
+path = "../../core/fkv_large"
+version = "0.1.0"
+
+[dev-dependencies.fkv_store]
+path = "../fkv_store"
+version = "0.1.0"
+
+[dev-dependencies.pollster]
+workspace = true

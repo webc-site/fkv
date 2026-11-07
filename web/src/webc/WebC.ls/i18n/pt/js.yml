@@ -1,0 +1,9 @@
+css: estilo puro
+base: Componentes básicos
+webc: Componente composto
+js: Biblioteca de scripts
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: camada pop-up
+  ^Nav(?![a-z]): navegação
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): cartão

@@ -1,0 +1,9 @@
+css: ಶುದ್ಧ ಶೈಲಿ
+base: ಮೂಲ ಘಟಕಗಳು
+webc: ಸಂಯೋಜಿತ ಘಟಕ
+js: ಸ್ಕ್ರಿಪ್ಟ್ ಲೈಬ್ರರಿ
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: ಪಾಪ್ಅಪ್ ಪದರ
+  ^Nav(?![a-z]): ಸಂಚರಣೆ
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): ಕಾರ್ಡ್

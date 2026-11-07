@@ -1,0 +1,9 @@
+css: puhas stiil
+base: Põhikomponendid
+webc: Komposiitkomponent
+js: Skriptiteek
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: hüpikakna kiht
+  ^Nav(?![a-z]): navigeerimine
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kaardile

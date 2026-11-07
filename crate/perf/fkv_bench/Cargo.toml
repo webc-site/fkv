@@ -1,0 +1,32 @@
+[package]
+name = "fkv_bench"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "性能评测：端到端 workload + 资源 / IO 计数"
+
+[dependencies]
+clap_args.workspace = true
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+fkv_config = { version = "0.1.0", path = "../../foundation/fkv_config" }
+fkv_store = { version = "0.1.0", path = "../../engine/fkv_store" }
+fkv_io_compio = { version = "0.1.0", path = "../../io/fkv_io_compio" }
+fkv_btree = { version = "0.1.0", path = "../../core/fkv_btree" }
+compio = { workspace = true, features = ["runtime", "fs", "io", "macros"] }
+futures = { workspace = true, default-features = false, features = ["alloc"] }
+rusty_alloc_default.workspace = true
+serde.workspace = true
+sonic-rs.workspace = true
+fastrand.workspace = true
+coarsetime.workspace = true
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。
+
+[dev-dependencies]
+criterion.workspace = true
+gxhash.workspace = true
+
+[[bench]]
+name = "hash"
+harness = false

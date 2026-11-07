@@ -1,0 +1,9 @@
+css: stile puro
+base: Componenti di base
+webc: Componente composito
+js: Libreria di script
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: livello pop-up
+  ^Nav(?![a-z]): navigazione
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): carta

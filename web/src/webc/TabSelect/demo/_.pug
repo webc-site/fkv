@@ -1,0 +1,42 @@
+main.demo.Lg
+  c-tab-select(key="demo-tab-select" value="language/rs")
+    nav
+
+      a(value="language")
+        span
+          c-t language
+        c-select
+          option(value="js") JavaScript
+          option(value="rs") Rust
+          option(value="py") Python
+      a(value="os")
+        span
+          c-t os
+        c-select
+          option(value="mac") macOS
+          option(value="win") Windows
+      a(value="about")
+        c-t about
+
+
+    b(slot="language")
+      b(slot="js")
+        p
+          c-t jsInfo
+      b(slot="rs")
+        p
+          c-t rsInfo
+      b(slot="py")
+        p
+          c-t pyInfo
+    b(slot="os")
+      b(slot="mac")
+        p
+          c-t macInfo
+      b(slot="win")
+        p
+          c-t winInfo
+    b(slot="about")
+      p
+        c-t aboutInfo
+

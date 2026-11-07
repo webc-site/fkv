@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/sk/README.md) : Komponent blogového príspevku
+[BoxX](../../src/webc/BoxX/i18n/sk/README.md) : Vytvorte a zobrazte vyskakovaciu vrstvu pomocou tlačidla Zavrieť
+[Code](../../src/webc/Code/i18n/sk/README.md) : kódové tlačidlo
+[Copy](../../src/webc/Copy/i18n/sk/README.md) : Skopírujte text do schránky
+[Edit](../../src/webc/Edit/i18n/sk/README.md) : tlačidlo upraviť
+[HtmDemo](../../src/webc/HtmDemo/i18n/sk/README.md) : Ladenie HTML a JS kódu online
+[I18n](../../src/webc/I18n/i18n/sk/README.md) : Tlačidlá a kontextové okná na prepínanie jazykov rozhrania
+[Nav](../../src/webc/Nav/i18n/sk/README.md) : Horný navigačný panel, ktorý sa pri posúvaní stránky automaticky zbalí alebo rozbalí
+[NavL](../../src/webc/NavL/i18n/sk/README.md) : Automaticky prepína navigačné menu a tlačidlo návratu
+[NavMenu](../../src/webc/NavMenu/i18n/sk/README.md) : Navigačné menu prispôsobené rôznym veľkostiam obrazovky
+[SelectBtn](../../src/webc/SelectBtn/i18n/sk/README.md) : Kombinácia rozbaľovacieho poľa výberu a tlačidla
+[Side](../../src/webc/Side/i18n/sk/README.md) : Panely zásuviek, ktoré sa vysúvajú z boku
+[TabSelect](../../src/webc/TabSelect/i18n/sk/README.md) : Karta s rozbaľovacím výberom
+[Toc](../../src/webc/Toc/i18n/sk/README.md) : Komponent navigácie v adresári
+[Btn](../../src/webc/Btn/i18n/sk/README.md) : Obyčajné tlačidlo a tlačidlo s okrúhlou ikonou
+[Card](../../src/webc/Card/i18n/sk/README.md) : Karta s kapsulou so šípkou doprava zobrazenou v závese
+[H1Txt](../../src/webc/H1Txt/i18n/sk/README.md) : Názov a popis textúry
+[Ing](../../src/webc/Ing/i18n/sk/README.md) : Indikátor stavu načítania alebo spracovania
+[Kv](../../src/webc/Kv/i18n/sk/README.md) : pár kľúč-hodnota
+[Lg](../../src/webc/Lg/i18n/sk/README.md) : Pozadie z matného skla a efekt zvýraznenia okrajov
+[MdCss](../../src/webc/MdCss/i18n/sk/README.md) : Typografické štýly optimalizované pre zážitok z čítania
+[NavALi](../../src/webc/NavALi/i18n/sk/README.md) : Štýl zoznamu odkazov navigačného panela
+[O](../../src/webc/O/i18n/sk/README.md) : Pred prvok nakreslite logo s dutou bodkou
+[Toast](../../src/webc/Toast/i18n/sk/README.md) : Vyskakovacie okno na okraji stránky
+[404](../../src/webc/404/i18n/sk/README.md) : Stránka s chybovou správou cesta neexistuje
+[Back](../../src/webc/Back/i18n/sk/README.md) : tlačidlo späť
+[Box](../../src/webc/Box/i18n/sk/README.md) : Vytvorte a zobrazte vyskakovaciu vrstvu
+[CardLi](../../src/webc/CardLi/i18n/sk/README.md) : Načítať a zobraziť zoznam kariet asynchrónne
+[Md](../../src/webc/Md/i18n/sk/README.md) : Bezpečne analyzujte a vykresľte text Markdown do HTML.
+[Pophover](../../src/webc/Pophover/i18n/sk/README.md) : výzva plávajúca bublina
+[Scroll](../../src/webc/Scroll/i18n/sk/README.md) : virtuálny posúvač
+[Select](../../src/webc/Select/i18n/sk/README.md) : Rozbaľovací výber, šírka sa prispôsobí aktuálnej položke
+[Tab](../../src/webc/Tab/i18n/sk/README.md) : Prepínateľné karty
+[fkv](../sk/doc/README.md)
+[Architektúra](../sk/doc/architecture.md)
+[Crate](../sk/doc/crates.md)
+[testovať](../sk/doc/testing.md)
+[Výkon](../sk/doc/performance.md)

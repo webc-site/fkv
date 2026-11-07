@@ -1,0 +1,9 @@
+css: Pure Style
+base: Basic Component
+webc: Composite Component
+js: Script library
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: Popup Layer
+  ^Nav(?![a-z]): Navigation
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): Card

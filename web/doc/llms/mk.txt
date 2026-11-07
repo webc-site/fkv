@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/mk/README.md) : Компонента за блог пост
+[BoxX](../../src/webc/BoxX/i18n/mk/README.md) : Креирајте и прикажете скокачки слој со копче за затворање
+[Code](../../src/webc/Code/i18n/mk/README.md) : копче за код
+[Copy](../../src/webc/Copy/i18n/mk/README.md) : Копирај текст во таблата со исечоци
+[Edit](../../src/webc/Edit/i18n/mk/README.md) : копче за уредување
+[HtmDemo](../../src/webc/HtmDemo/i18n/mk/README.md) : Дебагирање на HTML и JS код онлајн
+[I18n](../../src/webc/I18n/i18n/mk/README.md) : Копчиња и скокачки прозорци за префрлување јазици на интерфејсот
+[Nav](../../src/webc/Nav/i18n/mk/README.md) : Горна лента за навигација која автоматски се собира или се шири кога страницата се лизга
+[NavL](../../src/webc/NavL/i18n/mk/README.md) : Автоматско менување на менито за навигација и копче за враќање
+[NavMenu](../../src/webc/NavMenu/i18n/mk/README.md) : Мени за навигација прилагодено на различни големини на екранот
+[SelectBtn](../../src/webc/SelectBtn/i18n/mk/README.md) : Комбинација од паѓачкото поле за избор и копче
+[Side](../../src/webc/Side/i18n/mk/README.md) : Панели за фиоки што се лизгаат од страна
+[TabSelect](../../src/webc/TabSelect/i18n/mk/README.md) : Страница со јазиче со паѓачки избор
+[Toc](../../src/webc/Toc/i18n/mk/README.md) : Компонента за навигација во директориумот
+[Btn](../../src/webc/Btn/i18n/mk/README.md) : Обично копче и копче за тркалезна икона
+[Card](../../src/webc/Card/i18n/mk/README.md) : Картичка со капсула со десна стрелка прикажана во суспензија
+[H1Txt](../../src/webc/H1Txt/i18n/mk/README.md) : Наслов и опис на текстурата
+[Ing](../../src/webc/Ing/i18n/mk/README.md) : Индикатор за статусот на вчитување или обработка
+[Kv](../../src/webc/Kv/i18n/mk/README.md) : пар клучна вредност
+[Lg](../../src/webc/Lg/i18n/mk/README.md) : Заднина од матирано стакло и ефект на истакнување на рабовите
+[MdCss](../../src/webc/MdCss/i18n/mk/README.md) : Стилови на типографија оптимизирани за читање
+[NavALi](../../src/webc/NavALi/i18n/mk/README.md) : Стил на листа на врски со лентата за навигација
+[O](../../src/webc/O/i18n/mk/README.md) : Нацртајте лого со шуплива точка пред елементот
+[Toast](../../src/webc/Toast/i18n/mk/README.md) : Побарајте скокачки прозорец на работ на страницата
+[404](../../src/webc/404/i18n/mk/README.md) : Патеката не постои страница со порака за грешка
+[Back](../../src/webc/Back/i18n/mk/README.md) : копче за назад
+[Box](../../src/webc/Box/i18n/mk/README.md) : Креирајте и прикажете скокачки слој
+[CardLi](../../src/webc/CardLi/i18n/mk/README.md) : Вчитајте и прикажувајте список со картички асинхроно
+[Md](../../src/webc/Md/i18n/mk/README.md) : Безбедно анализирајте и прикажувајте Markdown текст во HTML.
+[Pophover](../../src/webc/Pophover/i18n/mk/README.md) : промпт за лебдечки меур
+[Scroll](../../src/webc/Scroll/i18n/mk/README.md) : виртуелна лента за лизгање
+[Select](../../src/webc/Select/i18n/mk/README.md) : Паѓачки избор, ширината се прилагодува на моменталната ставка
+[Tab](../../src/webc/Tab/i18n/mk/README.md) : Заменливи јазичиња
+[fkv](../mk/doc/README.md)
+[Архитектура](../mk/doc/architecture.md)
+[Crate](../mk/doc/crates.md)
+[тест](../mk/doc/testing.md)
+[Перформанси](../mk/doc/performance.md)

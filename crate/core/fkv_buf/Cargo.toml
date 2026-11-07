@@ -1,0 +1,12 @@
+[package]
+name = "fkv_buf"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "对齐 buffer、PagesPool、DirectIoBuffer"
+
+[dependencies]
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+# 迁移时用 cargo add --path ... 添加；先注释掉避免 unused dependency 警告。

@@ -1,0 +1,4 @@
+default: 默认按钮
+main: 主要按钮
+link: 链接按钮
+icon: 图标按钮 (.BtnC)

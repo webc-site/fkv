@@ -1,0 +1,53 @@
+[package]
+name = "fkv"
+description = "唯一 curated facade"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_api]
+version = "0.1.0"
+path = "../../engine/fkv_api"
+
+[dependencies.fkv_config]
+version = "0.1.0"
+path = "../../foundation/fkv_config"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_runtime]
+version = "0.1.0"
+path = "../../engine/fkv_runtime"
+
+[dependencies.fkv_sdk]
+version = "0.1.0"
+path = "../fkv_sdk"
+
+[dependencies.fkv_store]
+version = "0.1.0"
+path = "../../engine/fkv_store"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dev-dependencies.fkv_testkit]
+path = "../fkv_testkit"
+version = "0.1.0"
+
+[dev-dependencies.pollster]
+workspace = true

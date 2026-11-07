@@ -1,0 +1,9 @@
+css: hreinn stíll
+base: Grunnþættir
+webc: Samsettur hluti
+js: Handritasafn
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: sprettigluggalag
+  ^Nav(?![a-z]): siglingar
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kort

@@ -1,0 +1,71 @@
+[package]
+name = "fkv_large"
+description = "segment mapping、大 value 编码、metadata trailer、读写计划"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_buf]
+version = "0.1.0"
+path = "../fkv_buf"
+
+[dependencies.fkv_codec]
+version = "0.1.0"
+path = "../../foundation/fkv_codec"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../../io/fkv_io"
+
+[dependencies.fkv_mapping]
+version = "0.1.0"
+path = "../fkv_mapping"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.futures]
+workspace = true
+default-features = false
+features = [ "alloc" ]
+
+[dev-dependencies.compio]
+workspace = true
+features = [ "fs", "io", "macros" ]
+
+[dev-dependencies.fkv_failpoint]
+path = "../../foundation/fkv_failpoint"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_compio]
+path = "../../io/fkv_io_compio"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_mem]
+path = "../../io/fkv_io_mem"
+version = "0.1.0"
+
+[dev-dependencies.fkv_page]
+path = "../../format/fkv_page"
+version = "0.1.0"
+
+[dev-dependencies.fkv_testkit]
+path = "../../facade/fkv_testkit"
+version = "0.1.0"

@@ -1,0 +1,118 @@
+[package]
+name = "fkv_runtime"
+description = "shard OS 线程、compio Runtime、ingress"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_api]
+version = "0.1.0"
+path = "../fkv_api"
+
+[dependencies.fkv_btree]
+version = "0.1.0"
+path = "../../core/fkv_btree"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_metrics]
+version = "0.1.0"
+path = "../../foundation/fkv_metrics"
+
+[dependencies.log]
+workspace = true
+
+[dependencies.fkv_shard]
+version = "0.1.0"
+path = "../fkv_shard"
+
+[dependencies.fkv_standby]
+version = "0.1.0"
+path = "../../io/fkv_standby"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.crossfire]
+workspace = true
+
+[dependencies.futures]
+workspace = true
+default-features = false
+features = [ "executor", "std" ]
+
+[dependencies.fkv_config]
+version = "0.1.0"
+path = "../../foundation/fkv_config"
+
+[dependencies.fkv_page]
+version = "0.1.0"
+path = "../../format/fkv_page"
+
+[dependencies.fkv_object]
+version = "0.1.0"
+path = "../../io/fkv_object"
+
+[dependencies.fkv_object_s3]
+version = "0.1.0"
+path = "../../io/fkv_object_s3"
+
+[dependencies.fkv_task_prewarm]
+version = "0.1.0"
+path = "../fkv_task_prewarm"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../../io/fkv_io"
+
+[dependencies.fkv_io_compio]
+version = "0.1.0"
+path = "../../io/fkv_io_compio"
+
+[dependencies.fkv_cloud]
+version = "0.1.0"
+path = "../fkv_cloud"
+
+[dependencies.compio]
+workspace = true
+features = [ "fs", "io", "macros", "time" ]
+
+[dependencies.gxhash]
+workspace = true
+
+[dev-dependencies.bytes]
+workspace = true
+
+[dev-dependencies.fkv_api]
+path = "../fkv_api"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_mem]
+path = "../../io/fkv_io_mem"
+version = "0.1.0"
+
+[dev-dependencies.fkv_store]
+path = "../fkv_store"
+version = "0.1.0"
+
+[dev-dependencies.fkv_testkit]
+path = "../../facade/fkv_testkit"
+version = "0.1.0"
+
+[dev-dependencies.pollster]
+workspace = true
