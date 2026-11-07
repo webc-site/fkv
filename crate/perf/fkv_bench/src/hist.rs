@@ -8,14 +8,17 @@ const LAT_LINEAR_US: usize = 1 << 16;
 const LAT_LINEAR_BITS: u32 = LAT_LINEAR_US.trailing_zeros();
 /// 线性区之上的 2 的幂溢出桶数，覆盖到约 2.8e14µs。
 const LAT_LOG_NUM: usize = 32;
-/// 输出的延迟分位：`(percent, 指标名后缀)`。
+/// 输出的延迟分位：`(万分位刻度, 指标名后缀)`。刻度统一为「每 10000 份」，
+/// 修正 perf-21：此前的 `(999, "p999")` 表按百分位（/100）参与排名，
+/// `count × 999 / 100 ≥ count` 恒被钳到最后一个样本，p999/p9999 输出的
+/// 一直是 max 而非真实千分位。
 const LAT_PERCENT_LI: [(u32, &str); 6] = [
-  (50, "p50"),
-  (90, "p90"),
-  (95, "p95"),
-  (99, "p99"),
-  (999, "p999"),
-  (9999, "p9999"),
+  (5_000, "p50"),
+  (9_000, "p90"),
+  (9_500, "p95"),
+  (9_900, "p99"),
+  (9_990, "p999"),
+  (9_999, "p9999"),
 ];
 /// 每请求延迟直方图。
 ///
@@ -78,15 +81,16 @@ impl LatencyHist {
     self.max_us = self.max_us.max(other.max_us);
   }
 
-  /// 分位值（微秒）：线性区返回桶的 µs 值（误差 <1µs），溢出区返回桶上界，
-  /// 所有结果钳制到实测 `max_us`，避免分位大于 max 的怪异输出。
-  pub(crate) fn percentile_us(&self, percent: u32) -> u64 {
+  /// 分位值（微秒）：`per_10000` 为万分位刻度（如 9_990 = p999）。线性区
+  /// 返回桶的 µs 值（误差 <1µs），溢出区返回桶上界，所有结果钳制到实测
+  /// `max_us`，避免分位大于 max 的怪异输出。
+  pub(crate) fn percentile_us(&self, per_10000: u32) -> u64 {
     if self.count == 0 {
       return 0;
     }
     // 目标排名（1 基，向上取整）；钳制到样本数，避免 p9999 在小样本下溢出排名。
-    let rank = (self.count as u128 * percent as u128)
-      .div_ceil(100)
+    let rank = (self.count as u128 * u128::from(per_10000))
+      .div_ceil(10_000)
       .min(u128::from(self.count));
     let mut cumulative = 0u64;
     for (index, count) in self.linear.iter().enumerate() {
@@ -113,8 +117,8 @@ pub(crate) fn push_latency(
   hist: &LatencyHist,
 ) {
   result_li.push((format!("{prefix}_avg_us"), hist.avg_us(), "us"));
-  for (percent, name) in LAT_PERCENT_LI {
-    let value = hist.percentile_us(percent) as f64;
+  for (per_10000, name) in LAT_PERCENT_LI {
+    let value = hist.percentile_us(per_10000) as f64;
     result_li.push((format!("{prefix}_{name}_us"), value, "us"));
   }
   result_li.push((format!("{prefix}_max_us"), hist.max_us as f64, "us"));
@@ -173,12 +177,13 @@ impl WindowHist {
     self.max_us = self.max_us.max(other.max_us);
   }
 
-  fn percentile_us(&self, percent: u32) -> u64 {
+  /// `per_10000` 为万分位刻度（与 [`LatencyHist::percentile_us`] 同口径）。
+  fn percentile_us(&self, per_10000: u32) -> u64 {
     if self.count == 0 {
       return 0;
     }
-    let rank = (self.count as u128 * percent as u128)
-      .div_ceil(100)
+    let rank = (self.count as u128 * u128::from(per_10000))
+      .div_ceil(10_000)
       .min(u128::from(self.count));
     let mut cumulative = 0u64;
     for (index, count) in self.linear.iter().enumerate() {
@@ -280,9 +285,9 @@ pub(crate) fn push_window_metrics(
     let secs = (elapsed_secs - index as f64).clamp(f64::MIN_POSITIVE, 1.0);
     qps_li.push(hist.count as f64 / secs);
     kv_s_li.push(*kv as f64 / secs);
-    p50_li.push(hist.percentile_us(50) as f64);
-    p90_li.push(hist.percentile_us(90) as f64);
-    p99_li.push(hist.percentile_us(99) as f64);
+    p50_li.push(hist.percentile_us(5_000) as f64);
+    p90_li.push(hist.percentile_us(9_000) as f64);
+    p99_li.push(hist.percentile_us(9_900) as f64);
   }
   if qps_li.is_empty() {
     return;
@@ -293,4 +298,27 @@ pub(crate) fn push_window_metrics(
   result_li.push((format!("{prefix}_window_p50_us"), median(p50_li), "us"));
   result_li.push((format!("{prefix}_window_p90_us"), median(p90_li), "us"));
   result_li.push((format!("{prefix}_window_p99_us"), median(p99_li), "us"));
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  /// perf-21 锁定：千分位不得退化为 max。100 万个小样本 + 1 个大样本下，
+  /// p999/p9999 必须仍落在线性区小值桶；修复前的排名公式（千分位刻度按
+  /// /100 参与）把 rank 恒钳到最后一个样本，两个分位都会返回 max。
+  #[test]
+  fn percentile_permille_scale_is_not_clamped_to_max() {
+    let mut hist = LatencyHist::new();
+    let tiny = Duration::from_micros(3);
+    for _ in 0..1_000_000 {
+      hist.record(tiny);
+    }
+    hist.record(Duration::from_micros(10_000_000));
+    assert_eq!(hist.percentile_us(9_900), 3, "p99 应在小值桶");
+    assert_eq!(hist.percentile_us(9_990), 3, "p999 不得退化为 max");
+    assert_eq!(hist.percentile_us(9_999), 3, "p9999 不得退化为 max");
+    assert_eq!(hist.percentile_us(5_000), 3);
+    assert_eq!(hist.max_us, 10_000_000);
+  }
 }

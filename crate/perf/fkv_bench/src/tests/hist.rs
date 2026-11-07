@@ -5,7 +5,7 @@ use super::*;
 #[test]
 fn latency_hist_empty_reports_zero() {
   let hist = LatencyHist::new();
-  assert_eq!(hist.percentile_us(99), 0);
+  assert_eq!(hist.percentile_us(9_900), 0);
   assert_eq!(hist.avg_us(), 0.0);
   assert_eq!(hist.max_us, 0);
 }
@@ -16,10 +16,10 @@ fn latency_hist_linear_percentiles() {
   for us in 1..=100u64 {
     hist.record(Duration::from_micros(us));
   }
-  // 100 个样本：p50 落在 50µs 桶，p99 落在 99µs 桶，p100 为最大值。
-  assert_eq!(hist.percentile_us(50), 50);
-  assert_eq!(hist.percentile_us(99), 99);
-  assert_eq!(hist.percentile_us(100), 100);
+  // 100 个样本：p50 落在 50µs 桶，p99 落在 99µs 桶，p100（万分位 10_000）为最大值。
+  assert_eq!(hist.percentile_us(5_000), 50);
+  assert_eq!(hist.percentile_us(9_900), 99);
+  assert_eq!(hist.percentile_us(10_000), 100);
   assert_eq!(hist.max_us, 100);
   assert_eq!(hist.avg_us(), 50.5);
 }
@@ -29,7 +29,7 @@ fn latency_hist_overflow_bucket() {
   let mut hist = LatencyHist::new();
   hist.record(Duration::from_micros(100_000));
   // 100ms 落在 [65536, 131072)µs 桶，单一最大值时钳制到实测 max。
-  assert_eq!(hist.percentile_us(50), 100_000);
+  assert_eq!(hist.percentile_us(5_000), 100_000);
   assert_eq!(hist.max_us, 100_000);
 }
 
@@ -40,9 +40,9 @@ fn latency_hist_percentiles_are_monotonic() {
     hist.record(Duration::from_micros(us));
   }
   let mut last = 0;
-  for percent in [50u32, 90, 99, 999, 9999, 100] {
-    let value = hist.percentile_us(percent);
-    assert!(value >= last, "p{percent} = {value} < {last}");
+  for per_10000 in [5_000u32, 9_000, 9_900, 9_990, 9_999, 10_000] {
+    let value = hist.percentile_us(per_10000);
+    assert!(value >= last, "p{per_10000} = {value} < {last}");
     last = value;
   }
 }
@@ -61,7 +61,7 @@ fn latency_hist_merge_combines_counts() {
   assert_eq!(hist.sum_us, 10 + 20 + 30 + 100_000);
   assert_eq!(hist.max_us, 100_000);
   assert_eq!(hist.avg_us(), hist.sum_us as f64 / 4.0);
-  assert_eq!(hist.percentile_us(100), 100_000);
+  assert_eq!(hist.percentile_us(10_000), 100_000);
   // 归并到空直方图等于复制。
   let mut empty = LatencyHist::new();
   empty.merge(&other);
