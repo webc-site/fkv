@@ -152,4 +152,6 @@ jobs:
           git add web/src/conf/perf.js
           git commit -m "chore(web): 用 CI 运行 ${{ github.run_id }} 的产物回填性能矩阵" || \
             echo "perf.js 无变化"
+          # 回填提交期间上游可能已经前进（本地同时推过文档改动），先 rebase 再推。
+          git pull --rebase --autostash origin "$GITHUB_REF_NAME"
           git push
