@@ -1,0 +1,57 @@
+dialog.Box
+  background transparent
+  border none
+  bottom 0
+  left 0
+  margin auto
+  max-width min(calc(100vw - 32px), 360px)
+  outline none
+  overflow visible
+  padding 0
+  position fixed
+  right 0
+  top 0
+  width 100%
+  z-index 2147483647
+
+  &.FFF > :not(a.X)
+    align-items stretch
+    backdrop-filter blur(16px)
+    background #ffffffe6
+    border-radius 24px
+    box-shadow 0 20px 40px #0000001a, 0 1px 3px #00000005
+    box-sizing border-box
+    display flex
+    flex-direction column
+    margin 0 auto
+    max-height 80dvh
+    min-width 280px
+    padding 24px 20px
+    user-select none
+    width 100%
+
+  &>.Lg
+    align-items stretch
+    background-color #ffffffe0
+    border-radius 24px
+    box-shadow 0 20px 40px #0000001a, 0 1px 3px #00000005
+    box-sizing border-box
+    display flex
+    flex-direction column
+    gap 16px
+    margin 0 auto
+    max-height 80dvh
+    padding 24px
+    text-align center
+
+    h3
+      color #333
+      font-size 20px
+      margin 0
+
+    p
+      color #666
+
+  &::backdrop
+    backdrop-filter blur(4px)
+    background-color #00000020

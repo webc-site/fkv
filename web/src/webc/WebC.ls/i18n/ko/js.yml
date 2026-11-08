@@ -1,0 +1,9 @@
+css: 순수한 스타일
+base: 기본 구성 요소
+webc: 복합 부품
+js: 스크립트 라이브러리
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: 팝업 레이어
+  ^Nav(?![a-z]): 항해
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): 카드

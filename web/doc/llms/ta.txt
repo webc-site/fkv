@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/ta/README.md) : வலைப்பதிவு இடுகை கூறு
+[BoxX](../../src/webc/BoxX/i18n/ta/README.md) : மூடு பட்டனுடன் பாப்அப் லேயரை உருவாக்கி காண்பிக்கவும்
+[Code](../../src/webc/Code/i18n/ta/README.md) : குறியீடு பொத்தான்
+[Copy](../../src/webc/Copy/i18n/ta/README.md) : கிளிப்போர்டுக்கு உரையை நகலெடுக்கவும்
+[Edit](../../src/webc/Edit/i18n/ta/README.md) : தொகு பொத்தான்
+[HtmDemo](../../src/webc/HtmDemo/i18n/ta/README.md) : HTML மற்றும் JS குறியீட்டை ஆன்லைனில் பிழைத்திருத்துதல்
+[I18n](../../src/webc/I18n/i18n/ta/README.md) : இடைமுக மொழிகளை மாற்றுவதற்கான பொத்தான்கள் மற்றும் பாப்-அப் சாளரங்கள்
+[Nav](../../src/webc/Nav/i18n/ta/README.md) : பக்கம் ஸ்க்ரோல் செய்யும் போது தானாகவே சரிந்து அல்லது விரிவடையும் மேல் வழிசெலுத்தல் பட்டி
+[NavL](../../src/webc/NavL/i18n/ta/README.md) : வழிசெலுத்தல் மெனு மற்றும் திரும்பும் பொத்தானை தானாக மாற்றவும்
+[NavMenu](../../src/webc/NavMenu/i18n/ta/README.md) : வழிசெலுத்தல் மெனு வெவ்வேறு திரை அளவுகளுக்கு ஏற்றது
+[SelectBtn](../../src/webc/SelectBtn/i18n/ta/README.md) : கீழ்தோன்றும் தேர்வு பெட்டி மற்றும் பொத்தானின் சேர்க்கை
+[Side](../../src/webc/Side/i18n/ta/README.md) : பக்கவாட்டில் இருந்து வெளியேறும் டிராயர் பேனல்கள்
+[TabSelect](../../src/webc/TabSelect/i18n/ta/README.md) : கீழ்தோன்றும் தேர்வுடன் தாவல் பக்கம்
+[Toc](../../src/webc/Toc/i18n/ta/README.md) : அடைவு வழிசெலுத்தல் கூறு
+[Btn](../../src/webc/Btn/i18n/ta/README.md) : சாதாரண பொத்தான் மற்றும் வட்ட ஐகான் பொத்தான்
+[Card](../../src/webc/Card/i18n/ta/README.md) : வலது அம்புக்குறியுடன் கூடிய கேப்சூல் அட்டை இடைநீக்கத்தில் காட்டப்பட்டுள்ளது
+[H1Txt](../../src/webc/H1Txt/i18n/ta/README.md) : அமைப்பு தலைப்பு மற்றும் விளக்கம்
+[Ing](../../src/webc/Ing/i18n/ta/README.md) : ஏற்றுதல் அல்லது செயலாக்க நிலையின் காட்டி
+[Kv](../../src/webc/Kv/i18n/ta/README.md) : முக்கிய மதிப்பு ஜோடி
+[Lg](../../src/webc/Lg/i18n/ta/README.md) : உறைந்த கண்ணாடி பின்னணி மற்றும் விளிம்பு ஹைலைட் விளைவு
+[MdCss](../../src/webc/MdCss/i18n/ta/README.md) : வாசிப்பு அனுபவத்திற்கு உகந்த அச்சுக்கலை பாணிகள்
+[NavALi](../../src/webc/NavALi/i18n/ta/README.md) : வழிசெலுத்தல் பட்டி இணைப்பு பட்டியல் நடை
+[O](../../src/webc/O/i18n/ta/README.md) : உறுப்புக்கு முன்னால் ஒரு வெற்று புள்ளி லோகோவை வரையவும்
+[Toast](../../src/webc/Toast/i18n/ta/README.md) : பக்கத்தின் விளிம்பில் உடனடியாக பாப்-அப் சாளரம்
+[404](../../src/webc/404/i18n/ta/README.md) : பாதை பிழை செய்தி பக்கம் இல்லை
+[Back](../../src/webc/Back/i18n/ta/README.md) : பின் பொத்தான்
+[Box](../../src/webc/Box/i18n/ta/README.md) : பாப்அப் லேயரை உருவாக்கி காட்டவும்
+[CardLi](../../src/webc/CardLi/i18n/ta/README.md) : கார்டு பட்டியலை ஒத்திசைவின்றி ஏற்றி காண்பிக்கவும்
+[Md](../../src/webc/Md/i18n/ta/README.md) : மார்க் டவுன் உரையை HTMLக்கு பாதுகாப்பாக அலசவும்.
+[Pophover](../../src/webc/Pophover/i18n/ta/README.md) : மிதக்கும் குமிழி வரியில்
+[Scroll](../../src/webc/Scroll/i18n/ta/README.md) : மெய்நிகர் உருள் பட்டை
+[Select](../../src/webc/Select/i18n/ta/README.md) : கீழ்தோன்றும் தேர்வு, அகலம் தற்போதைய உருப்படிக்கு ஏற்றது
+[Tab](../../src/webc/Tab/i18n/ta/README.md) : மாறக்கூடிய தாவல்கள்
+[fkv](../ta/doc/README.md)
+[கட்டிடக்கலை](../ta/doc/architecture.md)
+[Crate](../ta/doc/crates.md)
+[சோதனை](../ta/doc/testing.md)
+[செயல்திறன்](../ta/doc/performance.md)

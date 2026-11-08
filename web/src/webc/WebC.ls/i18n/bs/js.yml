@@ -1,0 +1,9 @@
+css: čisti stil
+base: Osnovne komponente
+webc: Kompozitna komponenta
+js: Biblioteka skripti
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: popup sloj
+  ^Nav(?![a-z]): navigacija
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kartica

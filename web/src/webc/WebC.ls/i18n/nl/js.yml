@@ -1,0 +1,9 @@
+css: pure stijl
+base: Basiscomponenten
+webc: Samengesteld onderdeel
+js: Scriptbibliotheek
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: pop-up laag
+  ^Nav(?![a-z]): navigatie
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kaart

@@ -1,0 +1,9 @@
+css: suiwer styl
+base: Basiese komponente
+webc: Saamgestelde komponent
+js: Skrifbiblioteek
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: opspringlaag
+  ^Nav(?![a-z]): navigasie
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kaart

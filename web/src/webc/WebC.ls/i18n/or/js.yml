@@ -1,0 +1,9 @@
+css: ଶୁଦ୍ଧ ଶ style ଳୀ
+base: ମ Basic ଳିକ ଉପାଦାନଗୁଡ଼ିକ |
+webc: ମିଶ୍ରିତ ଉପାଦାନ |
+js: ସ୍କ୍ରିପ୍ଟ ଲାଇବ୍ରେରୀ |
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: ପପ୍ଅପ୍ ସ୍ତର |
+  ^Nav(?![a-z]): ନାଭିଗେସନ୍
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): କାର୍ଡ

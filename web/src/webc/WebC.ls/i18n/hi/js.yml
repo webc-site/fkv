@@ -1,0 +1,9 @@
+css: शुद्ध शैली
+base: मौलिक संघटक
+webc: समग्र घटक
+js: स्क्रिप्ट लाइब्रेरी
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: पॉपअप परत
+  ^Nav(?![a-z]): मार्गदर्शन
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): कार्ड

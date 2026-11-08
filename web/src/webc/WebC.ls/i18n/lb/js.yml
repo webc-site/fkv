@@ -1,0 +1,9 @@
+css: pure Stil
+base: Basis Komponente
+webc: Komposit Komponent
+js: Schrëft Bibliothéik
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: Popup Layer
+  ^Nav(?![a-z]): Navigatioun
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): Kaart

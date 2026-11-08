@@ -1,0 +1,52 @@
+c-nav-menu
+  align-items center
+  display flex
+  flex 1
+
+  > button.BtnC
+    display flex
+
+    > .Ico
+      background-image url('./svg/menu.svg')
+
+  & c-side b
+    display flex
+    flex-direction column
+    gap 8px
+    padding 24px 16px
+
+    > a
+      font-size 16px
+      font-weight 350
+      text-decoration none
+
+  @media (min-width 701px)
+    > button.BtnC
+      display none
+
+    & c-side
+      height auto
+      pointer-events auto
+      position static
+      visibility visible
+      width auto
+      z-index auto
+
+    & c-side .In
+      box-shadow none
+      height auto
+      position static
+      transform none
+      width auto
+
+    & c-side c-vs
+      height auto
+
+    c-side
+      display contents
+
+      .In, c-vs
+        display contents
+
+    & c-side b
+      padding 0

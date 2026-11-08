@@ -1,0 +1,9 @@
+css: style pur
+base: Composants de base
+webc: Composant composite
+js: Bibliothèque de scripts
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: calque contextuel
+  ^Nav(?![a-z]): navigation
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): carte

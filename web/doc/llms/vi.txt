@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/vi/README.md) : Thành phần bài đăng trên blog
+[BoxX](../../src/webc/BoxX/i18n/vi/README.md) : Tạo và hiển thị lớp bật lên bằng nút đóng
+[Code](../../src/webc/Code/i18n/vi/README.md) : nút mã
+[Copy](../../src/webc/Copy/i18n/vi/README.md) : Sao chép văn bản vào clipboard
+[Edit](../../src/webc/Edit/i18n/vi/README.md) : nút chỉnh sửa
+[HtmDemo](../../src/webc/HtmDemo/i18n/vi/README.md) : Gỡ lỗi mã HTML và JS trực tuyến
+[I18n](../../src/webc/I18n/i18n/vi/README.md) : Các nút và cửa sổ bật lên để chuyển đổi ngôn ngữ giao diện
+[Nav](../../src/webc/Nav/i18n/vi/README.md) : Thanh điều hướng trên cùng tự động thu gọn hoặc mở rộng khi cuộn trang
+[NavL](../../src/webc/NavL/i18n/vi/README.md) : Tự động chuyển đổi menu điều hướng và nút quay lại
+[NavMenu](../../src/webc/NavMenu/i18n/vi/README.md) : Menu điều hướng thích ứng với các kích thước màn hình khác nhau
+[SelectBtn](../../src/webc/SelectBtn/i18n/vi/README.md) : Sự kết hợp của hộp lựa chọn thả xuống và nút
+[Side](../../src/webc/Side/i18n/vi/README.md) : Bảng ngăn kéo trượt ra từ bên cạnh
+[TabSelect](../../src/webc/TabSelect/i18n/vi/README.md) : Trang tab có lựa chọn thả xuống
+[Toc](../../src/webc/Toc/i18n/vi/README.md) : Thành phần điều hướng thư mục
+[Btn](../../src/webc/Btn/i18n/vi/README.md) : Nút thông thường và nút biểu tượng tròn
+[Card](../../src/webc/Card/i18n/vi/README.md) : Thẻ Capsule có mũi tên phải hiển thị ở trạng thái treo
+[H1Txt](../../src/webc/H1Txt/i18n/vi/README.md) : Tiêu đề và mô tả kết cấu
+[Ing](../../src/webc/Ing/i18n/vi/README.md) : Chỉ báo trạng thái tải hoặc xử lý
+[Kv](../../src/webc/Kv/i18n/vi/README.md) : cặp giá trị khóa
+[Lg](../../src/webc/Lg/i18n/vi/README.md) : Hiệu ứng làm nổi bật cạnh và nền kính mờ
+[MdCss](../../src/webc/MdCss/i18n/vi/README.md) : Kiểu chữ được tối ưu hóa cho trải nghiệm đọc
+[NavALi](../../src/webc/NavALi/i18n/vi/README.md) : Kiểu danh sách liên kết thanh điều hướng
+[O](../../src/webc/O/i18n/vi/README.md) : Vẽ logo chấm rỗng phía trước phần tử
+[Toast](../../src/webc/Toast/i18n/vi/README.md) : Cửa sổ bật lên nhắc nhở ở cạnh trang
+[404](../../src/webc/404/i18n/vi/README.md) : Trang thông báo lỗi đường dẫn không tồn tại
+[Back](../../src/webc/Back/i18n/vi/README.md) : nút quay lại
+[Box](../../src/webc/Box/i18n/vi/README.md) : Tạo và hiển thị lớp bật lên
+[CardLi](../../src/webc/CardLi/i18n/vi/README.md) : Tải và hiển thị danh sách thẻ không đồng bộ
+[Md](../../src/webc/Md/i18n/vi/README.md) : Phân tích cú pháp và hiển thị văn bản Markdown thành HTML một cách an toàn.
+[Pophover](../../src/webc/Pophover/i18n/vi/README.md) : dấu nhắc bong bóng nổi
+[Scroll](../../src/webc/Scroll/i18n/vi/README.md) : thanh cuộn ảo
+[Select](../../src/webc/Select/i18n/vi/README.md) : Lựa chọn thả xuống, chiều rộng thích ứng với mục hiện tại
+[Tab](../../src/webc/Tab/i18n/vi/README.md) : Các tab có thể chuyển đổi
+[fkv](../vi/doc/README.md)
+[Ngành kiến ​​​​trúc](../vi/doc/architecture.md)
+[Crate](../vi/doc/crates.md)
+[Bài kiểm tra](../vi/doc/testing.md)
+[Hiệu suất](../vi/doc/performance.md)

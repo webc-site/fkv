@@ -1,0 +1,9 @@
+css: stil pur
+base: Komponenti bażiċi
+webc: Komponent kompost
+js: Librerija tal-iskript
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: saff popup
+  ^Nav(?![a-z]): navigazzjoni
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): karta

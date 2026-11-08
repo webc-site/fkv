@@ -1,0 +1,9 @@
+css: putli nga estilo
+base: Panguna nga mga sangkap
+webc: Composite nga sangkap
+js: Librarya sa script
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: popup nga layer
+  ^Nav(?![a-z]): nabigasyon
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kard

@@ -1,0 +1,69 @@
+[package]
+name = "fkv_standby"
+description = "Standby master / replica、远端 list、manifest stage、rsync / ssh"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.compio]
+workspace = true
+features = [ "fs", "io", "macros" ]
+
+[dependencies.fkv_config]
+version = "0.1.0"
+path = "../../foundation/fkv_config"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_manifest]
+version = "0.1.0"
+path = "../../format/fkv_manifest"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.futures]
+workspace = true
+default-features = false
+features = [ "alloc" ]
+
+[dependencies.log]
+workspace = true
+
+[dev-dependencies.compio]
+workspace = true
+features = [ "fs", "io", "macros" ]
+
+[dev-dependencies.fkv_btree]
+path = "../../core/fkv_btree"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_compio]
+path = "../fkv_io_compio"
+version = "0.1.0"
+
+[dev-dependencies.fkv_store]
+path = "../../engine/fkv_store"
+version = "0.1.0"
+
+[dev-dependencies.fkv_testkit]
+path = "../../facade/fkv_testkit"
+version = "0.1.0"
+
+[dev-dependencies.pollster]
+workspace = true

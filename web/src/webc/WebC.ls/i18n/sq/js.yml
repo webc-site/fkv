@@ -1,0 +1,9 @@
+css: stil i pastër
+base: Komponentët bazë
+webc: Komponent i përbërë
+js: Biblioteka e skripteve
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: shtresa popup
+  ^Nav(?![a-z]): navigacion
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kartelë

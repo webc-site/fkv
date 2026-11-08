@@ -1,0 +1,25 @@
+[package]
+name = "fkv_testkit"
+description = "测试夹具集合"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies]
+log.workspace = true
+
+[target.'cfg(target_os = "linux")'.dependencies]
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+libc.workspace = true

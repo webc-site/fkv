@@ -1,0 +1,51 @@
+[package]
+name = "fkv_io_sim"
+description = "确定性模拟与故障后端"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../fkv_io"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.fastrand]
+workspace = true
+
+[dependencies.gxhash]
+workspace = true
+
+[dependencies.fkv_failpoint]
+version = "0.1.0"
+path = "../../foundation/fkv_failpoint"
+
+[dev-dependencies.fkv_btree]
+path = "../../core/fkv_btree"
+version = "0.1.0"
+
+[dev-dependencies.fkv_store]
+path = "../../engine/fkv_store"
+version = "0.1.0"
+
+[dev-dependencies.pollster]
+workspace = true

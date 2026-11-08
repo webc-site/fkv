@@ -1,0 +1,317 @@
+body
+  margin 0
+  overflow hidden
+
+c-webc-site
+  display flex
+  height 100dvh
+  inset 0
+  position absolute
+  width 100%
+
+  > c-vs
+    > *
+      max-width 1648px
+
+    > c-nav
+      align-self center
+      width 100%
+
+    > main
+      display flex
+      flex-direction column
+      margin auto
+      width 100%
+
+    > main.doc
+      --mx 24px
+      align-items flex-start
+      box-sizing border-box
+      display flex
+      flex-direction row
+      margin 0 var(--mx) 64px
+      max-width calc(100% - var(--mx) * 2)
+      padding 5px 0
+
+      @media (min-width: 901px)
+        gap 32px
+
+      @media (max-width: 900px)
+        --mx 16px
+
+      c-toc
+        top 24px
+        width 320px
+
+        @media (max-width: 1150px)
+          width 260px
+
+        @media (max-width: 1000px)
+          width 220px
+
+        @media (max-width: 900px)
+          backdrop-filter none
+          background transparent
+          border 0
+          box-shadow none
+          height 0
+          padding 0
+          width 0
+
+      c-md
+        box-sizing border-box
+        flex 1
+        margin 0 auto
+        max-width 900px
+        min-width 0
+
+      @media (max-width: 900px)
+        padding 0
+
+main.Home
+  box-sizing border-box
+  display flex
+  flex-direction column
+  gap 44px
+  margin 0 auto
+  max-width 1040px
+  padding 56px 24px 32px
+  width 100%
+
+  @media (max-width 640px)
+    gap 32px
+    padding 32px 16px 24px
+
+  .HomeHero
+    align-items center
+    display flex
+    flex-direction column
+    gap 12px
+    text-align center
+
+    > h1
+      font-size 48px
+      letter-spacing 3px
+
+    > b
+      color #333
+      font-size 20px
+      letter-spacing 0
+
+    @media (max-width 640px)
+      > h1
+        font-size 40px
+
+      > b
+        font-size 17px
+
+  .HomeBadge
+    backdrop-filter blur(8px)
+    background linear-gradient(180deg, #ffffffb3, #f5f5f74d)
+    border 1px solid #00000014
+    border-radius 999px
+    box-shadow inset 0 1px 0 #fff9
+    color #666
+    font-size 12px
+    font-weight 500
+    letter-spacing 1px
+    padding 4px 12px
+
+  .HomeSub
+    color #666
+    font-size 15px
+    font-weight 350
+    line-height 1.7
+    max-width 680px
+
+  .HomeSection
+    display flex
+    flex-direction column
+    gap 14px
+
+    > h2.O
+      font-size 22px
+
+  .HomeMeta
+    color #888
+    font-size 12px
+    letter-spacing 0.2px
+    margin-top -6px
+
+  .HomeConfig
+    display grid
+    gap 14px
+    grid-template-columns repeat(auto-fit, minmax(260px, 1fr))
+    margin-top 18px
+
+    .HomeConfigCard
+      background #ffffff80
+      border 1px solid #00000014
+      border-radius 16px
+      box-shadow 0 4px 12px #00000004, inset 0 1px 0 #fff9
+      padding 16px 18px
+
+      > h3
+        color #777
+        font-size 12px
+        font-weight 600
+        letter-spacing 0.6px
+        margin 0 0 10px
+
+      > dl
+        display grid
+        gap 7px 14px
+        grid-template-columns auto 1fr
+        margin 0
+
+        > dt
+          color #888
+          font-size 12.5px
+
+        > dd
+          color #1d1d1f
+          font-size 12.5px
+          font-variant-numeric tabular-nums
+          margin 0
+          text-align right
+
+  .HomeTableWrap
+    border 1px solid #00000014
+    border-radius 16px
+    box-shadow 0 4px 12px #00000004, inset 0 1px 0 #fff9
+    overflow auto
+
+  .HomeTable
+    background #ffffff80
+    border-collapse collapse
+    font-size 14px
+    font-variant-numeric tabular-nums
+    width 100%
+
+    th, td
+      border-bottom 1px solid #0000000f
+      padding 14px 18px
+      text-align right
+      white-space nowrap
+
+    th:first-child, td:first-child
+      text-align left
+
+    thead th
+      background #00000005
+      color #777
+      font-size 12px
+      font-weight 500
+      letter-spacing 0.5px
+      position sticky
+      top 0
+      z-index 1
+
+    tbody tr:last-child td
+      border-bottom 0
+
+    tbody td:first-child
+      color #333
+      font-weight 600
+
+    .HomeSpeed
+      color #0071e3
+      font-variation-settings 'wght' 600
+      font-weight 600
+
+    .HomeSlow
+      color #d93025
+      font-variation-settings 'wght' 600
+      font-weight 600
+
+    .HomeGroup td
+      background #00000005
+      color #777
+      font-size 12px
+      font-weight 500
+      letter-spacing 0.5px
+      padding 9px 18px
+
+    @media (max-width 640px)
+      th, td
+        padding 12px
+
+      .HomeGroup td
+        padding 8px 12px
+
+  .HomeExtra
+    margin-top -4px
+
+    .HomeTable
+      th:last-child, td:last-child
+        text-align left
+        white-space normal
+
+  .HomeNote
+    color #888
+    font-size 12px
+    letter-spacing 0.3px
+
+    > a
+      color #0071e3
+      margin-left 4px
+
+  .HomeVerify
+    align-items center
+    display flex
+    flex-wrap wrap
+    gap 10px 28px
+
+    .HomeVerifyItem
+      align-items baseline
+      display flex
+      gap 6px
+
+      > b
+        color #0071e3
+        font-variation-settings 'wght' 600
+        font-weight 600
+
+      > span
+        color #777
+        font-size 13px
+
+  .HomeLinks
+    display flex
+    flex-wrap wrap
+    gap 12px 24px
+
+    > a
+      color #555
+      font-size 14px
+      transition color 0.2s ease
+
+      &:hover
+        color #0071e3
+
+  .HomeFoot
+    align-items center
+    border-top 1px solid #00000014
+    color #777
+    display flex
+    font-size 13px
+    justify-content space-between
+    padding-top 20px
+
+    > a
+      transition color 0.2s ease
+
+      &:hover
+        color #0071e3
+
+pre.err
+  background-color #fff5f5
+  border 1px solid #feb2b2
+  border-radius 16px
+  color #c53030
+  font-size 14px
+  margin 32px auto
+  max-width 600px
+  padding 24px
+  white-space pre-wrap
+  word-break break-all

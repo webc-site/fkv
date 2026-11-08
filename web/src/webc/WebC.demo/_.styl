@@ -1,0 +1,134 @@
+c-webc-demo
+  display flex
+  flex-direction column
+  margin 0 auto
+  width 100%
+
+  > c-nav
+    justify-content center
+
+  .M
+    display block
+    padding 24px 0
+
+  #demo
+    display block
+
+    > b
+      align-items center
+      display flex
+      flex-direction column
+      justify-content center
+      width 100%
+      padding 0
+
+      > .sandbox
+        display flex
+        justify-content center
+
+        & , & > *
+          width 100%
+
+  #use
+    > c-tab-select
+      > b.A
+        display flex
+        align-items center
+        justify-content space-between
+        gap 12px
+
+      > b
+        > code
+          white-space pre-wrap
+          word-break break-all
+          font-weight 250
+          flex 1
+          font-family c
+          font-size 12px
+
+  .R > b
+    display flex
+    flex-direction column
+
+  h2.O
+    font-size 18px
+    margin 0 0 12px
+    display flex
+    align-items center
+    gap 8px
+
+    > c-edit, > c-code
+      margin 0 6px 0 auto
+
+@media (min-width 900px)
+  c-webc-demo
+    box-sizing border-box
+    align-items center
+    padding 0 24px 24px
+
+    > c-nav
+      display none
+
+    .M
+      display flex
+      flex-direction row
+      gap 24px
+      width 100%
+      align-items start
+
+    .L, .R
+      flex 1
+      min-width 0
+      display flex
+      flex-direction column
+      gap 24px
+
+    .B, #demo
+      margin 0
+      min-width 0
+      max-width none
+      width auto
+
+nav.Nav.D
+  .NavALi > .Card:not(.A)
+    backdrop-filter blur(3px)
+    background linear-gradient(#fff3, #eeea 100%)
+    border-color #0002
+
+    &:hover
+      background linear-gradient(180deg, #0071e314 0, #0071e308 100%)
+      border-color #0071e326
+      color #0071e3
+
+    &:active
+      box-shadow inset 0 2px 4px #00000026
+      transform scale(0.96)
+
+@media (max-width 899px)
+  c-webc-demo
+    > c-nav
+      padding 0
+      margin-top 24px
+
+      &.D
+        top 60px
+
+    .M
+      display flex
+      flex-direction column
+      gap 24px
+
+    .R
+      display flex
+      flex-direction column
+      gap 24px
+      margin 0 24px
+
+    #use
+      padding 0 24px 24px
+
+    .B, #demo
+      box-sizing border-box
+      margin 0 auto
+      max-width 800px
+      width calc(100% - 48px)

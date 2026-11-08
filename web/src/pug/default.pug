@@ -1,0 +1,12 @@
+extends ./_.pug
+
+block head
+  each url in css_li || []
+    link(rel="stylesheet" href=url)
+  each url in js_src_li || []
+    script(type="module" src=url)
+  each js in js_li || []
+    script(type="module")!= js
+
+block body
+  != body

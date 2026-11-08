@@ -1,0 +1,68 @@
+[package]
+name = "fkv_task_read"
+description = "Read / Floor"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_btree]
+version = "0.1.0"
+path = "../../core/fkv_btree"
+
+[dependencies.fkv_compress]
+version = "0.1.0"
+path = "../../format/fkv_compress"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../../io/fkv_io"
+
+[dependencies.fkv_mapping]
+version = "0.1.0"
+path = "../../core/fkv_mapping"
+
+[dependencies.fkv_page]
+version = "0.1.0"
+path = "../../format/fkv_page"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.gxhash]
+workspace = true
+
+[dev-dependencies.compio]
+workspace = true
+features = [ "macros", "fs", "io" ]
+
+[dev-dependencies.fkv_io_compio]
+path = "../../io/fkv_io_compio"
+version = "0.1.0"
+
+[dev-dependencies.fkv_testkit]
+path = "../../facade/fkv_testkit"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_mem]
+path = "../../io/fkv_io_mem"
+version = "0.1.0"
+
+[dev-dependencies.pollster]
+workspace = true

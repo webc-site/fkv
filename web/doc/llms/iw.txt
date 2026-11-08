@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/iw/README.md) : רכיב פוסט בבלוג
+[BoxX](../../src/webc/BoxX/i18n/iw/README.md) : צור והצג שכבה קופצת עם כפתור סגירה
+[Code](../../src/webc/Code/i18n/iw/README.md) : כפתור קוד
+[Copy](../../src/webc/Copy/i18n/iw/README.md) : העתק טקסט ללוח
+[Edit](../../src/webc/Edit/i18n/iw/README.md) : כפתור עריכה
+[HtmDemo](../../src/webc/HtmDemo/i18n/iw/README.md) : איתור באגים בקוד HTML ו-JS באינטרנט
+[I18n](../../src/webc/I18n/i18n/iw/README.md) : לחצנים וחלונות קופצים להחלפת שפות ממשק
+[Nav](../../src/webc/Nav/i18n/iw/README.md) : סרגל הניווט העליון שמתכווץ או מתרחב באופן אוטומטי כאשר הדף גולש
+[NavL](../../src/webc/NavL/i18n/iw/README.md) : החלף אוטומטית את תפריט הניווט וכפתור החזרה
+[NavMenu](../../src/webc/NavMenu/i18n/iw/README.md) : תפריט ניווט מותאם לגדלי מסך שונים
+[SelectBtn](../../src/webc/SelectBtn/i18n/iw/README.md) : שילוב של תיבת בחירה נפתחת וכפתור
+[Side](../../src/webc/Side/i18n/iw/README.md) : לוחות מגירות המחליקים החוצה מהצד
+[TabSelect](../../src/webc/TabSelect/i18n/iw/README.md) : דף כרטיסייה עם בחירה נפתחת
+[Toc](../../src/webc/Toc/i18n/iw/README.md) : רכיב ניווט בספריות
+[Btn](../../src/webc/Btn/i18n/iw/README.md) : כפתור רגיל וכפתור אייקון עגול
+[Card](../../src/webc/Card/i18n/iw/README.md) : כרטיס קפסולה עם חץ ימינה מוצג בהשעיה
+[H1Txt](../../src/webc/H1Txt/i18n/iw/README.md) : כותרת ותיאור מרקם
+[Ing](../../src/webc/Ing/i18n/iw/README.md) : מחוון של מצב טעינה או עיבוד
+[Kv](../../src/webc/Kv/i18n/iw/README.md) : צמד ערכי מפתח
+[Lg](../../src/webc/Lg/i18n/iw/README.md) : רקע זכוכית חלבית ואפקט הדגשת קצה
+[MdCss](../../src/webc/MdCss/i18n/iw/README.md) : סגנונות טיפוגרפיה מותאמים לחוויית קריאה
+[NavALi](../../src/webc/NavALi/i18n/iw/README.md) : סגנון רשימת קישורים בסרגל הניווט
+[O](../../src/webc/O/i18n/iw/README.md) : צייר לוגו נקודה חלולה מול האלמנט
+[Toast](../../src/webc/Toast/i18n/iw/README.md) : חלון מוקפץ בקשה בקצה העמוד
+[404](../../src/webc/404/i18n/iw/README.md) : הנתיב אינו קיים דף הודעת שגיאה
+[Back](../../src/webc/Back/i18n/iw/README.md) : כפתור חזרה
+[Box](../../src/webc/Box/i18n/iw/README.md) : צור והצג שכבת קופץ
+[CardLi](../../src/webc/CardLi/i18n/iw/README.md) : טען והצג את רשימת הכרטיסים באופן אסינכרוני
+[Md](../../src/webc/Md/i18n/iw/README.md) : ניתוח ועיבוד בטוח של טקסט Markdown ל-HTML.
+[Pophover](../../src/webc/Pophover/i18n/iw/README.md) : הודעת בועה צפה
+[Scroll](../../src/webc/Scroll/i18n/iw/README.md) : פס גלילה וירטואלי
+[Select](../../src/webc/Select/i18n/iw/README.md) : בחירה נפתחת, רוחב מתאים לפריט הנוכחי
+[Tab](../../src/webc/Tab/i18n/iw/README.md) : כרטיסיות שניתן להחליף ביניהן
+[fkv](../iw/doc/README.md)
+[אַדְרִיכָלוּת](../iw/doc/architecture.md)
+[Crate](../iw/doc/crates.md)
+[מִבְחָן](../iw/doc/testing.md)
+[ביצועים](../iw/doc/performance.md)

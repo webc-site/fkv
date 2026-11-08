@@ -1,0 +1,60 @@
+[package]
+name = "fkv_task_compact"
+description = "Compaction 任务编排"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../../io/fkv_io"
+
+[dependencies.fkv_mapping]
+version = "0.1.0"
+path = "../../core/fkv_mapping"
+
+[dependencies.fkv_task_gc]
+version = "0.1.0"
+path = "../fkv_task_gc"
+
+[dependencies.fkv_task_read]
+version = "0.1.0"
+path = "../fkv_task_read"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.futures]
+workspace = true
+default-features = false
+features = [ "alloc" ]
+
+[dependencies.futures-timer]
+workspace = true
+
+[dev-dependencies.fkv_io_mem]
+path = "../../io/fkv_io_mem"
+version = "0.1.0"
+
+[dev-dependencies.gxhash]
+workspace = true
+
+[dev-dependencies.pollster]
+workspace = true

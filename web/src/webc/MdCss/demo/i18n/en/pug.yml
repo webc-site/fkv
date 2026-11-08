@@ -1,0 +1,38 @@
+basicTitle: Basic style
+bold: Bold
+italic: Italics
+del: Strikethrough
+inlineCode: Inline Code
+linkPrefix: There is text before and after the link, such as
+link: United Nations official website
+linkSuffix: is a link.
+quoteSingle: This is a single line quote.
+quoteMultiLine1: This is a multi-line quote.
+quoteMultiLine2: A visual effect for displaying multi-line references.
+note: General messages and notes
+tip: Tips and useful tips
+important: Important tips and concerns
+warning: Risk warnings and precautions
+caution: DANGER AND EXTREME RISK WARNING
+listTitle: Quotes and Lists
+taskTitle: Task List
+todoItem: This is an unfinished CSS task
+doneItem: This is a completed CSS task
+ulItem1: Unordered first item
+ulSubItem1: Unordered subitem one
+ulSubItem2: Unordered subitem two
+ulItem2: Unordered second item
+olItem1: Ordered first item
+olSubItem1: Ordered item one
+olSubItem2: Ordered subitem two
+olItem2: Ordered second term
+tableTitle: Sheet
+col1: Project
+col2: State
+col3: Score
+row1Col1: Static
+row1Col2: Completed
+row2Col1: Streaming
+row2Col2: Rendering
+codeTitle: Code Block
+imageTitle: Picture

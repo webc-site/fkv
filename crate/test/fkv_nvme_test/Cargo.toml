@@ -1,0 +1,40 @@
+[package]
+name = "fkv_nvme_test"
+publish = false
+description = "仅在本地 NVMe / SSD 上运行的隔离测试（不发布）"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[dev-dependencies.compio]
+workspace = true
+features = [ "macros", "fs", "io" ]
+
+[dev-dependencies.fkv_btree]
+version = "0.1.0"
+path = "../../core/fkv_btree"
+
+[dev-dependencies.fkv_io_compio]
+version = "0.1.0"
+path = "../../io/fkv_io_compio"
+
+[dev-dependencies.fkv_store]
+version = "0.1.0"
+path = "../../engine/fkv_store"
+
+[dev-dependencies.fkv_testkit]
+version = "0.1.0"
+path = "../../facade/fkv_testkit"
+
+[dev-dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"

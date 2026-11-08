@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/as/README.md) : ব্লগ পোষ্টৰ উপাদান
+[BoxX](../../src/webc/BoxX/i18n/as/README.md) : এটা বন্ধ বুটামৰ সৈতে এটা পপআপ স্তৰ সৃষ্টি আৰু প্ৰদৰ্শন কৰক
+[Code](../../src/webc/Code/i18n/as/README.md) : ক'ড বুটাম
+[Copy](../../src/webc/Copy/i18n/as/README.md) : লিখনী ক্লিপবোৰ্ডলৈ কপি কৰক
+[Edit](../../src/webc/Edit/i18n/as/README.md) : সম্পাদনা বুটাম
+[HtmDemo](../../src/webc/HtmDemo/i18n/as/README.md) : HTML আৰু JS ক'ড অনলাইনত ডিবাগিং কৰা
+[I18n](../../src/webc/I18n/i18n/as/README.md) : আন্তঃপৃষ্ঠ ভাষা সলনি কৰাৰ বাবে বুটাম আৰু পপ-আপ উইণ্ড'সমূহ
+[Nav](../../src/webc/Nav/i18n/as/README.md) : শীৰ্ষ নেভিগেচন বাৰ যি পৃষ্ঠা স্ক্ৰল কৰাৰ সময়ত স্বয়ংক্ৰিয়ভাৱে সংকুচিত বা প্ৰসাৰিত হয়
+[NavL](../../src/webc/NavL/i18n/as/README.md) : স্বয়ংক্ৰিয়ভাৱে নেভিগেচন মেনু আৰু উভতি অহা বুটাম সলনি কৰক
+[NavMenu](../../src/webc/NavMenu/i18n/as/README.md) : বিভিন্ন পৰ্দাৰ আকাৰৰ সৈতে খাপ খুৱাই লোৱা নেভিগেচন মেনু
+[SelectBtn](../../src/webc/SelectBtn/i18n/as/README.md) : ড্ৰপ-ডাউন নিৰ্বাচন বাকচ আৰু বুটামৰ সংমিশ্ৰণ
+[Side](../../src/webc/Side/i18n/as/README.md) : কাষৰ পৰা ওলাই যোৱা ড্ৰয়াৰ পেনেল
+[TabSelect](../../src/webc/TabSelect/i18n/as/README.md) : ড্ৰপ-ডাউন নিৰ্বাচনৰ সৈতে টেব পৃষ্ঠা
+[Toc](../../src/webc/Toc/i18n/as/README.md) : ডাইৰেকটৰি নেভিগেচন উপাদান
+[Btn](../../src/webc/Btn/i18n/as/README.md) : সাধাৰণ বুটাম আৰু ঘূৰণীয়া আইকন বুটাম
+[Card](../../src/webc/Card/i18n/as/README.md) : সোঁ কাঁড় চিহ্নৰ সৈতে কেপচুল কাৰ্ড ঝুলনত প্ৰদৰ্শিত
+[H1Txt](../../src/webc/H1Txt/i18n/as/README.md) : টেক্সচাৰৰ শিৰোনাম আৰু বিৱৰণ
+[Ing](../../src/webc/Ing/i18n/as/README.md) : লোডিং বা প্ৰচেছিং অৱস্থাৰ সূচক
+[Kv](../../src/webc/Kv/i18n/as/README.md) : কী মান যোৰ
+[Lg](../../src/webc/Lg/i18n/as/README.md) : ফ্ৰষ্টেড গ্লাছ বেকগ্ৰাউণ্ড আৰু এজ হাইলাইট ইফেক্ট
+[MdCss](../../src/webc/MdCss/i18n/as/README.md) : পঢ়াৰ অভিজ্ঞতাৰ বাবে অনুকূলিত টাইপোগ্ৰাফী শৈলী
+[NavALi](../../src/webc/NavALi/i18n/as/README.md) : নেভিগেচন বাৰ লিংক তালিকা শৈলী
+[O](../../src/webc/O/i18n/as/README.md) : উপাদানটোৰ সন্মুখত এটা ফুটা বিন্দুৰ ল’গ’ আঁকক
+[Toast](../../src/webc/Toast/i18n/as/README.md) : পৃষ্ঠাৰ প্ৰান্তত পপ-আপ উইণ্ড' প্ৰমপ্ট কৰক
+[404](../../src/webc/404/i18n/as/README.md) : পথৰ অস্তিত্ব নাই ভুল বাৰ্তা পৃষ্ঠা
+[Back](../../src/webc/Back/i18n/as/README.md) : বেক বুটাম
+[Box](../../src/webc/Box/i18n/as/README.md) : পপআপ স্তৰ সৃষ্টি আৰু প্ৰদৰ্শন কৰক
+[CardLi](../../src/webc/CardLi/i18n/as/README.md) : কাৰ্ড তালিকা এচিনক্ৰ'নাছভাৱে লোড আৰু প্ৰদৰ্শন কৰক
+[Md](../../src/webc/Md/i18n/as/README.md) : মাৰ্কডাউন লিখনীক নিৰাপদে বিশ্লেষণ আৰু HTML লৈ ৰেণ্ডাৰ কৰক।
+[Pophover](../../src/webc/Pophover/i18n/as/README.md) : ভাসমান বাবল প্ৰমপ্ট
+[Scroll](../../src/webc/Scroll/i18n/as/README.md) : ভাৰ্চুৱেল স্ক্ৰল বাৰ
+[Select](../../src/webc/Select/i18n/as/README.md) : ড্ৰপ-ডাউন নিৰ্বাচন, প্ৰস্থ বৰ্তমান বস্তুৰ সৈতে খাপ খায়
+[Tab](../../src/webc/Tab/i18n/as/README.md) : চুইচযোগ্য টেবসমূহ
+[fkv](../as/doc/README.md)
+[স্থাপত্য](../as/doc/architecture.md)
+[Crate](../as/doc/crates.md)
+[পৰীক্ষা](../as/doc/testing.md)
+[কাৰ্যক্ষমতা](../as/doc/performance.md)

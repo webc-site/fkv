@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/es/README.md) : Componente de publicación de blog
+[BoxX](../../src/webc/BoxX/i18n/es/README.md) : Crear y mostrar una capa emergente con un botón de cerrar
+[Code](../../src/webc/Code/i18n/es/README.md) : botón de código
+[Copy](../../src/webc/Copy/i18n/es/README.md) : Copiar texto al portapapeles
+[Edit](../../src/webc/Edit/i18n/es/README.md) : botón editar
+[HtmDemo](../../src/webc/HtmDemo/i18n/es/README.md) : Depuración de código HTML y JS en línea
+[I18n](../../src/webc/I18n/i18n/es/README.md) : Botones y ventanas emergentes para cambiar el idioma de la interfaz
+[Nav](../../src/webc/Nav/i18n/es/README.md) : Barra de navegación superior que se contrae o expande automáticamente cuando se desplaza la página
+[NavL](../../src/webc/NavL/i18n/es/README.md) : Cambiar automáticamente el menú de navegación y el botón de retorno
+[NavMenu](../../src/webc/NavMenu/i18n/es/README.md) : Menú de navegación adaptado a diferentes tamaños de pantalla
+[SelectBtn](../../src/webc/SelectBtn/i18n/es/README.md) : Combinación de cuadro de selección desplegable y botón
+[Side](../../src/webc/Side/i18n/es/README.md) : Paneles de cajones que se deslizan hacia afuera desde el costado
+[TabSelect](../../src/webc/TabSelect/i18n/es/README.md) : Página de pestaña con selección desplegable
+[Toc](../../src/webc/Toc/i18n/es/README.md) : Componente de navegación de directorio
+[Btn](../../src/webc/Btn/i18n/es/README.md) : Botón ordinario y botón de icono redondo.
+[Card](../../src/webc/Card/i18n/es/README.md) : Tarjeta cápsula con flecha hacia la derecha mostrada en suspensión
+[H1Txt](../../src/webc/H1Txt/i18n/es/README.md) : Título y descripción de la textura.
+[Ing](../../src/webc/Ing/i18n/es/README.md) : Indicador de estado de carga o procesamiento.
+[Kv](../../src/webc/Kv/i18n/es/README.md) : par clave-valor
+[Lg](../../src/webc/Lg/i18n/es/README.md) : Fondo de vidrio esmerilado y efecto de resaltado de borde
+[MdCss](../../src/webc/MdCss/i18n/es/README.md) : Estilos de tipografía optimizados para la experiencia de lectura.
+[NavALi](../../src/webc/NavALi/i18n/es/README.md) : Estilo de lista de enlaces de la barra de navegación
+[O](../../src/webc/O/i18n/es/README.md) : Dibuja un logotipo de punto hueco delante del elemento.
+[Toast](../../src/webc/Toast/i18n/es/README.md) : Ventana emergente emergente en el borde de la página
+[404](../../src/webc/404/i18n/es/README.md) : La ruta no existe página de mensaje de error
+[Back](../../src/webc/Back/i18n/es/README.md) : botón de retroceso
+[Box](../../src/webc/Box/i18n/es/README.md) : Crear y mostrar capa emergente
+[CardLi](../../src/webc/CardLi/i18n/es/README.md) : Cargar y mostrar la lista de tarjetas de forma asincrónica
+[Md](../../src/webc/Md/i18n/es/README.md) : Analice y renderice de forma segura texto Markdown a HTML.
+[Pophover](../../src/webc/Pophover/i18n/es/README.md) : mensaje de burbuja flotante
+[Scroll](../../src/webc/Scroll/i18n/es/README.md) : barra de desplazamiento virtual
+[Select](../../src/webc/Select/i18n/es/README.md) : Selección desplegable, el ancho se adapta al elemento actual
+[Tab](../../src/webc/Tab/i18n/es/README.md) : Pestañas intercambiables
+[fkv](../es/doc/README.md)
+[Arquitectura](../es/doc/architecture.md)
+[Crate](../es/doc/crates.md)
+[prueba](../es/doc/testing.md)
+[Rendimiento](../es/doc/performance.md)

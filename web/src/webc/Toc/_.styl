@@ -1,0 +1,297 @@
+.TocBtn
+  display none
+  flex-shrink 0
+
+  .Ico
+    background-image url('./svg/toc.svg')
+
+c-toc
+  backdrop-filter blur(8px)
+  background #ffffff59
+  border 1px solid #fff9
+  border-radius 16px
+  box-shadow 0 4px 24px #0000000a
+  box-sizing border-box
+  display flex
+  flex-direction column
+  flex-shrink 0
+  gap 4px
+  padding 8px
+  position sticky
+
+  @media (min-width: 901px)
+    c-side
+      position static
+      visibility visible
+      height 100%
+      width 100%
+      z-index auto
+
+      .In
+        position static
+        width 100%
+        max-width 100%
+        height 100%
+        background transparent
+        transform none !important
+        box-shadow none
+
+  @media (max-width: 900px)
+    position static
+    backdrop-filter none
+    background transparent
+    border none
+    box-shadow none
+    width 0
+    height 0
+    padding 0
+
+    c-side .In
+      border-left 1px solid #00000014
+      box-shadow -4px 0 20px #0000000d
+      padding 8px
+
+c-vs
+  display flex
+  flex-direction column
+  gap 2px
+  flex 1
+  min-height 0
+  height 100%
+
+  > a
+    position relative
+    display flex
+    align-items center
+    justify-content space-between
+    padding 6px 14px
+    border-radius 8px
+    color #444
+    font-size 14px
+    font-weight 500
+    text-decoration none
+    cursor pointer
+    transition background 0.15s, color 0.15s
+
+    &:hover
+      color #000
+      background #0000000d
+
+    &::after
+      content ""
+      width 12px
+      height 12px
+      margin-left 6px
+      background url('./svg/arrow.svg') no-repeat center / contain
+      transform rotate(-90deg)
+      opacity 0.3
+      transition transform 0.2s, opacity 0.2s
+
+    &.A, &:has(+ .sub)
+      color #000
+      font-weight 600
+
+      &::after
+        transform rotate(0deg)
+        opacity 0.8
+
+    &.Ing
+      min-width auto
+      min-height auto
+
+      &::after
+        background url('./svg/ing.svg') no-repeat center / contain
+        transform rotate(0deg)
+        opacity 1
+
+    &.A::before
+      content ""
+      position absolute
+      left 3px
+      top 50%
+      transform translateY(-50%)
+      width 2px
+      height 14px
+      background #000
+      border-radius 1px
+
+.sub
+  position relative
+  display flex
+  flex-direction column
+  gap 1px
+  margin 2px 0 4px 0
+
+  a
+    position relative
+    display flex
+    align-items center
+    padding 4px 14px
+    border-radius 6px
+    color #666
+    font-size 13px
+    line-height 1.4
+    text-decoration none
+    cursor pointer
+    transition color 0.15s, background 0.15s
+
+    &:hover
+      color #000
+      background #0000000a
+
+    &.A
+      color #000
+      font-weight 600
+
+      &::before
+        content ""
+        position absolute
+        left 3px
+        top 50%
+        transform translateY(-50%)
+        width 2px
+        height 14px
+        background #000
+        border-radius 1px
+
+    &.h1
+      color #222
+      font-weight 600
+      padding-left 14px
+      margin-top 1px
+
+    &.h2
+      padding-left 14px
+
+    &.h3
+      padding-left 24px
+      font-size 12.5px
+
+    &.h4
+      padding-left 34px
+      font-size 12px
+
+    &.h5
+      padding-left 44px
+      font-size 11.5px
+
+    &.h6
+      padding-left 54px
+      font-size 11px
+
+@media (max-width: 900px)
+  c-md h1, .Md h1
+    position relative
+    padding-right 48px
+    text-align left
+
+  .TocBtn
+    display flex
+    position absolute
+    right 0
+    top 0
+    z-index 100
+
+    &.D, &.I, &.H
+      position fixed
+      right 16px
+      transition top 0.3s
+      z-index 10100
+
+    &.H
+      top var(--top)
+
+    &.D, &.I
+      top 76px
+
+@media (min-width: 901px)
+  .TocBtn
+    display none
+
+  :has(> c-side.open), :has(c-side.open)
+    z-index 11000
+
+a:has(h2, h3, h4, h5, h6)
+  color inherit
+  text-decoration none
+
+  &::after
+    display none
+
+  &:hover
+    color #06f
+
+    h2, h3, h4, h5
+      color #06f
+
+    &::after
+      display block
+
+b.DocNav
+  align-items center
+  box-sizing border-box
+  display flex
+  font-weight normal
+  gap 12px
+  justify-content space-between
+  margin-top 48px
+  width 100%
+
+  > a
+    align-items center
+    box-sizing border-box
+    color #444
+    display inline-flex
+    font-size 14px
+    gap 8px
+    line-height 1.4
+    max-width 48%
+    min-width 0
+    padding 6px 0
+    text-decoration none
+    transition color 0.2s ease
+
+    &::after, &::before
+      display none
+
+    > span
+      flex 1
+      min-width 0
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+
+    > .Ico
+      background url('./svg/arrow.svg') no-repeat center / contain
+      content ""
+      display block
+      flex-shrink 0
+      height 14px
+      opacity 0.6
+      width 14px
+
+    &:hover
+      color #000
+
+      > .Ico
+        opacity 1
+
+    &.prev
+      margin-right auto
+
+      > .Ico
+        transform rotate(90deg)
+
+    &.next
+      margin-left auto
+
+      > .Ico
+        transform rotate(-90deg)
+
+.Md b.DocNav > a
+  &::after, &::before
+    display none
+
+@media (min-width: 901px)
+  b.DocNav
+    display none

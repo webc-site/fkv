@@ -1,0 +1,37 @@
+c-copy
+  display inline-block
+  vertical-align middle
+
+  .BtnIco
+    display inline-flex
+    align-items center
+    justify-content center
+    width 32px
+    height 32px
+    border-radius 6px
+    color #666
+    transition background-color 0.2s, color 0.2s
+    cursor pointer
+
+    &:hover
+      background-color #0000000d
+      color #000
+
+    &::before
+      content ""
+      width 16px
+      height 16px
+      background-color currentColor
+      mask-image url("./svg/copy.svg")
+      mask-repeat no-repeat
+      mask-position center
+      mask-size 100% 100%
+
+  c-pophover.Done
+    --pophover-bg-top #0f9f67e6
+    --pophover-bg-bottom #03961ef2
+    --pophover-bg-mid #0a7c50eb
+
+    [slot="pop"]
+      &::before
+        box-shadow inset 0 0 6px #0009

@@ -1,0 +1,18 @@
+[package]
+name = "fkv_object_s3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "S3 SigV4 + ListObjectsV2"
+
+[dependencies]
+bytes.workspace = true
+crossfire.workspace = true
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+fkv_object = { version = "0.1.0", path = "../fkv_object" }
+futures.workspace = true
+log.workspace = true
+fkv_s3 = { version = "0.1.0", path = "../fkv_s3" }
+compio = { workspace = true, features = ["runtime", "time", "macros"] }

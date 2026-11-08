@@ -1,0 +1,40 @@
+[package]
+name = "fkv_cli"
+description = "bench 与检查工具"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[[bin]]
+name = "fkv"
+path = "src/main.rs"
+
+[dependencies.clap_args]
+workspace = true
+
+[dependencies.compio]
+workspace = true
+features = [ "runtime", "fs", "io", "macros", "time" ]
+
+[dependencies.fkv]
+version = "0.1.0"
+path = "../fkv"
+
+[dependencies.rusty_alloc_default]
+workspace = true
+
+[dev-dependencies.fkv_testkit]
+path = "../fkv_testkit"
+version = "0.1.0"

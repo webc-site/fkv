@@ -1,0 +1,9 @@
+css: toza uslub
+base: Asosiy komponentlar
+webc: Kompozit komponent
+js: Skriptlar kutubxonasi
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: qalqib chiquvchi qatlam
+  ^Nav(?![a-z]): navigatsiya
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): karta

@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/id/README.md) : Komponen posting blog
+[BoxX](../../src/webc/BoxX/i18n/id/README.md) : Buat dan tampilkan lapisan popup dengan tombol tutup
+[Code](../../src/webc/Code/i18n/id/README.md) : tombol kode
+[Copy](../../src/webc/Copy/i18n/id/README.md) : Salin teks ke papan klip
+[Edit](../../src/webc/Edit/i18n/id/README.md) : tombol edit
+[HtmDemo](../../src/webc/HtmDemo/i18n/id/README.md) : Men-debug kode HTML dan JS secara online
+[I18n](../../src/webc/I18n/i18n/id/README.md) : Tombol dan jendela pop-up untuk mengganti bahasa antarmuka
+[Nav](../../src/webc/Nav/i18n/id/README.md) : Bilah navigasi atas yang secara otomatis diciutkan atau diperluas saat halaman digulir
+[NavL](../../src/webc/NavL/i18n/id/README.md) : Secara otomatis beralih menu navigasi dan tombol kembali
+[NavMenu](../../src/webc/NavMenu/i18n/id/README.md) : Menu navigasi disesuaikan dengan ukuran layar yang berbeda
+[SelectBtn](../../src/webc/SelectBtn/i18n/id/README.md) : Kombinasi kotak pilihan drop-down dan tombol
+[Side](../../src/webc/Side/i18n/id/README.md) : Panel laci yang dapat digeser keluar dari samping
+[TabSelect](../../src/webc/TabSelect/i18n/id/README.md) : Halaman tab dengan pilihan drop-down
+[Toc](../../src/webc/Toc/i18n/id/README.md) : Komponen Navigasi Direktori
+[Btn](../../src/webc/Btn/i18n/id/README.md) : Tombol biasa dan tombol ikon bulat
+[Card](../../src/webc/Card/i18n/id/README.md) : Kartu kapsul dengan panah kanan ditampilkan dalam suspensi
+[H1Txt](../../src/webc/H1Txt/i18n/id/README.md) : Judul dan deskripsi tekstur
+[Ing](../../src/webc/Ing/i18n/id/README.md) : Indikator status pemuatan atau pemrosesan
+[Kv](../../src/webc/Kv/i18n/id/README.md) : pasangan nilai kunci
+[Lg](../../src/webc/Lg/i18n/id/README.md) : Latar belakang kaca buram dan efek sorotan tepi
+[MdCss](../../src/webc/MdCss/i18n/id/README.md) : Gaya tipografi dioptimalkan untuk pengalaman membaca
+[NavALi](../../src/webc/NavALi/i18n/id/README.md) : Gaya daftar tautan bilah navigasi
+[O](../../src/webc/O/i18n/id/README.md) : Gambarlah logo titik berongga di depan elemen
+[Toast](../../src/webc/Toast/i18n/id/README.md) : Jendela pop-up prompt di tepi halaman
+[404](../../src/webc/404/i18n/id/README.md) : Halaman pesan kesalahan jalur tidak ada
+[Back](../../src/webc/Back/i18n/id/README.md) : tombol kembali
+[Box](../../src/webc/Box/i18n/id/README.md) : Membuat dan menampilkan lapisan popup
+[CardLi](../../src/webc/CardLi/i18n/id/README.md) : Memuat dan menampilkan daftar kartu secara asinkron
+[Md](../../src/webc/Md/i18n/id/README.md) : Parsing dan render teks Markdown dengan aman ke HTML.
+[Pophover](../../src/webc/Pophover/i18n/id/README.md) : gelembung mengambang cepat
+[Scroll](../../src/webc/Scroll/i18n/id/README.md) : bilah gulir virtual
+[Select](../../src/webc/Select/i18n/id/README.md) : Pilihan drop-down, lebar menyesuaikan dengan item saat ini
+[Tab](../../src/webc/Tab/i18n/id/README.md) : Tab yang dapat diganti
+[fkv](../id/doc/README.md)
+[Arsitektur](../id/doc/architecture.md)
+[Crate](../id/doc/crates.md)
+[tes](../id/doc/testing.md)
+[Performa](../id/doc/performance.md)

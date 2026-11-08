@@ -1,0 +1,72 @@
+[package]
+name = "fkv_io_compio"
+description = "compio-fs / io_uring 后端"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.compio]
+workspace = true
+features = [ "fs", "io", "macros", "time" ]
+
+[dependencies.fkv_buf]
+version = "0.1.0"
+path = "../../core/fkv_buf"
+
+[dependencies.fkv_config]
+version = "0.1.0"
+path = "../../foundation/fkv_config"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_failpoint]
+version = "0.1.0"
+path = "../../foundation/fkv_failpoint"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../fkv_io"
+
+[dependencies.fkv_page]
+version = "0.1.0"
+path = "../../format/fkv_page"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.futures]
+workspace = true
+
+[dependencies.gxhash]
+workspace = true
+
+[dependencies.itoa]
+workspace = true
+
+[dependencies.libc]
+workspace = true
+
+[dependencies.log]
+workspace = true
+
+[dev-dependencies.fkv_testkit]
+path = "../../facade/fkv_testkit"
+version = "0.1.0"
+
+[target."cfg(target_os = \"linux\")".dependencies.io-uring]
+workspace = true

@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/sw/README.md) : Sehemu ya chapisho la blogi
+[BoxX](../../src/webc/BoxX/i18n/sw/README.md) : Unda na uonyeshe safu ibukizi na kitufe cha kufunga
+[Code](../../src/webc/Code/i18n/sw/README.md) : kitufe cha nambari
+[Copy](../../src/webc/Copy/i18n/sw/README.md) : Nakili maandishi kwenye ubao wa kunakili
+[Edit](../../src/webc/Edit/i18n/sw/README.md) : kitufe cha kuhariri
+[HtmDemo](../../src/webc/HtmDemo/i18n/sw/README.md) : Kutatua HTML na msimbo wa JS mtandaoni
+[I18n](../../src/webc/I18n/i18n/sw/README.md) : Vifungo na madirisha ibukizi kwa kubadili lugha za kiolesura
+[Nav](../../src/webc/Nav/i18n/sw/README.md) : Upau wa kusogeza wa juu ambao huporomoka au kupanuka kiotomatiki ukurasa unaposonga
+[NavL](../../src/webc/NavL/i18n/sw/README.md) : Badili menyu ya kusogeza na kitufe cha kurudi kiotomatiki
+[NavMenu](../../src/webc/NavMenu/i18n/sw/README.md) : Menyu ya kusogeza imebadilishwa kwa ukubwa tofauti wa skrini
+[SelectBtn](../../src/webc/SelectBtn/i18n/sw/README.md) : Mchanganyiko wa kisanduku cha uteuzi kunjuzi na kitufe
+[Side](../../src/webc/Side/i18n/sw/README.md) : Paneli za droo zinazoteleza kutoka upande
+[TabSelect](../../src/webc/TabSelect/i18n/sw/README.md) : Ukurasa wa kichupo ulio na chaguo kunjuzi
+[Toc](../../src/webc/Toc/i18n/sw/README.md) : Kipengele cha Urambazaji wa Saraka
+[Btn](../../src/webc/Btn/i18n/sw/README.md) : Kitufe cha kawaida na kitufe cha ikoni ya pande zote
+[Card](../../src/webc/Card/i18n/sw/README.md) : Kadi ya kibonge yenye mshale wa kulia unaoonyeshwa kwa kusimamishwa
+[H1Txt](../../src/webc/H1Txt/i18n/sw/README.md) : Kichwa cha muundo na maelezo
+[Ing](../../src/webc/Ing/i18n/sw/README.md) : Kiashiria cha hali ya upakiaji au usindikaji
+[Kv](../../src/webc/Kv/i18n/sw/README.md) : jozi ya thamani muhimu
+[Lg](../../src/webc/Lg/i18n/sw/README.md) : Mandharinyuma ya glasi iliyoganda na athari ya kuangazia makali
+[MdCss](../../src/webc/MdCss/i18n/sw/README.md) : Mitindo ya uchapaji iliyoboreshwa kwa matumizi ya usomaji
+[NavALi](../../src/webc/NavALi/i18n/sw/README.md) : Mtindo wa orodha ya upau wa kusogeza
+[O](../../src/webc/O/i18n/sw/README.md) : Chora nembo ya nukta tupu mbele ya kipengele
+[Toast](../../src/webc/Toast/i18n/sw/README.md) : Dirisha ibukizi la haraka kwenye ukingo wa ukurasa
+[404](../../src/webc/404/i18n/sw/README.md) : Njia haipo ukurasa wa ujumbe wa hitilafu
+[Back](../../src/webc/Back/i18n/sw/README.md) : kitufe cha nyuma
+[Box](../../src/webc/Box/i18n/sw/README.md) : Unda na uonyeshe safu ibukizi
+[CardLi](../../src/webc/CardLi/i18n/sw/README.md) : Pakia na uonyeshe orodha ya kadi bila mpangilio
+[Md](../../src/webc/Md/i18n/sw/README.md) : Changanua na utoe maandishi ya Markdown kwa HTML kwa usalama.
+[Pophover](../../src/webc/Pophover/i18n/sw/README.md) : haraka ya Bubble inayoelea
+[Scroll](../../src/webc/Scroll/i18n/sw/README.md) : upau wa kusogeza wa mtandaoni
+[Select](../../src/webc/Select/i18n/sw/README.md) : Chaguo kunjuzi, upana hubadilika kulingana na kipengee cha sasa
+[Tab](../../src/webc/Tab/i18n/sw/README.md) : Vichupo vinavyoweza kubadilishwa
+[fkv](../sw/doc/README.md)
+[Usanifu](../sw/doc/architecture.md)
+[Crate](../sw/doc/crates.md)
+[mtihani](../sw/doc/testing.md)
+[Utendaji](../sw/doc/performance.md)

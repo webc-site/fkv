@@ -1,0 +1,5 @@
+desc: 桌面端平铺展示链接，移动端折叠为图标按钮
+desktop_title: 桌面端
+desktop_desc: 平铺展示
+mobile_title: 移动端
+mobile_desc: 折叠为图标按钮，点击滑出侧拉菜单

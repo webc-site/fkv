@@ -1,0 +1,9 @@
+css: શુદ્ધ શૈલી
+base: મૂળભૂત ઘટકો
+webc: સંયુક્ત ઘટક
+js: સ્ક્રિપ્ટ લાઇબ્રેરી
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: પોપઅપ સ્તર
+  ^Nav(?![a-z]): નેવિગેશન
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): કાર્ડ

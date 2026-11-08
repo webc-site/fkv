@@ -1,0 +1,23 @@
+[package]
+name = "fkv_compare"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "对比评测：fkv vs RocksDB vs fjall（同一阶段形状、同一缓存口径）"
+
+[dependencies]
+fkv_btree = { version = "0.1.0", path = "../../core/fkv_btree" }
+fkv_config = { version = "0.1.0", path = "../../foundation/fkv_config" }
+fkv_io_compio = { version = "0.1.0", path = "../../io/fkv_io_compio" }
+fkv_store = { version = "0.1.0", path = "../../engine/fkv_store" }
+fkv_api = { version = "0.1.0", path = "../../engine/fkv_api" }
+fkv_runtime = { version = "0.1.0", path = "../../engine/fkv_runtime" }
+fkv_types = { version = "0.1.0", path = "../../foundation/fkv_types" }
+compio = { workspace = true, features = ["runtime", "fs", "io", "macros"] }
+fjall.workspace = true
+futures = { workspace = true, default-features = false, features = ["alloc"] }
+libc.workspace = true
+serde.workspace = true
+sonic-rs.workspace = true

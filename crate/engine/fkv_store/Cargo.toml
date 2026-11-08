@@ -1,0 +1,127 @@
+[package]
+name = "fkv_store"
+description = "Store 生命周期、模式派生、路由、fanout"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true
+
+[dependencies.fkv_btree]
+version = "0.1.0"
+path = "../../core/fkv_btree"
+
+[dependencies.fkv_config]
+version = "0.1.0"
+path = "../../foundation/fkv_config"
+
+[dependencies.fkv_error]
+version = "0.1.0"
+path = "../../foundation/fkv_error"
+
+[dependencies.fkv_codec]
+version = "0.1.0"
+path = "../../foundation/fkv_codec"
+
+[dependencies.fkv_compress]
+version = "0.1.0"
+path = "../../format/fkv_compress"
+
+[dependencies.fkv_io]
+version = "0.1.0"
+path = "../../io/fkv_io"
+
+[dependencies.fkv_large]
+version = "0.1.0"
+path = "../../core/fkv_large"
+
+[dependencies.fkv_manifest]
+version = "0.1.0"
+path = "../../format/fkv_manifest"
+
+[dependencies.fkv_mapping]
+version = "0.1.0"
+path = "../../core/fkv_mapping"
+
+[dependencies.fkv_page]
+version = "0.1.0"
+path = "../../format/fkv_page"
+
+[dependencies.fkv_recovery]
+version = "0.1.0"
+path = "../fkv_recovery"
+
+[dependencies.fkv_task_compact]
+version = "0.1.0"
+path = "../fkv_task_compact"
+
+[dependencies.fkv_task_gc]
+version = "0.1.0"
+path = "../fkv_task_gc"
+
+[dependencies.fkv_task_read]
+version = "0.1.0"
+path = "../fkv_task_read"
+
+[dependencies.fkv_task_reopen]
+version = "0.1.0"
+path = "../fkv_task_reopen"
+
+[dependencies.fkv_task_scan]
+version = "0.1.0"
+path = "../fkv_task_scan"
+
+[dependencies.fkv_task_write]
+version = "0.1.0"
+path = "../fkv_task_write"
+
+[dependencies.fkv_types]
+version = "0.1.0"
+path = "../../foundation/fkv_types"
+
+[dependencies.gxhash]
+workspace = true
+
+[dependencies.fkv_gc]
+version = "0.1.0"
+path = "../fkv_gc"
+
+[dependencies.log]
+workspace = true
+
+[dev-dependencies.compio]
+workspace = true
+features = [ "macros", "fs", "io" ]
+
+[dev-dependencies.fkv_failpoint]
+path = "../../foundation/fkv_failpoint"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_compio]
+path = "../../io/fkv_io_compio"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_mem]
+path = "../../io/fkv_io_mem"
+version = "0.1.0"
+
+[dev-dependencies.fkv_io_sim]
+path = "../../io/fkv_io_sim"
+version = "0.1.0"
+
+[dev-dependencies.fkv_testkit]
+path = "../../facade/fkv_testkit"
+version = "0.1.0"
+
+[dev-dependencies.pollster]
+workspace = true

@@ -1,0 +1,9 @@
+css: أسلوب نقي
+base: المكونات الأساسية
+webc: مكون مركب
+js: مكتبة البرامج النصية
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: طبقة منبثقة
+  ^Nav(?![a-z]): ملاحة
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): بطاقة

@@ -1,0 +1,20 @@
+[package]
+name = "fkv_s3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "S3 客户端：SigV4 签名 + compio 上的 HTTP/1.1（不依赖 tokio / object_store）"
+
+[dependencies]
+fkv_error = { version = "0.1.0", path = "../../foundation/fkv_error" }
+bytes.workspace = true
+hex.workspace = true
+hmac.workspace = true
+quick-xml.workspace = true
+sha2.workspace = true
+compio = { workspace = true, features = ["runtime", "net", "io", "macros"] }
+compio-tls.workspace = true
+rustls.workspace = true
+webpki-roots.workspace = true

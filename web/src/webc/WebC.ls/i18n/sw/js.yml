@@ -1,0 +1,9 @@
+css: mtindo safi
+base: Vipengele vya msingi
+webc: Kipengele cha mchanganyiko
+js: Maktaba ya hati
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: safu ibukizi
+  ^Nav(?![a-z]): urambazaji
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): kadi

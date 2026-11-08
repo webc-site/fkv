@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/or/README.md) : ବ୍ଲଗ୍ ପୋଷ୍ଟ ଉପାଦାନ |
+[BoxX](../../src/webc/BoxX/i18n/or/README.md) : ଏକ ବନ୍ଦ ବଟନ୍ ସହିତ ଏକ ପପ୍ଅପ୍ ସ୍ତର ସୃଷ୍ଟି ଏବଂ ପ୍ରଦର୍ଶନ କରନ୍ତୁ |
+[Code](../../src/webc/Code/i18n/or/README.md) : କୋଡ୍ ବଟନ୍
+[Copy](../../src/webc/Copy/i18n/or/README.md) : କ୍ଲିପବୋର୍ଡରେ ପାଠ କପି କରନ୍ତୁ |
+[Edit](../../src/webc/Edit/i18n/or/README.md) : ବଟନ୍ ସଂପାଦନ କରନ୍ତୁ |
+[HtmDemo](../../src/webc/HtmDemo/i18n/or/README.md) : ଅନଲାଇନରେ HTML ଏବଂ JS କୋଡ୍ ଡିବଗ୍ କରିବା |
+[I18n](../../src/webc/I18n/i18n/or/README.md) : ଇଣ୍ଟରଫେସ୍ ଭାଷା ବଦଳାଇବା ପାଇଁ ବଟନ୍ ଏବଂ ପପ୍-ଅପ୍ ୱିଣ୍ଡୋ |
+[Nav](../../src/webc/Nav/i18n/or/README.md) : ଶୀର୍ଷ ନାଭିଗେସନ୍ ବାର୍ ଯାହା ପୃଷ୍ଠା ସ୍କ୍ରୋଲ୍ କଲାବେଳେ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ନଷ୍ଟ ହୋଇଯାଏ କିମ୍ବା ବିସ୍ତାର ହୁଏ |
+[NavL](../../src/webc/NavL/i18n/or/README.md) : ସ୍ୱୟଂଚାଳିତ ଭାବରେ ନାଭିଗେସନ୍ ମେନୁ ଏବଂ ରିଟର୍ନ ବଟନ୍ ସୁଇଚ୍ କରନ୍ତୁ |
+[NavMenu](../../src/webc/NavMenu/i18n/or/README.md) : ନାଭିଗେସନ୍ ମେନୁ ବିଭିନ୍ନ ସ୍କ୍ରିନ୍ ଆକାର ସହିତ ଅନୁକୂଳ ହୋଇଛି |
+[SelectBtn](../../src/webc/SelectBtn/i18n/or/README.md) : ଡ୍ରପ୍-ଡାଉନ୍ ଚୟନ ବାକ୍ସ ଏବଂ ବଟନ୍ ର ମିଶ୍ରଣ |
+[Side](../../src/webc/Side/i18n/or/README.md) : ଡ୍ରୟର ପ୍ୟାନେଲ ଯାହା ପାର୍ଶ୍ୱରୁ ବାହାରିଥାଏ |
+[TabSelect](../../src/webc/TabSelect/i18n/or/README.md) : ଡ୍ରପ୍ ଡାଉନ୍ ଚୟନ ସହିତ ଟ୍ୟାବ୍ ପୃଷ୍ଠା |
+[Toc](../../src/webc/Toc/i18n/or/README.md) : ଡିରେକ୍ଟୋରୀ ନାଭିଗେସନ୍ ଉପାଦାନ |
+[Btn](../../src/webc/Btn/i18n/or/README.md) : ସାଧାରଣ ବଟନ୍ ଏବଂ ରାଉଣ୍ଡ ଆଇକନ୍ ବଟନ୍ |
+[Card](../../src/webc/Card/i18n/or/README.md) : ନିଲମ୍ବନରେ ପ୍ରଦର୍ଶିତ ଡାହାଣ ତୀର ସହିତ କ୍ୟାପସୁଲ କାର୍ଡ |
+[H1Txt](../../src/webc/H1Txt/i18n/or/README.md) : ଟେକ୍ସଚର ଟାଇଟଲ୍ ଏବଂ ବର୍ଣ୍ଣନା |
+[Ing](../../src/webc/Ing/i18n/or/README.md) : ଲୋଡିଂ କିମ୍ବା ପ୍ରକ୍ରିୟାକରଣ ସ୍ଥିତିର ସୂଚକ |
+[Kv](../../src/webc/Kv/i18n/or/README.md) : କି ମୂଲ୍ୟ ଯୁଗଳ |
+[Lg](../../src/webc/Lg/i18n/or/README.md) : ଫ୍ରଷ୍ଟଡ୍ ଗ୍ଲାସ୍ ପୃଷ୍ଠଭୂମି ଏବଂ ଧାର ହାଇଲାଇଟ୍ ଇଫେକ୍ଟ |
+[MdCss](../../src/webc/MdCss/i18n/or/README.md) : ପ reading ିବା ଅଭିଜ୍ଞତା ପାଇଁ ଟାଇପୋଗ୍ରାଫି ଶ yles ଳୀ ଅପ୍ଟିମାଇଜ୍ |
+[NavALi](../../src/webc/NavALi/i18n/or/README.md) : ନାଭିଗେସନ୍ ବାର୍ ଲିଙ୍କ୍ ତାଲିକା ଶ style ଳୀ |
+[O](../../src/webc/O/i18n/or/README.md) : ଉପାଦାନ ସାମ୍ନାରେ ଏକ ଖୋଲା ଡଟ୍ ଲୋଗୋ ଅଙ୍କନ କରନ୍ତୁ |
+[Toast](../../src/webc/Toast/i18n/or/README.md) : ପୃଷ୍ଠାର ଧାରରେ ତୁରନ୍ତ ପପ୍-ଅପ୍ ୱିଣ୍ଡୋ |
+[404](../../src/webc/404/i18n/or/README.md) : ପଥ ତ୍ରୁଟି ସନ୍ଦେଶ ପୃଷ୍ଠା ବିଦ୍ୟମାନ ନାହିଁ |
+[Back](../../src/webc/Back/i18n/or/README.md) : ପଛ ବଟନ୍
+[Box](../../src/webc/Box/i18n/or/README.md) : ପପ୍ଅପ୍ ସ୍ତର ସୃଷ୍ଟି ଏବଂ ପ୍ରଦର୍ଶନ କରନ୍ତୁ |
+[CardLi](../../src/webc/CardLi/i18n/or/README.md) : ଅସନ୍ତୁଳିତ ଭାବରେ କାର୍ଡ ତାଲିକା ଲୋଡ୍ ଏବଂ ପ୍ରଦର୍ଶନ କରନ୍ତୁ |
+[Md](../../src/webc/Md/i18n/or/README.md) : ମାର୍କଡାଉନ୍ ଟେକ୍ସଟ୍ କୁ ସୁରକ୍ଷିତ ଭାବରେ ବିଶ୍ଳେଷଣ କରନ୍ତୁ ଏବଂ HTML ରେ ରେଣ୍ଡର୍ କରନ୍ତୁ |
+[Pophover](../../src/webc/Pophover/i18n/or/README.md) : ଭାସମାନ ବବୁଲ୍ ପ୍ରମ୍ପ୍ଟ |
+[Scroll](../../src/webc/Scroll/i18n/or/README.md) : ଭର୍ଚୁଆଲ୍ ସ୍କ୍ରୋଲ୍ ବାର୍ |
+[Select](../../src/webc/Select/i18n/or/README.md) : ଡ୍ରପ୍-ଡାଉନ୍ ଚୟନ, ମୋଟେଇ ସାମ୍ପ୍ରତିକ ଆଇଟମ୍ ସହିତ ଖାପ ଖାଏ |
+[Tab](../../src/webc/Tab/i18n/or/README.md) : ସୁଇଚ୍ ଟ୍ୟାବ୍ |
+[fkv](../or/doc/README.md)
+[ସ୍ଥାପତ୍ୟ](../or/doc/architecture.md)
+[Crate](../or/doc/crates.md)
+[ପରୀକ୍ଷା](../or/doc/testing.md)
+[କାର୍ଯ୍ୟଦକ୍ଷତା](../or/doc/performance.md)

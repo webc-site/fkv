@@ -1,0 +1,9 @@
+css: estilo hutsa
+base: Oinarrizko osagaiak
+webc: Osagai konposatua
+js: Gidoien liburutegia
+group:
+  ^Box(?![a-z])|^(I18n|Captcha|Confirm)$: popup geruza
+  ^Nav(?![a-z]): nabigazioa
+  ^Md(?![a-z]): Markdown
+  ^Card(?![a-z]): txartela

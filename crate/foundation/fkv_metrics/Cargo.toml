@@ -1,0 +1,18 @@
+[package]
+name = "fkv_metrics"
+description = "计数器 / 延迟直方图 / cache / file 指标"
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.publish]
+workspace = true

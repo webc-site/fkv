@@ -1,0 +1,155 @@
+name: perf
+
+on:
+  workflow_dispatch:
+    inputs:
+      rows:
+        description: 读 / scan / len 数据集行数
+        default: "25000000"
+      bulk_rows:
+        description: bulk load 行数
+        default: "25000000"
+      cache_bytes:
+        description: 每引擎缓存额度（字节）
+        default: "268435456"
+      readers:
+        description: 点读并发点（逗号分隔）
+        default: "1,4,8,16,32"
+      rounds:
+        description: 采样轮数（每阶段取中位数）
+        default: "3"
+      backfill:
+        description: 用本次产物回填 web/src/conf/perf.js 并提交
+        type: boolean
+        default: false
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+# 首页矩阵的数字只能来自可追溯的一次运行：本工作流构建 fkv_compare（fkv / RocksDB /
+# fjall 三引擎，同一 key 编码、同一阶段形状、同一缓存额度），跑完把 JSON 报告作为
+# artifact 上传，再由 scripts/perf/fkv_compare_to_js.py 回填页面。
+#
+# RocksDB 通过 cpp/rocksdb_ffi.cpp 的 C ABI 共享库以 dlopen 加载，Rust 侧构建不
+# 链接 RocksDB；系统包缺失时脚本非 0 退出，此时矩阵退化为 fkv / fjall 两列。
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    # 回填步骤要把 web/src/conf/perf.js 推回仓库；默认 GITHUB_TOKEN 是只读。
+    permissions:
+      contents: write
+    timeout-minutes: 240
+    env:
+      CARGO_TERM_COLOR: always
+      # 数据集 / 缓存额度：数据 ≈ 10.8× 缓存，对齐 RocksDB 官方 97 GiB / 6 GiB。
+      ROWS: ${{ inputs.rows }}
+      BULK_ROWS: ${{ inputs.bulk_rows }}
+      CACHE_BYTES: ${{ inputs.cache_bytes }}
+      READERS: ${{ inputs.readers }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # backfill 需要能推回本仓库。
+          token: ${{ secrets.GITHUB_TOKEN }}
+      # 三引擎各留一份 2.7 GiB 数据集，托管 runner 默认盘位偏紧，先腾空间。
+      - name: 腾出磁盘（三个引擎的数据目录并存）
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+          sudo apt-get clean
+          df -h /
+      - run: bash scripts/ci/install.sh
+      - name: 安装 RocksDB（第三列可缺失）
+        run: |
+          sudo apt-get install -y --no-install-recommends librocksdb-dev || \
+            echo "librocksdb-dev 不可用，RocksDB 列将记为未启用"
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: perf
+      - name: 构建 fkv_compare
+        run: cargo build --release -p fkv_compare
+      - name: 构建 RocksDB C ABI 适配器
+        run: |
+          if bash scripts/perf/build_rocksdb_ffi.sh target/perf/librocksdb_bench_ffi.so; then
+            echo "ROCKSDB_LIB=target/perf/librocksdb_bench_ffi.so" >> "$GITHUB_ENV"
+          else
+            echo "RocksDB 适配器未构建，跳过第三列"
+          fi
+      - name: 断言 4 KiB 页（RocksDB block_size 与两侧页同粒度）
+        run: |
+          page=$(getconf PAGESIZE)
+          echo "PAGESIZE=$page"
+          test "$page" = "4096"
+      - name: 跑三引擎矩阵（3 轮取中位数）
+        # 共享 runner 单次采样抖动可达 2.8 倍（同一份代码的删除阶段），页面数字必须
+        # 可复核，所以每阶段跑 3 轮取中位数。
+        run: |
+          mkdir -p target/perf
+          for i in $(seq 1 "${{ inputs.rounds }}"); do
+            args=(
+              --rows "$ROWS" --bulk-rows "$BULK_ROWS"
+              --cache-bytes "$CACHE_BYTES" --readers "$READERS"
+              --workdir "target/perf/work-$i"
+              --json "target/perf/run-$i.json"
+            )
+            if [ -n "${ROCKSDB_LIB:-}" ]; then
+              args+=(--rocksdb-lib "$ROCKSDB_LIB")
+            fi
+            ./target/release/fkv_compare "${args[@]}"
+            # 每轮清掉数据目录：三引擎各 2.8 GiB，三轮并存会占 25 GiB，托管 runner
+            # 磁盘吃满后第 2、3 轮的读/计数阶段会整体塌陷（实测 len 从 22.6M 掉到
+            # 4.4M），中位数就变成了「磁盘有多满」而不是引擎性能。
+            rm -rf "target/perf/work-$i"
+            df -h / | tail -1
+          done
+          # 每轮 JSON 一起留档：出问题时能直接看出是某一轮慢还是整体退化。
+          python3 scripts/perf/median.py --out target/perf/fkv-compare.json \
+            target/perf/run-*.json
+      - name: 拆解读路径 CPU 成本
+        # 数据集与页缓存都已就绪时，一次点读的纯 CPU 成本（含页解码）；
+        # 与矩阵里的读吞吐对照，可区分「IO 打不过」和「CPU 打不过」。
+        run: |
+          cargo build --release -p fkv_compare --example read_parts
+          ./target/release/examples/read_parts target/perf/work/fkv 200000 25000000 \
+            | tee target/perf/read-parts.txt
+      - name: 生成可读摘要
+        run: |
+          python3 - <<'PY' | tee target/perf/fkv-compare.md
+          import json
+          d = json.load(open("target/perf/fkv-compare.json"))
+          print(f"{'阶段':<18}{'fkv':>12}{'RocksDB':>12}{'fjall':>12}")
+          for p in d["phases"]:
+              def ops(c):
+                  return 0 if not c or not c["secs"] else c["ops"] / c["secs"]
+              print(f"{p['phase']:<18}" + "".join(f"{ops(p[k]):>12.0f}" for k in ("fkv", "rocksdb", "fjall")))
+          print()
+          for k, v in (d.get("sizes") or {}).items():
+              print(f"{k}: {'—' if v is None else f'{v / 2**20:.1f} MiB'}")
+          PY
+      - uses: actions/upload-artifact@v5
+        with:
+          name: perf-matrix-${{ github.run_id }}
+          path: |
+            target/perf/fkv-compare.json
+            target/perf/fkv-compare.md
+            target/perf/read-parts.txt
+            target/perf/run-*.json
+          retention-days: 90
+      - name: 回填首页数据
+        if: ${{ inputs.backfill }}
+        run: |
+          python3 scripts/perf/fkv_compare_to_js.py \
+            --json target/perf/fkv-compare.json \
+            --perf-js web/src/conf/perf.js \
+            --machine "GitHub Actions ubuntu-latest (x86_64, 4 KiB 页)" \
+            --source "CI 运行 ${{ github.run_id }}" \
+            --date "$(date -u +%F)"
+          git config user.name "fkv perf bot"
+          git config user.email "perf@webc.site"
+          git add web/src/conf/perf.js
+          git commit -m "chore(web): 用 CI 运行 ${{ github.run_id }} 的产物回填性能矩阵" || \
+            echo "perf.js 无变化"
+          git push

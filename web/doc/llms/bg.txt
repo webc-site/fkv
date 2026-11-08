@@ -1,0 +1,38 @@
+[Blog](../../src/webc/Blog/i18n/bg/README.md) : Компонент за публикация в блог
+[BoxX](../../src/webc/BoxX/i18n/bg/README.md) : Създайте и покажете изскачащ слой с бутон за затваряне
+[Code](../../src/webc/Code/i18n/bg/README.md) : кодов бутон
+[Copy](../../src/webc/Copy/i18n/bg/README.md) : Копиране на текст в клипборда
+[Edit](../../src/webc/Edit/i18n/bg/README.md) : бутон за редактиране
+[HtmDemo](../../src/webc/HtmDemo/i18n/bg/README.md) : Отстраняване на грешки в HTML и JS код онлайн
+[I18n](../../src/webc/I18n/i18n/bg/README.md) : Бутони и изскачащи прозорци за превключване на езиците на интерфейса
+[Nav](../../src/webc/Nav/i18n/bg/README.md) : Горна навигационна лента, която автоматично се свива или разширява, когато страницата се превърта
+[NavL](../../src/webc/NavL/i18n/bg/README.md) : Автоматично превключване на навигационното меню и бутона за връщане
+[NavMenu](../../src/webc/NavMenu/i18n/bg/README.md) : Навигационно меню, адаптирано към различни размери на екрана
+[SelectBtn](../../src/webc/SelectBtn/i18n/bg/README.md) : Комбинация от падащо поле за избор и бутон
+[Side](../../src/webc/Side/i18n/bg/README.md) : Панели за чекмеджета, които се плъзгат отстрани
+[TabSelect](../../src/webc/TabSelect/i18n/bg/README.md) : Разделна страница с избор от падащо меню
+[Toc](../../src/webc/Toc/i18n/bg/README.md) : Компонент за навигация в директория
+[Btn](../../src/webc/Btn/i18n/bg/README.md) : Обикновен бутон и бутон с кръгла икона
+[Card](../../src/webc/Card/i18n/bg/README.md) : Карта на капсула със стрелка надясно, показана в окачване
+[H1Txt](../../src/webc/H1Txt/i18n/bg/README.md) : Заглавие и описание на текстурата
+[Ing](../../src/webc/Ing/i18n/bg/README.md) : Индикатор за състояние на зареждане или обработка
+[Kv](../../src/webc/Kv/i18n/bg/README.md) : двойка ключ стойност
+[Lg](../../src/webc/Lg/i18n/bg/README.md) : Фон от матирано стъкло и ефект на подчертаване на ръбовете
+[MdCss](../../src/webc/MdCss/i18n/bg/README.md) : Типографски стилове, оптимизирани за четене
+[NavALi](../../src/webc/NavALi/i18n/bg/README.md) : Стил на списък с връзки на лентата за навигация
+[O](../../src/webc/O/i18n/bg/README.md) : Начертайте лого с куха точка пред елемента
+[Toast](../../src/webc/Toast/i18n/bg/README.md) : Изскачащ прозорец с подкана в края на страницата
+[404](../../src/webc/404/i18n/bg/README.md) : Пътят не съществува, страница със съобщение за грешка
+[Back](../../src/webc/Back/i18n/bg/README.md) : бутон за връщане назад
+[Box](../../src/webc/Box/i18n/bg/README.md) : Създайте и покажете изскачащ слой
+[CardLi](../../src/webc/CardLi/i18n/bg/README.md) : Зареждане и показване на списък с карти асинхронно
+[Md](../../src/webc/Md/i18n/bg/README.md) : Безопасно анализирайте и рендирайте Markdown текст в HTML.
+[Pophover](../../src/webc/Pophover/i18n/bg/README.md) : подкана за плаващ балон
+[Scroll](../../src/webc/Scroll/i18n/bg/README.md) : виртуална лента за превъртане
+[Select](../../src/webc/Select/i18n/bg/README.md) : Избор от падащо меню, ширината се адаптира към текущия елемент
+[Tab](../../src/webc/Tab/i18n/bg/README.md) : Превключваеми раздели
+[fkv](../bg/doc/README.md)
+[Архитектура](../bg/doc/architecture.md)
+[Crate](../bg/doc/crates.md)
+[тест](../bg/doc/testing.md)
+[Производителност](../bg/doc/performance.md)
