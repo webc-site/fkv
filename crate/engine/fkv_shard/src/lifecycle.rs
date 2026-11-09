@@ -84,6 +84,9 @@ pub struct ShardConfig {
   pub fd_limit: usize,
   /// 每表页缓存字节预算；0 表示不限制。
   pub page_cache_bytes: usize,
+  /// data 页（含 overflow 页）是否进页缓存；对齐 C++
+  /// `KvOption::enable_data_page_cache`，默认 false。index 页始终进缓存。
+  pub enable_data_page_cache: bool,
   /// 本 shard 的 root meta 字节预算；0 表示不限制。
   ///
   /// 计入 data / segment mapping、页缓存、压缩字典与 branch 元数据，
@@ -158,6 +161,8 @@ impl ShardConfig {
       fd_limit: 10_000,
       // 与 `fkv_config::DEFAULT_PAGE_CACHE_BYTES` 一致（同上测试钉住）。
       page_cache_bytes: 64 * 1024 * 1024,
+      // 对齐 C++ `KvOption::enable_data_page_cache` 默认 false。
+      enable_data_page_cache: false,
       root_meta_cache_bytes: 0,
       io_queue_size: 4096,
       backend: Default::default(),
@@ -468,6 +473,7 @@ impl Shard {
       segment_file_amplify_factor: config.segment_file_amplify_factor,
       manifest_limit: config.manifest_limit,
       page_cache_bytes: config.page_cache_bytes,
+      enable_data_page_cache: config.enable_data_page_cache,
       pages_per_file_shift: config.pages_per_file_shift,
       yield_budget_us: config.yield_budget_us,
       compression_level: config.compression_level,
@@ -871,6 +877,7 @@ mod tests {
       segment_file_amplify_factor: 0,
       manifest_limit: 8 * 1024 * 1024,
       page_cache_bytes: 1024 * 1024,
+      enable_data_page_cache: false,
       pages_per_file_shift: DEFAULT_PAGES_PER_FILE_SHIFT,
       yield_budget_us: 0,
       compression_level: None,

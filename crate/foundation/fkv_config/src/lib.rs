@@ -14,7 +14,7 @@
 //! - `data_append_mode`：已实现。`true` = `AllocMode::Append`，`false` =
 //!   `AllocMode::Pooled`（对齐 C++ `PooledFilePages`）；cloud / standby
 //!   模式按 C++ 规则强制为 `true`。
-//! - `enable_data_page_cache` / `init_page_count`：C++ data page cache 的开关与
+//! - `init_page_count`：C++ data page cache 的预分配页数；
 //!   预分配页数；Rust 读路径直接走 page cache + page buffer，没有对应缓存层，
 //!   字段仅保留配置兼容。
 //! - `direct_io_buffer_pool_size`：C++ 预注册 O_DIRECT buffer 池；fkv 的 IO 走
@@ -700,7 +700,6 @@ impl KvOption {
       };
     }
     track_ignored!(
-      enable_data_page_cache,
       init_page_count,
       coroutine_stack_size,
       max_archive_tasks,

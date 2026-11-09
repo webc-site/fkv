@@ -463,6 +463,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
     // 上一批写出的页同样应命中；若改走裸 IO，`remap_page` 的池复用会绕过缓存
     // 回填，留下陈旧条目。
     let page_cache_bytes = self.page_cache_bytes;
+    let data_page_cached = self.enable_data_page_cache;
     let roots_result = {
       let state = self
         .table_map
@@ -477,7 +478,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
       let segment_size = self
         .large_value_layout
         .map_or(0, |layout| layout.segment_size());
-      let io = CachedWriteIo::new(&self.io, page_cache, self.page_size);
+      let io = CachedWriteIo::new(&self.io, page_cache, self.page_size, data_page_cached);
       let result: Result<(PageId, PageId)> = async {
         let new_root = if data_delete_li.is_empty() {
           root_id

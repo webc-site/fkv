@@ -1,4 +1,4 @@
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::Mutex;
 
 use fkv_error::{KvError, Result};
 use fkv_io::PageIo;
@@ -322,15 +322,26 @@ async fn flaky_chain(store: &FlakyIo, tbl: &TableIdent, mapper: &mut PageMapper)
   root
 }
 
-/// 记录窗口批量读（`read_page_span`）与逐页 owned 读（`read_page_owned`）次数：
-/// 验证深度退化到 1 后窗口被整条旁路，后续页只走逐页直读。
-struct CountingIo {
+/// 记录每次批量读（`read_page_li`）提交的物理页号序列。
+struct BatchIo {
   inner: MemStore,
-  span_num: AtomicUsize,
-  owned_num: AtomicUsize,
+  batch_li: Mutex<Vec<Vec<FilePageId>>>,
 }
 
-impl PageIo for CountingIo {
+impl BatchIo {
+  fn new(page_size: usize) -> Self {
+    Self {
+      inner: MemStore::new(page_size),
+      batch_li: Mutex::new(Vec::new()),
+    }
+  }
+
+  fn take_batch_li(&self) -> Vec<Vec<FilePageId>> {
+    std::mem::take(&mut *self.batch_li.lock().unwrap())
+  }
+}
+
+impl PageIo for BatchIo {
   async fn read_page(
     &self,
     tbl: &TableIdent,
@@ -346,8 +357,20 @@ impl PageIo for CountingIo {
     file_page_id: FilePageId,
     buf: &mut Vec<u8>,
   ) -> Result<()> {
-    self.owned_num.fetch_add(1, Ordering::Relaxed);
     self.inner.read_page_owned(tbl, file_page_id, buf).await
+  }
+
+  async fn read_page_li(
+    &self,
+    tbl: &TableIdent,
+    file_page_id_li: &[FilePageId],
+    page_buf_li: &mut [Vec<u8>],
+  ) -> Result<()> {
+    self.batch_li.lock().unwrap().push(file_page_id_li.to_vec());
+    self
+      .inner
+      .read_page_li(tbl, file_page_id_li, page_buf_li)
+      .await
   }
 
   async fn read_page_span(
@@ -356,7 +379,10 @@ impl PageIo for CountingIo {
     file_page_id: FilePageId,
     page_buf_li: &mut [Vec<u8>],
   ) -> Result<()> {
-    self.span_num.fetch_add(1, Ordering::Relaxed);
+    let span: Vec<FilePageId> = (0..page_buf_li.len() as FilePageId)
+      .map(|offset| file_page_id + offset)
+      .collect();
+    self.batch_li.lock().unwrap().push(span);
     self
       .inner
       .read_page_span(tbl, file_page_id, page_buf_li)
@@ -372,51 +398,96 @@ impl PageIo for CountingIo {
   }
 }
 
-/// 投机白读多于有用读、深度退化到 1 之后：窗口被丢弃，不再批量读，剩余链页
-/// 全部走窗口引入前的逐页 `read_page_owned`。
+/// 三层树：非叶 root -> 3 个 LeafIndex -> 9 个 data 页（每页 3 条，键升序）。
+///
+/// data 页物理页号 0..8，LeafIndex 20..22，root 30。叶子链与索引顺序一致：
+/// `k00..k26` 连续。返回 snapshot 用的 root。
+async fn multi_level_tree<I: PageIo>(io: &I, tbl: &TableIdent, mapper: &mut PageMapper) -> PageId {
+  const DATA_PER_PAGE: usize = 3;
+  const PAGE_NUM: usize = 9;
+  const LEAF_NUM: usize = 3;
+  let key_at = |index: usize| format!("k{index:02}").into_bytes();
+
+  let data_li: Vec<PageId> = (0..PAGE_NUM).map(|_| mapper.allocate_page()).collect();
+  let leaf_li: Vec<PageId> = (0..LEAF_NUM).map(|_| mapper.allocate_page()).collect();
+  let root = mapper.allocate_page();
+  for (fp, id) in data_li.iter().enumerate() {
+    mapper.set_file_page(*id, fp as FilePageId);
+  }
+  for (index, id) in leaf_li.iter().enumerate() {
+    mapper.set_file_page(*id, (20 + index) as FilePageId);
+  }
+  mapper.set_file_page(root, 30);
+
+  for page_idx in 0..PAGE_NUM {
+    let mut builder = DataPageBuilder::new(512, 16).unwrap();
+    for offset in 0..DATA_PER_PAGE {
+      let key = key_at(page_idx * DATA_PER_PAGE + offset);
+      builder
+        .add(EntrySpec {
+          key: &key,
+          value: b"v",
+          ts: 0,
+          expire_ts: 0,
+          overflow: false,
+          compression: CompressionType::None,
+          large_value: false,
+        })
+        .unwrap();
+    }
+    let mut page = builder.finish().unwrap();
+    let next = if page_idx + 1 < PAGE_NUM {
+      data_li[page_idx + 1]
+    } else {
+      PageId::MAX
+    };
+    set_next_page_id(&mut page, next).unwrap();
+    if page_idx > 0 {
+      set_prev_page_id(&mut page, data_li[page_idx - 1]).unwrap();
+    }
+    io.write_page(tbl, page_idx as FilePageId, &page)
+      .await
+      .unwrap();
+  }
+
+  for group in 0..LEAF_NUM {
+    let first = group * DATA_PER_PAGE;
+    let mut builder = IndexPageBuilder::new(512, 16, true).unwrap();
+    builder.add(&key_at(first), data_li[first]).unwrap();
+    for offset in 1..DATA_PER_PAGE {
+      let index = first + offset;
+      builder.add(&key_at(index), data_li[index]).unwrap();
+    }
+    let page = builder.finish().unwrap();
+    io.write_page(tbl, (20 + group) as FilePageId, &page)
+      .await
+      .unwrap();
+  }
+
+  let mut builder = IndexPageBuilder::new(512, 16, false).unwrap();
+  builder.add(&key_at(0), leaf_li[0]).unwrap();
+  builder.add(&key_at(DATA_PER_PAGE), leaf_li[1]).unwrap();
+  builder.add(&key_at(2 * DATA_PER_PAGE), leaf_li[2]).unwrap();
+  io.write_page(tbl, 30, &builder.finish().unwrap())
+    .await
+    .unwrap();
+  root
+}
+
+/// 索引栈预取必须按 key 顺序批量提交叶子页：批次拼起来等于叶子链顺序
+/// （fp0..fp8），单批不超过 K=6，且确实发生跨 LeafIndex 页（第 3 页起）
+/// 的下降。
 #[test]
-fn degraded_window_bypasses_speculation() {
+fn prefetch_batches_leaf_pages_in_key_order() {
   use fkv_task_scan::{ScanArg, scan_range};
 
   pollster::block_on(async {
-    let io = CountingIo {
-      inner: MemStore::new(512),
-      span_num: AtomicUsize::new(0),
-      owned_num: AtomicUsize::new(0),
-    };
-    let tbl = TableIdent::new("demo", 5).unwrap();
+    let io = BatchIo::new(512);
+    let tbl = TableIdent::new("demo", 21).unwrap();
     let mut mapper = PageMapper::new(AllocMode::Append, 0);
-    let ids: Vec<PageId> = (0..26).map(|_| mapper.allocate_page()).collect();
-    for (fp, id) in ids.iter().enumerate() {
-      mapper.set_file_page(*id, fp as FilePageId);
-    }
-    let (p0, p10, p1, p2, root) = (ids[0], ids[10], ids[1], ids[2], ids[25]);
-    // 链 p0(fp0) -> p10(fp10) -> p1(fp1) -> p2(fp2)：fp10 起的 16 页都真实存在，
-    // 投机段一次读成功，但本请求只用到首页 -> 白读 15 页。
-    for fp in [
-      3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-    ] {
-      io.write_page(&tbl, fp, &vec![0u8; 512]).await.unwrap();
-    }
-    let mut page0 = data_page(&[("a", "A"), ("b", "B")]);
-    set_next_page_id(&mut page0, p10).unwrap();
-    let mut page10 = data_page(&[("c", "C")]);
-    set_prev_page_id(&mut page10, p0).unwrap();
-    set_next_page_id(&mut page10, p1).unwrap();
-    let mut page1 = data_page(&[("d", "D")]);
-    set_prev_page_id(&mut page1, p10).unwrap();
-    set_next_page_id(&mut page1, p2).unwrap();
-    let mut page2 = data_page(&[("e", "E")]);
-    set_prev_page_id(&mut page2, p1).unwrap();
-    set_next_page_id(&mut page2, PageId::MAX).unwrap();
-    io.write_page(&tbl, 0, &page0).await.unwrap();
-    io.write_page(&tbl, 10, &page10).await.unwrap();
-    io.write_page(&tbl, 1, &page1).await.unwrap();
-    io.write_page(&tbl, 2, &page2).await.unwrap();
-    io.write_page(&tbl, 25, &index_page(true, p0))
-      .await
-      .unwrap();
+    let root = multi_level_tree(&io, &tbl, &mut mapper).await;
     let snapshot = snap(&tbl, &mapper, root);
+
     let out = scan_range(
       &io,
       ScanArg {
@@ -433,17 +504,194 @@ fn degraded_window_bypasses_speculation() {
     )
     .await
     .unwrap();
-    assert_eq!(out.len(), 5);
-    // 首页投机段读一次；退化后剩余两页各一次 owned 直读。
-    assert_eq!(io.span_num.load(Ordering::Relaxed), 1);
-    // owned 读：index root + 首页 p0 + 退化后的 p1 / p2。
-    assert_eq!(io.owned_num.load(Ordering::Relaxed), 4);
+    let expected_keys: Vec<Vec<u8>> = (0..27).map(|i| format!("k{i:02}").into_bytes()).collect();
+    assert_eq!(
+      out.iter().map(|(key, _)| key.clone()).collect::<Vec<_>>(),
+      expected_keys,
+      "扫描结果必须按 key 升序"
+    );
+
+    let batch_li = io.take_batch_li();
+    let submitted: Vec<FilePageId> = batch_li.iter().flatten().copied().collect();
+    assert_eq!(
+      submitted,
+      (0..9).collect::<Vec<FilePageId>>(),
+      "预取必须按叶子链 / key 顺序提交且不重复: {batch_li:?}"
+    );
+    assert!(
+      batch_li.iter().any(|batch| batch.len() > 1),
+      "索引栈预取必须一次提交多页: {batch_li:?}"
+    );
+    assert!(
+      batch_li.iter().all(|batch| batch.len() <= 6),
+      "单批不得超过 C++ 对齐的 6 页: {batch_li:?}"
+    );
+  });
+}
+
+/// 预取路径必须与逐页直读逐 key 一致：`end` 为空走索引栈批量预取；带 `end`
+/// 的有界扫描不预取（同一条叶子链，逐页 `read_page_owned`）。两种路径的
+/// key/value 序列必须完全相同。
+#[test]
+fn prefetch_order_matches_direct_scan() {
+  use fkv_task_scan::{ScanArg, ScanOption, scan_entries_with, scan_range};
+
+  pollster::block_on(async {
+    let io = MemStore::new(512);
+    let tbl = TableIdent::new("demo", 22).unwrap();
+    let mut mapper = PageMapper::new(AllocMode::Append, 0);
+    let root = multi_level_tree(&io, &tbl, &mut mapper).await;
+    let snapshot = snap(&tbl, &mapper, root);
+    let arg = |begin: &'static [u8], end: &'static [u8]| ScanArg {
+      tbl: &tbl,
+      snapshot: &snapshot,
+      tree: ScanTree::Data,
+      begin,
+      end,
+      page_size: 512,
+      max_entries: 0,
+      dict: None,
+      ttl_filter_now_ms: None,
+    };
+    let inclusive = ScanOption {
+      end_inclusive: true,
+      ..ScanOption::default()
+    };
+
+    for begin in [b"".as_slice(), b"k05".as_slice(), b"k04".as_slice()] {
+      let prefetched = scan_range(&io, arg(begin, b"")).await.unwrap();
+      let direct = scan_entries_with(&io, arg(begin, b"k26"), inclusive)
+        .await
+        .unwrap();
+      assert_eq!(
+        prefetched,
+        direct
+          .iter()
+          .map(|entry| (entry.key.clone(), entry.value.clone()))
+          .collect::<Vec<_>>(),
+        "begin={begin:?} 预取与逐页直读必须逐 key 一致"
+      );
+    }
+  });
+}
+
+/// 计数路径与物化路径在各种边界下等值：整表、半开 / 闭区间、页边界键、
+/// 跨 LeafIndex 页分裂，以及链上的空 data 页。
+#[test]
+fn scan_count_matches_materialized_across_index_splits() {
+  use fkv_task_scan::{ScanArg, ScanOption, scan_count, scan_entries_with};
+
+  pollster::block_on(async {
+    let io = MemStore::new(512);
+    let tbl = TableIdent::new("demo", 23).unwrap();
+    let mut mapper = PageMapper::new(AllocMode::Append, 0);
+    let root = multi_level_tree(&io, &tbl, &mut mapper).await;
+    let snapshot = snap(&tbl, &mapper, root);
+    let arg = |begin: &'static [u8], end: &'static [u8]| ScanArg {
+      tbl: &tbl,
+      snapshot: &snapshot,
+      tree: ScanTree::Data,
+      begin,
+      end,
+      page_size: 512,
+      max_entries: 0,
+      dict: None,
+      ttl_filter_now_ms: None,
+    };
+
+    let cases: &[(&'static [u8], &'static [u8])] = &[
+      (b"", b""),
+      (b"k00", b"k26"),
+      (b"k03", b"k20"),
+      (b"k04", b"k04"),
+      (b"k05", b"k06"),
+      (b"k08", b"k09"),
+      (b"k26", b""),
+      (b"zzz", b""),
+    ];
+    for &(begin, end) in cases {
+      for end_inclusive in [false, true] {
+        for begin_inclusive in [true, false] {
+          let option = ScanOption {
+            begin_inclusive,
+            end_inclusive,
+            ..ScanOption::default()
+          };
+          let entries = scan_entries_with(&io, arg(begin, end), option)
+            .await
+            .unwrap();
+          let count = scan_count(&io, arg(begin, end), option).await.unwrap();
+          assert_eq!(
+            count,
+            entries.len(),
+            "begin={begin:?} end={end:?} begin_incl={begin_inclusive} end_incl={end_inclusive}"
+          );
+        }
+      }
+    }
+    // 整表计数 = 27 条。
+    assert_eq!(
+      scan_count(&io, arg(b"", b""), ScanOption::default())
+        .await
+        .unwrap(),
+      27
+    );
+
+    // 叶子链中间夹一个空 data 页：索引 / 链都包含它，扫描必须跳过而不报错，
+    // 计数与物化等值。
+    let empty_io = MemStore::new(512);
+    let empty_tbl = TableIdent::new("demo", 24).unwrap();
+    let mut empty_mapper = PageMapper::new(AllocMode::Append, 0);
+    let p0 = empty_mapper.allocate_page();
+    let p1 = empty_mapper.allocate_page();
+    let empty_root = empty_mapper.allocate_page();
+    empty_mapper.set_file_page(p0, 0);
+    empty_mapper.set_file_page(p1, 1);
+    empty_mapper.set_file_page(empty_root, 2);
+    let mut page0 = data_page(&[("a", "A"), ("b", "B")]);
+    set_next_page_id(&mut page0, p1).unwrap();
+    let mut page1 = DataPageBuilder::new(512, 16).unwrap().finish().unwrap();
+    set_prev_page_id(&mut page1, p0).unwrap();
+    set_next_page_id(&mut page1, PageId::MAX).unwrap();
+    empty_io.write_page(&empty_tbl, 0, &page0).await.unwrap();
+    empty_io.write_page(&empty_tbl, 1, &page1).await.unwrap();
+    let mut index = IndexPageBuilder::new(512, 16, true).unwrap();
+    index.add(b"", p0).unwrap();
+    index.add(b"c", p1).unwrap();
+    empty_io
+      .write_page(&empty_tbl, 2, &index.finish().unwrap())
+      .await
+      .unwrap();
+    let empty_snap = snap(&empty_tbl, &empty_mapper, empty_root);
+    let empty_arg = || ScanArg {
+      tbl: &empty_tbl,
+      snapshot: &empty_snap,
+      tree: ScanTree::Data,
+      begin: b"",
+      end: b"",
+      page_size: 512,
+      max_entries: 0,
+      dict: None,
+      ttl_filter_now_ms: None,
+    };
+    assert_eq!(
+      scan_count(&empty_io, empty_arg(), ScanOption::default())
+        .await
+        .unwrap(),
+      2
+    );
+    assert_eq!(
+      scan_entries_with(&empty_io, empty_arg(), ScanOption::default())
+        .await
+        .unwrap()
+        .len(),
+      2
+    );
   });
 }
 
 /// 落盘 sem-66 对拍用的 4 页叶子链：entry 内容 / TTL / next-prev 链接固定为
-/// 同一份逻辑 oplog，只有物理布局（`fp_li` / `root_fp`）可变，用于铺出
-/// 「连续（投机命中）」与「散乱（批量读失败退化旁路）」两种盘面。
+/// 同一份逻辑 oplog，只有物理布局（`fp_li` / `root_fp`）可变。
 /// 返回 snapshot 用的 root `PageId`。
 async fn ttl_chain<I: PageIo>(
   io: &I,
@@ -483,17 +731,13 @@ async fn ttl_chain<I: PageIo>(
   id_li[4]
 }
 
-/// issue sem-66：同一份逻辑 oplog（entry / TTL / 链接）铺成两种盘面对拍——
-/// 连续物理布局（投机窗口全程命中，链页零逐页读）与退化旁路（批量读失败把
-/// 深度降 1、调用方丢弃窗口，此后逐页直读）——`scan_page_with` 的逐条 entry
+/// issue sem-66：同一份逻辑 oplog（entry / TTL / 链接）铺成两种物理布局
+/// （顺序 fp0..fp3 与散乱 fp0/fp10/fp1/fp2）——`scan_page_with` 的逐条 entry
 /// （key / value / timestamp / expire_ts 全字段）、TTL 过滤与配额截断
 /// （`has_remaining`）必须一致，并与显式期望逐值相等。
 ///
-/// 退化入口选批量读失败而非白读自适应：配额把窗口深度压到 2（`entry_limit / 8`
-/// 的下界），该深度下自适应不可达——每窗首页必是链的下一页、必被取走，单窗
-/// `wasted == consumed` 恒成立（白读自适应需深度 ≥ 3 即 `entry_limit >= 24`，
-/// 见无配额的 `degraded_window_bypasses_speculation`）；两条入口都终结于同
-/// 一个旁路（refill 置 `depth = 1` → 调用方 `window = None` 丢弃）。
+/// 小配额把预取深度压到 1（不预取），两种盘面都走逐页直读；布局差异不得影响
+/// 结果。
 #[test]
 fn bypass_and_speculation_paths_agree() {
   use fkv_task_scan::{PageOption, ScanArg, ScanOption, ScanPage, ScannedEntry, scan_page_with};
@@ -543,12 +787,8 @@ fn bypass_and_speculation_paths_agree() {
       expire_ts: expire,
     });
 
-    // 盘面一（投机生效）：链页物理连续 fp0..fp3、root@fp4，每个窗口都命中。
-    let io_spec = CountingIo {
-      inner: MemStore::new(512),
-      span_num: AtomicUsize::new(0),
-      owned_num: AtomicUsize::new(0),
-    };
+    // 盘面一：链页物理连续 fp0..fp3、root@fp4。
+    let io_spec = MemStore::new(512);
     let tbl_spec = TableIdent::new("demo", 66).unwrap();
     let mut mapper_spec = PageMapper::new(AllocMode::Append, 0);
     let root_spec = ttl_chain(&io_spec, &tbl_spec, &mut mapper_spec, [0, 1, 2, 3], 4).await;
@@ -558,18 +798,9 @@ fn bypass_and_speculation_paths_agree() {
       .unwrap();
     assert_eq!(page_spec.entry_li, expected);
     assert!(page_spec.has_remaining, "配额截断必须置 has_remaining");
-    // IO 形态锚定投机路径确实生效：owned 仅 index root + 首个 data 页，
-    // 两次窗口批量读（fp1 起两页 / fp3 起两页，后段尾页即 root@fp4）。
-    assert_eq!(io_spec.owned_num.load(Ordering::Relaxed), 2);
-    assert_eq!(io_spec.span_num.load(Ordering::Relaxed), 2);
 
-    // 盘面二（退化旁路）：同一 oplog，P1 散落到 fp10 且窗口第二页 fp11 未落盘，
-    // 首次批量读失败 → 深度降 1 → 窗口被丢弃 → P1..P3 逐页直读。
-    let io_byp = CountingIo {
-      inner: MemStore::new(512),
-      span_num: AtomicUsize::new(0),
-      owned_num: AtomicUsize::new(0),
-    };
+    // 盘面二：同一 oplog，P1 散落到 fp10，root@fp25。
+    let io_byp = MemStore::new(512);
     let tbl_byp = TableIdent::new("demo", 67).unwrap();
     let mut mapper_byp = PageMapper::new(AllocMode::Append, 0);
     let root_byp = ttl_chain(&io_byp, &tbl_byp, &mut mapper_byp, [0, 10, 1, 2], 25).await;
@@ -579,10 +810,6 @@ fn bypass_and_speculation_paths_agree() {
     assert_eq!(page_byp.entry_li, page_spec.entry_li);
     assert_eq!(page_byp.entry_li, expected);
     assert_eq!(page_byp.has_remaining, page_spec.has_remaining);
-    // IO 形态锚定旁路确实发生：唯一一次批量读即失败的那次，root + 4 个链页
-    // 全部逐页 owned 直读。
-    assert_eq!(io_byp.span_num.load(Ordering::Relaxed), 1);
-    assert_eq!(io_byp.owned_num.load(Ordering::Relaxed), 5);
   });
 }
 

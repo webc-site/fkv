@@ -889,6 +889,7 @@ mod tests {
       max_inflight_write: 32 * 1024,
       fd_limit: 10_000,
       page_cache_bytes: fkv_config::DEFAULT_PAGE_CACHE_BYTES as usize,
+      enable_data_page_cache: false,
       root_meta_cache_bytes: 0,
       io_queue_size: 4096,
       backend: crate::Backend::default(),

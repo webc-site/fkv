@@ -199,6 +199,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
     }
     self.ensure_page_cache(tbl);
     let page_cache_bytes = self.page_cache_bytes;
+    let data_page_cached = self.enable_data_page_cache;
     let compression_enabled = self.compression_level.is_some();
     let state = self.table_map.entry(tbl.clone()).or_default();
     let root_id = state.root.unwrap_or(NULL_PAGE);
@@ -265,7 +266,7 @@ impl<I: PageIo + ManifestIo> Store<I> {
       // 因此免一次磁盘读），写成功后回填同一个读写共用实例。失效由
       // `PageMapper::freed_file_page_li` 在批次结算时逐页执行，见 `page_cache`
       // 模块文档。
-      let io = CachedWriteIo::new(&self.io, page_cache, self.page_size);
+      let io = CachedWriteIo::new(&self.io, page_cache, self.page_size, data_page_cached);
       // `live_li` 在入口已判空，本批必然重写主树。
       let new_root = write_batch(
         &io,

@@ -20,13 +20,19 @@ use crate::{
 };
 
 impl<I: PageIo> Store<I> {
-  /// 读路径 IO：在真实 `PageIo` 外面包一层读写共用页缓存，未命中才回源磁盘。
+  /// 读路径 IO：在真实 `PageIo` 外面包一层读写共用页缓存；index 页恒走缓存，
+  /// data 页按 [`Store::enable_data_page_cache`] 分流。
   ///
   /// 缓存实例与写路径共用（`TableState::page_cache`）：写批刚写出的页，紧接着的
   /// 读请求直接命中。表没有缓存实例（预算 `0` / 表未打开）时完全直通。
   /// 只覆盖 `PageIo` 的页读；大 value 的 segment 读走 `SegmentIo`，不在此列。
   fn read_io(&self, tbl: &TableIdent) -> CachedReadIo<'_, I> {
-    CachedReadIo::new(&self.io, self.page_cache(tbl), self.page_size)
+    CachedReadIo::new(
+      &self.io,
+      self.page_cache(tbl),
+      self.page_size,
+      self.enable_data_page_cache,
+    )
   }
 
   /// 读上下文：快照 + 字典。

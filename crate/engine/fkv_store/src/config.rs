@@ -44,6 +44,9 @@ impl<I: PageIo> Store<I> {
       touch_clock: 0,
       defer_ttl: false,
       page_cache_bytes: fkv_config::DEFAULT_PAGE_CACHE_BYTES as usize,
+      // 对齐 C++ `KvOption::enable_data_page_cache` 默认 false：index 页进
+      // 页缓存，data 页直读盘。
+      enable_data_page_cache: false,
       snapshots: SnapshotRegistry::new(),
       generation_source: GenerationSource::new(),
       yield_budget_us: 0,
@@ -73,12 +76,15 @@ impl<I: PageIo> Store<I> {
   /// 每表页缓存（读写共用）字节预算（`0` = 关闭页缓存）。
   ///
   /// 写路径的 COW 每批都要读回上一批刚写下的同一路径（root → 内部 index →
-  /// leaf index → data 页），读路径的每一页页读也要落盘。本缓存把这些页留
-  /// 在内存里，读写两侧共用同一实例：写出的页紧接着就能被读命中，读过的页
+  /// leaf index → data 页），读路径的每一页页读也要落盘。本缓存把这些页留在
+  /// 内存里，读写两侧共用同一实例：写出的页紧接着就能被读命中，读过的页
   /// 也会被后续读请求命中（对齐 C++ 单池 buffer pool / swizzling 句柄）。
   ///
-  /// 预算即 `buffer_pool_size`（C++ 单池口径），超出即按 Clock 逐出；
-  /// `0` 显式关闭，读写路径都退化为直连 IO，盘面逐字节不变。
+  /// index 页始终经过本缓存；data 页是否入池由
+  /// [`Self::with_enable_data_page_cache`] 决定（默认关闭，对齐 C++
+  /// `KvOption::enable_data_page_cache`）。预算即 `buffer_pool_size`（C++
+  /// 单池口径），超出即按 Clock 逐出；`0` 显式关闭，读写路径都退化为直连 IO，
+  /// 盘面逐字节不变。
   pub fn with_page_cache_bytes(mut self, bytes: usize) -> Self {
     self.page_cache_bytes = bytes;
     self
@@ -87,6 +93,23 @@ impl<I: PageIo> Store<I> {
   /// 当前页缓存预算（`0` = 关闭）。
   pub fn page_cache_bytes(&self) -> usize {
     self.page_cache_bytes
+  }
+
+  /// data 页（含 overflow 页）是否进页缓存（对齐 C++
+  /// `KvOption::enable_data_page_cache`，默认 `false`）。
+  ///
+  /// index 页始终走页缓存；本开关只决定 data 页读 / 写是否查缓存、回填。
+  /// 关闭时行为等价 C++ `LoadDataPageStorage` / `LoadDataPageForUpdate`
+  /// 的直读分支：`page_cache_stat` 的 hit / miss / len 不随 data 页访问变化，
+  /// 盘面字节与开关开启时逐字节一致。
+  pub fn with_enable_data_page_cache(mut self, enabled: bool) -> Self {
+    self.enable_data_page_cache = enabled;
+    self
+  }
+
+  /// 当前 data 页缓存开关（默认 `false`）。
+  pub fn enable_data_page_cache(&self) -> bool {
+    self.enable_data_page_cache
   }
 
   /// index 页 restart 间隔（对齐 C++ `KvOption::index_page_restart_interval`）。

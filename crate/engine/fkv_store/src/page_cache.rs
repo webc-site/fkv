@@ -14,6 +14,23 @@
 //! - 读路径（[`CachedReadIo`]）：全部 `read_page*` 先探缓存，未命中读盘后回填；
 //!   写类方法直通内层（读装饰器不得改变写语义）。
 //!
+//! ## index 页 / data 页分流（对齐 C++ `enable_data_page_cache`）
+//!
+//! C++ 的开关只门控 **data 页**：`LoadDataPage()` 关闭时走
+//! `LoadDataPageStorage()`，完全不碰 buffer pool；index 页始终经
+//! `PageManager::FindPage`。fkv 的 `FilePageId` 在读到页头之前无法区分类型，
+//! 因此装饰器在**读盘成功后**按页头 `PageType` 分类（`cacheable`）：
+//!
+//! - 开关开启：所有页类型读写都经过缓存（与改造前逐字节一致）；
+//! - 开关关闭：index 页照常命中 / 回填 / 计账；`Data` / `Overflow` 页既不
+//!   命中计账也不回填（写出的 data 页还会显式失效同 id 旧条目）。因此
+//!   `page_cache_stat` 的 `miss` / `len` 不随 data 页访问变化，等价 C++
+//!   `LoadDataPageStorage` 绕过 buffer pool 的语义。index 页的 miss 延后到
+//!   分类之后补记（[`PageCache::record_miss`]），避免把 data 页算进去。
+//!
+//! 分类只看一个页头字节，不引入任何新缓存层；缓存仍然只决定「字节从哪里
+//! 来」，不改变写出的字节、写顺序、fsync 顺序与 manifest 形态。
+//!
 //! 命中 / 未命中按读写两侧分别累计（`CacheSide`，仅用于内部计数），对外的
 //! `page_cache_*` 指标是两者之和；占用与逐出是同一个池的公共账目。
 //!
@@ -57,10 +74,12 @@
 //! 缓存只影响**读到的字节来源**，不改变写出的字节、写顺序、fsync 顺序与
 //! manifest 形态：开启与关闭缓存产出逐字节相同的盘面（见 `tests/page_cache.rs`）。
 //!
-//! 缓存只覆盖 `PageIo` 的 data 页 / overflow 页（两者都由 data mapper 分配、
-//! 退役时进 `freed_file_page_li`）。大 value 的 segment 读走 `SegmentIo`，不在
-//! 本缓存内：segment 文件按槽位顺序写、单次读即用，缓存收益低且需要另一套
-//! 退役对账，因此明确不缓存（读到的字节仍直连后端）。
+//! 缓存覆盖 `PageIo` 的 index 页、data 页与 overflow 页（data / overflow 由
+//! data mapper 分配、退役时进 `freed_file_page_li`）。其中 data / overflow 页
+//! 只有在 [`Store::enable_data_page_cache`](crate::Store::enable_data_page_cache)
+//! 开启时才入池；关闭时（默认）只有 index 页占用预算。大 value 的 segment 读
+//! 走 `SegmentIo`，不在本缓存内：segment 文件按槽位顺序写、单次读即用，缓存
+//! 收益低且需要另一套退役对账，因此明确不缓存（读到的字节仍直连后端）。
 //!
 //! ## 实测（macOS，rows=200000、batch-size=1、128B 值，`fkv_bench`）
 //!
@@ -73,6 +92,7 @@ use std::{cell::RefCell, collections::VecDeque, sync::Arc};
 
 use fkv_error::{KvError, Result};
 use fkv_io::{PageIo, PageRef};
+use fkv_page::{PageType, page_type};
 use fkv_types::{FilePageId, TableIdent};
 use gxhash::{HashMap, HashSet};
 
@@ -192,18 +212,51 @@ impl PageCache {
 
   /// 探测一页；命中返回整页字节并置引用位、记一次 hit，未命中记一次 miss。
   pub(crate) fn get(&self, file_page_id: FilePageId, side: CacheSide) -> Option<Arc<[u8]>> {
+    self.probe(file_page_id, side, true)
+  }
+
+  /// 只记命中的探测（data 页缓存关闭时用）。
+  ///
+  /// 关闭 data 页缓存后，data 页在读到之前无法从 `FilePageId` 判定类型，
+  /// 因此先按未命中继续读盘、拿到页头后再决定是否记 miss / 回填
+  /// （[`Self::record_miss`]）。索引页的 miss 因此延后到分类之后，data 页
+  /// 则完全不计账——对齐 C++ `LoadDataPageStorage` 绕过 `FindPage` 的语义。
+  pub(crate) fn get_hit_only(
+    &self,
+    file_page_id: FilePageId,
+    side: CacheSide,
+  ) -> Option<Arc<[u8]>> {
+    self.probe(file_page_id, side, false)
+  }
+
+  fn probe(
+    &self,
+    file_page_id: FilePageId,
+    side: CacheSide,
+    account_miss: bool,
+  ) -> Option<Arc<[u8]>> {
     if !self.enabled() {
       return None;
     }
     let Some(entry) = self.page_map.get(&file_page_id) else {
-      let miss = self.miss_counter(side);
-      miss.set(miss.get() + 1);
+      if account_miss {
+        self.record_miss(side);
+      }
       return None;
     };
     entry.referenced.set(true);
     let hit = self.hit_counter(side);
     hit.set(hit.get() + 1);
     Some(Arc::clone(&entry.page))
+  }
+
+  /// 补记一次未命中（data 页缓存关闭时，分类为索引页后调用）。
+  pub(crate) fn record_miss(&self, side: CacheSide) {
+    if !self.enabled() {
+      return;
+    }
+    let miss = self.miss_counter(side);
+    miss.set(miss.get() + 1);
   }
 
   /// 回填 / 覆盖一页；容量不足时按 Clock 逐出到预算内。
@@ -323,6 +376,14 @@ struct CachedIo<'a, I> {
   /// 写成功后是否把写出的字节回填进缓存。写路径 `true`；读路径 `false`
   /// （读装饰器不参与写，若真被写到也只做保守失效，见 [`Self::write_page`]）。
   refill_on_write: bool,
+  /// data 页（含 overflow 页）是否进缓存。
+  ///
+  /// `true`：当前行为，所有页类型读写都经过缓存。
+  /// `false`（对齐 C++ `enable_data_page_cache=false`）：index 页仍走缓存，
+  /// data / overflow 页读到后不回填、命中 / 未命中都不计账；写出的 data 页
+  /// 不回填（并显式失效同 id 旧条目），等价 `LoadDataPageStorage` /
+  /// `LoadDataPageForUpdate` 的直读直写分支。
+  data_page_cached: bool,
 }
 
 impl<'a, I> CachedIo<'a, I> {
@@ -332,6 +393,7 @@ impl<'a, I> CachedIo<'a, I> {
     page_size: usize,
     side: CacheSide,
     refill_on_write: bool,
+    data_page_cached: bool,
   ) -> Self {
     Self {
       inner,
@@ -339,6 +401,7 @@ impl<'a, I> CachedIo<'a, I> {
       page_size,
       side,
       refill_on_write,
+      data_page_cached,
     }
   }
 
@@ -351,12 +414,20 @@ impl<'a, I> CachedIo<'a, I> {
   }
 
   /// 命中缓存时把整页拷进 `dst`；返回是否命中。缓存条目恒为整页。
+  ///
+  /// data 页缓存关闭时用 [`PageCache::get_hit_only`]：未命中不立刻计账，
+  /// 等读到页头、分类后再由 [`Self::refill_after_read`] 决定。
   fn fill_from_cache(&self, file_page_id: FilePageId, dst: &mut [u8]) -> bool {
     let Some(cache) = self.cache else {
       return false;
     };
     let cache = cache.borrow();
-    let Some(page) = cache.get(file_page_id, self.side) else {
+    let page = if self.data_page_cached {
+      cache.get(file_page_id, self.side)
+    } else {
+      cache.get_hit_only(file_page_id, self.side)
+    };
+    let Some(page) = page else {
       return false;
     };
     // 命中路径下 `dst` 长度已校验 ≥ page_size；`min` 只防御条目异常变短。
@@ -365,28 +436,53 @@ impl<'a, I> CachedIo<'a, I> {
     true
   }
 
-  /// 读盘成功后回填（只取整页前缀，忽略调用方缓冲的尾部余量）。
+  /// 该页类型是否允许进缓存。
+  ///
+  /// index 页永远可缓存；data / overflow 页由 `data_page_cached` 决定。
+  /// 页头损坏（`page_type` 报错）按可缓存处理：缓存只负责字节身份，
+  /// 坏页由调用方按原有错误路径拒绝。
+  fn cacheable(&self, page: &[u8]) -> bool {
+    if self.data_page_cached {
+      return true;
+    }
+    !matches!(page_type(page), Ok(PageType::Data | PageType::Overflow))
+  }
+
+  /// 读盘成功后按页类型回填（只取整页前缀，忽略调用方缓冲的尾部余量）。
   ///
   /// 调用点只在 `Ok` 之后调用本方法：EOF / 校验失败 / 不存在的页不会进缓存。
-  fn refill(&self, file_page_id: FilePageId, buf: &[u8]) {
+  /// data 页缓存关闭时，data / overflow 页既不回填也不补记 miss，
+  /// 与 C++ `LoadDataPageStorage` 完全绕过 buffer pool 一致。
+  fn refill_after_read(&self, file_page_id: FilePageId, buf: &[u8]) {
     let Some(cache) = self.cache else {
       return;
     };
     let len = buf.len().min(self.page_size);
-    cache
-      .borrow_mut()
-      .insert(file_page_id, Arc::from(&buf[..len]));
+    let buf = buf.get(..len).unwrap_or(buf);
+    if !self.cacheable(buf) {
+      return;
+    }
+    if !self.data_page_cached {
+      cache.borrow().record_miss(self.side);
+    }
+    cache.borrow_mut().insert(file_page_id, Arc::from(buf));
   }
 
-  /// 写成功后回填写出的整页（写路径）。
+  /// 写成功后按页类型回填写出的整页（写路径）。
+  ///
+  /// data 页缓存关闭时，写出的 data / overflow 页不入池，并显式失效同 id
+  /// 旧条目（COW / 池复用下同一物理 id 可能曾是索引页），维持硬不变量。
   fn insert_page(&self, file_page_id: FilePageId, page: &[u8]) {
     let Some(cache) = self.cache else {
       return;
     };
     let len = page.len().min(self.page_size);
-    cache
-      .borrow_mut()
-      .insert(file_page_id, Arc::from(&page[..len]));
+    let page = page.get(..len).unwrap_or(page);
+    if !self.cacheable(page) {
+      cache.borrow_mut().remove(file_page_id);
+      return;
+    }
+    cache.borrow_mut().insert(file_page_id, Arc::from(page));
   }
 
   /// 读装饰器被写时的保守失效：盘上字节已变，旧条目不能再命中。
@@ -402,13 +498,19 @@ impl<'a, I> CachedIo<'a, I> {
 pub(crate) struct CachedWriteIo<'a, I>(CachedIo<'a, I>);
 
 impl<'a, I: PageIo> CachedWriteIo<'a, I> {
-  pub(crate) fn new(inner: &'a I, cache: &'a RefCell<PageCache>, page_size: usize) -> Self {
+  pub(crate) fn new(
+    inner: &'a I,
+    cache: &'a RefCell<PageCache>,
+    page_size: usize,
+    data_page_cached: bool,
+  ) -> Self {
     Self(CachedIo::new(
       inner,
       Some(cache),
       page_size,
       CacheSide::Write,
       true,
+      data_page_cached,
     ))
   }
 }
@@ -421,13 +523,19 @@ impl<'a, I: PageIo> CachedWriteIo<'a, I> {
 pub(crate) struct CachedReadIo<'a, I>(CachedIo<'a, I>);
 
 impl<'a, I: PageIo> CachedReadIo<'a, I> {
-  pub(crate) fn new(inner: &'a I, cache: Option<&'a RefCell<PageCache>>, page_size: usize) -> Self {
+  pub(crate) fn new(
+    inner: &'a I,
+    cache: Option<&'a RefCell<PageCache>>,
+    page_size: usize,
+    data_page_cached: bool,
+  ) -> Self {
     Self(CachedIo::new(
       inner,
       cache,
       page_size,
       CacheSide::Read,
       false,
+      data_page_cached,
     ))
   }
 }
@@ -567,7 +675,7 @@ impl<I: PageIo> PageIo for CachedIo<'_, I> {
       return Ok(());
     }
     self.inner.read_page(tbl, file_page_id, dst).await?;
-    self.refill(file_page_id, dst);
+    self.refill_after_read(file_page_id, dst);
     Ok(())
   }
 
@@ -579,18 +687,19 @@ impl<I: PageIo> PageIo for CachedIo<'_, I> {
     buf: &'a mut Vec<u8>,
   ) -> Result<PageRef<'a>> {
     self.check_dst(buf.len())?;
-    if let Some(cache) = self.cache
-      && let Some(page) = cache.borrow().get(file_page_id, self.side)
-    {
+    let hit = self.cache.and_then(|cache| {
+      let cache = cache.borrow();
+      if self.data_page_cached {
+        cache.get(file_page_id, self.side)
+      } else {
+        cache.get_hit_only(file_page_id, self.side)
+      }
+    });
+    if let Some(page) = hit {
       return Ok(PageRef::Shared(page));
     }
     self.inner.read_page_owned(tbl, file_page_id, buf).await?;
-    if let Some(cache) = self.cache {
-      let len = buf.len().min(self.page_size);
-      cache
-        .borrow_mut()
-        .insert(file_page_id, Arc::from(&buf[..len]));
-    }
+    self.refill_after_read(file_page_id, buf);
     Ok(PageRef::Borrowed(buf.as_slice()))
   }
 
@@ -606,7 +715,7 @@ impl<I: PageIo> PageIo for CachedIo<'_, I> {
     }
     // 转发给内层：本地后端可直接把页读进调用方 `Vec`（零整页拷贝）。
     self.inner.read_page_owned(tbl, file_page_id, buf).await?;
-    self.refill(file_page_id, buf);
+    self.refill_after_read(file_page_id, buf);
     Ok(())
   }
 
@@ -647,7 +756,7 @@ impl<I: PageIo> PageIo for CachedIo<'_, I> {
     for ((idx, file_page_id), buf) in miss_idx_li.iter().zip(miss_id_li).zip(miss_buf_li) {
       // 失败批次不区分哪些页已经成功落进缓冲：整批不回填，错误照原样上抛。
       if result.is_ok() {
-        self.refill(file_page_id, &buf);
+        self.refill_after_read(file_page_id, &buf);
       }
       page_buf_li[*idx] = buf;
     }
@@ -683,7 +792,7 @@ impl<I: PageIo> PageIo for CachedIo<'_, I> {
       let result = self.inner.read_page_span(tbl, start_fp, run).await;
       if result.is_ok() {
         for (offset, buf) in run.iter().enumerate() {
-          self.refill(start_fp + offset as u64, buf);
+          self.refill_after_read(start_fp + offset as u64, buf);
         }
       }
       result?;
@@ -866,14 +975,14 @@ mod tests {
         .page_cache
         .as_ref()
         .unwrap();
-      let write_io = CachedWriteIo::new(&store.io, cache, page_size);
+      let write_io = CachedWriteIo::new(&store.io, cache, page_size, true);
       let mut buf = vec![0u8; page_size];
       write_io
         .read_page_owned(&tbl, fp_a, &mut buf)
         .await
         .unwrap();
       assert_eq!(buf, bytes_a, "阳性对照：缓存里有条目时命中的就是它");
-      let read_io = CachedReadIo::new(&store.io, Some(cache), page_size);
+      let read_io = CachedReadIo::new(&store.io, Some(cache), page_size, true);
       buf.fill(0);
       read_io.read_page_owned(&tbl, fp_a, &mut buf).await.unwrap();
       assert_eq!(buf, bytes_a, "读路径同样命中同一实例");
@@ -923,14 +1032,14 @@ mod tests {
         .page_cache
         .as_ref()
         .unwrap();
-      let write_io = CachedWriteIo::new(&store.io, cache, page_size);
+      let write_io = CachedWriteIo::new(&store.io, cache, page_size, true);
       let mut buf = vec![0u8; page_size];
       write_io
         .read_page_owned(&tbl, fp_b, &mut buf)
         .await
         .unwrap();
       assert_eq!(buf, bytes_b, "复用页不得返回上一世的字节");
-      let read_io = CachedReadIo::new(&store.io, Some(cache), page_size);
+      let read_io = CachedReadIo::new(&store.io, Some(cache), page_size, true);
       buf.fill(0);
       read_io.read_page_owned(&tbl, fp_b, &mut buf).await.unwrap();
       assert_eq!(buf, bytes_b, "读路径也不得返回上一世的字节");

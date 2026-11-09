@@ -300,9 +300,20 @@ pub struct Store<I> {
   defer_ttl: bool,
   /// 每表页缓存（读写共用）字节预算；`0` 表示**关闭**页缓存。
   ///
-  /// 对齐 C++ `PageManager` 的单一 buffer pool：index 页与 data 页同池，
-  /// 读写两侧共用同一实例与同一份预算。关闭时读写路径都直连 IO。
+  /// 对齐 C++ `PageManager` 的单一 buffer pool：index 页与 data 页共用一个
+  /// 实例与一份预算。index 页始终经过本缓存；data 页是否入池由
+  /// [`Self::enable_data_page_cache`] 决定（默认关闭，对齐 C++
+  /// `KvOption::enable_data_page_cache`）。预算为 `0` 时读写路径都直连 IO。
   page_cache_bytes: usize,
+  /// data 页（含 overflow 页）是否进页缓存；对齐 C++
+  /// `KvOption::enable_data_page_cache`，默认 `false`。
+  ///
+  /// index 页始终走页缓存（C++ `FindPage`），不受本开关影响；开关关闭时
+  /// data 页的读 / 写都退化为 `LoadDataPageStorage` 的直读直写语义：
+  /// 不查缓存计账、不回填，因此 `page_cache_stat` 的 hit / miss / len
+  /// 不随 data 页访问变化。开关只影响「字节从哪里来」，不改变写出的字节、
+  /// 写顺序与 fsync 顺序。
+  enable_data_page_cache: bool,
   /// 活跃 mapper 快照登记表：GC retained set 必须并集所有仍被读请求持有的
   /// 旧映射，否则旧快照独占的 file page 会被提前回收（27a）。
   snapshots: SnapshotRegistry,

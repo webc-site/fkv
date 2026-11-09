@@ -46,6 +46,7 @@ pub(crate) struct StoreCfg {
   pub segment_file_amplify_factor: u8,
   pub manifest_limit: usize,
   pub page_cache_bytes: usize,
+  pub enable_data_page_cache: bool,
   pub pages_per_file_shift: u8,
   pub yield_budget_us: u64,
   pub compression_level: Option<i32>,
@@ -448,6 +449,7 @@ impl PartitionStoreMap {
       .with_manifest_limit(cfg.manifest_limit)
       // 读写共用同一个页缓存池（C++ `PageManager` 单池口径）。
       .with_page_cache_bytes(cfg.page_cache_bytes)
+      .with_enable_data_page_cache(cfg.enable_data_page_cache)
       .with_pages_per_file_shift(cfg.pages_per_file_shift)
       .with_yield_budget_us(cfg.yield_budget_us)
       .with_alloc_mode(cfg.alloc_mode)
@@ -532,6 +534,7 @@ mod tests {
       segment_file_amplify_factor: 0,
       manifest_limit: 8 * 1024 * 1024,
       page_cache_bytes: 1024 * 1024,
+      enable_data_page_cache: false,
       pages_per_file_shift: DEFAULT_PAGES_PER_FILE_SHIFT,
       yield_budget_us: 0,
       compression_level: None,

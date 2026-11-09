@@ -159,6 +159,11 @@ fn build_shard_cfg(
         bytes
       }) as usize
     },
+    // 对齐 C++ `KvOption::enable_data_page_cache` 默认 false：index 页始终
+    // 走页缓存，data 页只在显式开启时进池。
+    enable_data_page_cache: option.map_or(option_default.enable_data_page_cache, |opts| {
+      opts.enable_data_page_cache
+    }),
     root_meta_cache_bytes: shard_root_meta_cache_bytes,
     io_queue_size,
     backend,
@@ -507,5 +512,27 @@ mod tests {
     assert_eq!(cfg.overflow_pointers, 16);
     assert_eq!(cfg.page_cache_bytes, 128 * 1024 * 1024);
     assert_eq!(cfg.fd_limit, 10_000);
+    assert!(
+      !cfg.enable_data_page_cache,
+      "对齐 C++ KvOption::enable_data_page_cache 默认 false"
+    );
+  }
+
+  /// `KvOption::enable_data_page_cache` 显式开启后必须原样投影到 `ShardConfig`。
+  #[test]
+  fn data_page_cache_option_projects_to_shard_config() {
+    let config = config();
+    let mut option = KvOption::default();
+    option.enable_data_page_cache = true;
+    let settings = resolve_settings(&config, Some(&option)).unwrap();
+    let cfg = build_shard_cfg(
+      &config,
+      Some(&option),
+      &settings,
+      Backend::Mem,
+      StoreMode::Local,
+      None,
+    );
+    assert!(cfg.enable_data_page_cache);
   }
 }

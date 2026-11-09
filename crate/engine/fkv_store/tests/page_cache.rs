@@ -179,8 +179,9 @@ where
 fn write_cache_cuts_cow_path_disk_reads() {
   pollster::block_on(async {
     let rows = 20_000u32;
-    let mut with_cache =
-      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_BYTES);
+    let mut with_cache = Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16)
+      .with_page_cache_bytes(CACHE_BYTES)
+      .with_enable_data_page_cache(true);
     let mut without_cache =
       Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_OFF);
     run_single_key_writes(&mut with_cache, rows).await;
@@ -252,6 +253,16 @@ fn dir_snapshot(root: &Path) -> BTreeMap<String, Vec<u8>> {
 }
 
 fn compio_store(root: &Path, cache_bytes: usize, alloc_mode: AllocMode) -> Store<CompioStore> {
+  compio_store_data_cache(root, cache_bytes, alloc_mode, true)
+}
+
+/// 同上，但显式指定 `enable_data_page_cache`（差分用）。
+fn compio_store_data_cache(
+  root: &Path,
+  cache_bytes: usize,
+  alloc_mode: AllocMode,
+  data_page_cache: bool,
+) -> Store<CompioStore> {
   let layout = SegmentLayout::new(PAGE_SIZE as u32, 2).unwrap();
   Store::new(
     CompioStore::new(root.to_path_buf(), PAGE_SIZE, DEFAULT_PAGES_PER_FILE_SHIFT),
@@ -261,6 +272,7 @@ fn compio_store(root: &Path, cache_bytes: usize, alloc_mode: AllocMode) -> Store
   .with_alloc_mode(alloc_mode)
   .with_large_value(layout, 1024)
   .with_page_cache_bytes(cache_bytes)
+  .with_enable_data_page_cache(data_page_cache)
 }
 
 /// 混合 workload：批量 put、覆盖、删除、大 value、交错点读。
@@ -386,6 +398,42 @@ async fn write_cache_on_off_store_bytes_identical() {
   }
 }
 
+/// `enable_data_page_cache` 只影响字节来源，不改变盘面：同一 workload 在
+/// 开关 on / off 下产出逐字节相同的 store 目录。
+///
+/// 与 `write_cache_on_off_store_bytes_identical` 的区别是这里两侧页缓存预算
+/// 相同（`CACHE_BYTES`），只切 data 页缓存开关，隔离出本开关的唯一变量。
+#[compio::test]
+async fn data_page_cache_on_off_store_bytes_identical() {
+  for alloc_mode in [AllocMode::Append, AllocMode::Pooled] {
+    let on_root = TempRoot::new("dpc_diff_on");
+    let off_root = TempRoot::new("dpc_diff_off");
+    let mut on = compio_store_data_cache(on_root.path(), CACHE_BYTES, alloc_mode, true);
+    let mut off = compio_store_data_cache(off_root.path(), CACHE_BYTES, alloc_mode, false);
+    let on_observed = mixed_workload(&mut on).await;
+    let off_observed = mixed_workload(&mut off).await;
+    assert_eq!(
+      on_observed, off_observed,
+      "data 页缓存开关不得改变可见数据 (mode={alloc_mode:?})"
+    );
+
+    let on_files = dir_snapshot(on_root.path());
+    let off_files = dir_snapshot(off_root.path());
+    assert_eq!(
+      on_files.keys().collect::<Vec<_>>(),
+      off_files.keys().collect::<Vec<_>>(),
+      "文件集必须一致 (mode={alloc_mode:?})"
+    );
+    for (name, bytes) in &on_files {
+      assert_eq!(
+        bytes,
+        off_files.get(name).unwrap(),
+        "文件字节必须一致: {name} (mode={alloc_mode:?})"
+      );
+    }
+  }
+}
+
 // 池复用正确性
 
 /// 验收 3（端到端）：Pooled 下反复覆盖 / 删除（物理页会被回收再复用）后，
@@ -396,7 +444,8 @@ fn write_cache_pooled_page_reuse_keeps_latest_values() {
     let tbl = TableIdent::new("reuse", 1).unwrap();
     let mut store = Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16)
       .with_alloc_mode(AllocMode::Pooled)
-      .with_page_cache_bytes(CACHE_BYTES);
+      .with_page_cache_bytes(CACHE_BYTES)
+      .with_enable_data_page_cache(true);
     let key_num = 400u32;
     for round in 0..8u32 {
       // 全量覆盖（COW remap + retire），值随轮次变化。
@@ -563,7 +612,8 @@ fn failed_batch_clears_write_cache() {
       PAGE_SIZE,
       16,
     )
-    .with_page_cache_bytes(CACHE_BYTES);
+    .with_page_cache_bytes(CACHE_BYTES)
+    .with_enable_data_page_cache(true);
     // 先写几批把缓存捂热。
     for round in 0..6u32 {
       let batch: Vec<BatchEntry> = (0..8)
@@ -716,7 +766,8 @@ fn repeated_failed_batches_keep_cache_empty() {
       PAGE_SIZE,
       16,
     )
-    .with_page_cache_bytes(CACHE_BYTES);
+    .with_page_cache_bytes(CACHE_BYTES)
+    .with_enable_data_page_cache(true);
     for _ in 0..3 {
       let err = store
         .put(
@@ -741,8 +792,9 @@ fn repeated_failed_batches_keep_cache_empty() {
 fn read_cache_serves_repeated_reads_without_disk_reads() {
   pollster::block_on(async {
     let tbl = TableIdent::new("rc_hit", 1).unwrap();
-    let mut store =
-      Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16).with_page_cache_bytes(CACHE_BYTES);
+    let mut store = Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16)
+      .with_page_cache_bytes(CACHE_BYTES)
+      .with_enable_data_page_cache(true);
     let key_li: Vec<Vec<u8>> = (0..300u32)
       .map(|idx| format!("k{idx:05}").into_bytes())
       .collect();
@@ -850,6 +902,155 @@ fn read_cache_disabled_is_a_passthrough() {
     assert_eq!(read.bytes, 0);
     assert_eq!(read.hit, 0, "关闭时读路径不应有命中");
     assert_eq!(read.miss, 0, "关闭时读路径不应记录未命中");
+  });
+}
+
+/// 默认 `enable_data_page_cache == false`：data 页读取直读盘、不回填、不计账；
+/// index 页照常进缓存并计入命中 / 未命中。
+///
+/// 构造一棵「leaf index -> 多个 data 页」的树，`reopen` 清空页缓存后：
+/// 第一次点读只把 index 页读进缓存（data 页直读）；后续反复点读全部命中
+/// index 页，但 data 页仍逐次读盘。`miss` / `len` 不随 data 页读变化，
+/// 而 `hit` / 底层页读次数照常增长。
+#[test]
+fn data_page_cache_off_keeps_data_pages_out_of_cache() {
+  pollster::block_on(async {
+    let tbl = TableIdent::new("dpc_off", 1).unwrap();
+    let mut store = Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16)
+      .with_page_cache_bytes(CACHE_BYTES)
+      .with_enable_data_page_cache(false);
+    assert!(!store.enable_data_page_cache(), "默认必须关闭 data 页缓存");
+    let key_li: Vec<Vec<u8>> = (0..600u32)
+      .map(|idx| format!("k{idx:05}").into_bytes())
+      .collect();
+    let value = |idx: u32| -> Vec<u8> { vec![(idx % 251) as u8; 120] };
+    for (round, chunk) in key_li.chunks(100).enumerate() {
+      let batch: Vec<BatchEntry> = chunk
+        .iter()
+        .enumerate()
+        .map(|(offset, key)| {
+          let idx = round as u32 * 100 + offset as u32;
+          BatchEntry::upsert(key.clone(), value(idx), u64::from(idx) + 1)
+        })
+        .collect();
+      store.put(&tbl, &batch).await.unwrap();
+    }
+    // reopen 按契约清空页缓存（含写路径回填的 index 页），保证下面第一遍读
+    // 必须真的回源。
+    store.reopen(&tbl).await.unwrap();
+    // `clear` 只清条目、不重置累计计数器；用读前基线取增量。
+    let base = store.page_cache_stat();
+    assert_eq!(base.len, 0, "reopen 必须清空缓存条目");
+
+    // 第一次点读：读 index 页（miss + 回填）与 data 页（直读，不记账）。
+    assert_eq!(
+      store.get(&tbl, &key_li[0]).await.unwrap(),
+      Some(value(0)),
+      "数据页直读必须返回正确值"
+    );
+    let after_warm = store.page_cache_stat();
+    let reads_after_warm = store.page_io().read_num.get();
+    assert!(after_warm.len >= 1, "index 页必须进缓存");
+    assert_eq!(
+      after_warm.miss - base.miss,
+      1,
+      "只有 index 页的 miss 被记账"
+    );
+
+    // 重复点读 20 个不同 data 页两遍：index 页全命中，data 页每次直读。
+    for _ in 0..2 {
+      for key in key_li.iter().take(20) {
+        store.get(&tbl, key).await.unwrap().expect("key 必须存在");
+      }
+    }
+    let after = store.page_cache_stat();
+    let reads_after = store.page_io().read_num.get();
+    assert_eq!(
+      after.len, after_warm.len,
+      "data 页读取不得增加缓存条目: warm={} after={}",
+      after_warm.len, after.len
+    );
+    assert_eq!(after.miss, after_warm.miss, "data 页读取不得增加 miss 计数");
+    assert!(
+      after.hit > after_warm.hit,
+      "index 页命中必须照常计数: {} -> {}",
+      after_warm.hit,
+      after.hit
+    );
+    assert!(
+      reads_after > reads_after_warm,
+      "data 页关闭缓存后必须每次回源读盘: {reads_after_warm} -> {reads_after}"
+    );
+  });
+}
+
+/// 打开 `enable_data_page_cache`：行为与改造前一致——index 页与 data 页都进
+/// 缓存，首次读的 index / data 各记一次 miss，重复读全部命中且不再触盘。
+#[test]
+fn data_page_cache_on_caches_index_and_data_pages() {
+  pollster::block_on(async {
+    let tbl = TableIdent::new("dpc_on", 1).unwrap();
+    let mut store = Store::new(CountingIo::new(PAGE_SIZE), PAGE_SIZE, 16)
+      .with_page_cache_bytes(CACHE_BYTES)
+      .with_enable_data_page_cache(true);
+    let key_li: Vec<Vec<u8>> = (0..600u32)
+      .map(|idx| format!("k{idx:05}").into_bytes())
+      .collect();
+    let value = |idx: u32| -> Vec<u8> { vec![(idx % 251) as u8; 120] };
+    for (round, chunk) in key_li.chunks(100).enumerate() {
+      let batch: Vec<BatchEntry> = chunk
+        .iter()
+        .enumerate()
+        .map(|(offset, key)| {
+          let idx = round as u32 * 100 + offset as u32;
+          BatchEntry::upsert(key.clone(), value(idx), u64::from(idx) + 1)
+        })
+        .collect();
+      store.put(&tbl, &batch).await.unwrap();
+    }
+    store.reopen(&tbl).await.unwrap();
+
+    // 首次点读：index 页 + data 页各回源一次、各记一次 miss。
+    let before = store.page_cache_stat();
+    assert_eq!(store.get(&tbl, &key_li[0]).await.unwrap(), Some(value(0)));
+    let warmed = store.page_cache_stat();
+    assert!(
+      warmed.miss - before.miss >= 2,
+      "index + data 页首次读都必须记 miss: {} -> {}",
+      before.miss,
+      warmed.miss
+    );
+    assert!(warmed.len >= 2, "index 与 data 页都必须进缓存");
+    let reads_warm = store.page_io().read_num.get();
+
+    // 同一 key 重复读：index + data 全命中，不再触盘。
+    assert_eq!(store.get(&tbl, &key_li[0]).await.unwrap(), Some(value(0)));
+    let hit_after_repeat = store.page_cache_stat();
+    assert!(
+      hit_after_repeat.hit - warmed.hit >= 2,
+      "index + data 页重复读都必须命中: {} -> {}",
+      warmed.hit,
+      hit_after_repeat.hit
+    );
+    assert_eq!(
+      store.page_io().read_num.get(),
+      reads_warm,
+      "重复读同一 key 不得再触盘"
+    );
+
+    // 20 个不同 key 读两遍：第一遍可能补读 data 页，第二遍必须全部命中。
+    for key in key_li.iter().take(20) {
+      store.get(&tbl, key).await.unwrap().expect("key 必须存在");
+    }
+    let reads_after_first_pass = store.page_io().read_num.get();
+    for key in key_li.iter().take(20) {
+      store.get(&tbl, key).await.unwrap().expect("key 必须存在");
+    }
+    assert_eq!(
+      store.page_io().read_num.get(),
+      reads_after_first_pass,
+      "第二遍读必须全部命中页缓存"
+    );
   });
 }
 
@@ -997,7 +1198,8 @@ async fn read_cache_sees_writes_deletes_compaction_reopen_and_truncate() {
   .with_alloc_mode(AllocMode::Append)
   .with_large_value(layout, 1024)
   .with_file_amplify_factor(1)
-  .with_page_cache_bytes(CACHE_BYTES);
+  .with_page_cache_bytes(CACHE_BYTES)
+  .with_enable_data_page_cache(true);
   let key_li: Vec<Vec<u8>> = (0..64u32)
     .map(|idx| format!("k{idx:04}").into_bytes())
     .collect();
@@ -1111,7 +1313,8 @@ async fn compact_clears_page_cache_before_moving_pages() {
     TINY_PAGE,
     16,
   )
-  .with_page_cache_bytes(CACHE_BYTES);
+  .with_page_cache_bytes(CACHE_BYTES)
+  .with_enable_data_page_cache(true);
 
   let batch: Vec<BatchEntry> = (0..60u32)
     .map(|i| BatchEntry::upsert(format!("k{i:03}").into_bytes(), vec![b'v'; 100], 1))
