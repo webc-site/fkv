@@ -37,7 +37,6 @@ impl<I: PageIo> Store<I> {
       overflow_pointers: fkv_page::DEFAULT_OVERFLOW_POINTERS,
       file_amplify_factor: 0,
       segment_file_amplify_factor: 0,
-      max_open_tables: 0,
       root_meta_cache_bytes: 0,
       root_meta_used: 0,
       table_order_li: VecDeque::new(),
@@ -133,12 +132,6 @@ impl<I: PageIo> Store<I> {
   /// 开启后用 `drain_pending_ttl*` 执行清理。
   pub fn with_deferred_ttl(mut self, defer_ttl: bool) -> Self {
     self.defer_ttl = defer_ttl;
-    self
-  }
-
-  /// 限制同时驻留内存的 table 数；超限驱逐最久未写的表（0 = 不限制）。
-  pub fn with_max_open_tables(mut self, max_open_tables: usize) -> Self {
-    self.max_open_tables = max_open_tables;
     self
   }
 

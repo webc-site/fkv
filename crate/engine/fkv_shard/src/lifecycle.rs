@@ -664,7 +664,7 @@ impl TableOpen {
   /// 与当前身份一致。
   ///
   /// 登记缺失 / 代际或身份不符按「未就绪」处理，由串行打开路径补齐；这样登记表
-  /// 与 `Store` 的淘汰（detach / drop_table / max_open_tables）不会产生
+  /// 与 `Store` 的淘汰（detach / drop_table / root_meta 预算）不会产生
   /// 「登记为已打开、实际不存在」的静默丢读。
   pub(crate) fn ready(
     &self,

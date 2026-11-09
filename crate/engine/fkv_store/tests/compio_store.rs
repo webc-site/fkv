@@ -216,39 +216,3 @@ async fn evict_table_clears_state_and_reopen_reloads() {
   store.reopen(&tbl).await.unwrap();
   assert_eq!(store.get(&tbl, b"a").await.unwrap(), Some(b"A".to_vec()));
 }
-
-/// issue 13：`max_open_tables` 超限时按 FIFO 驱逐最久未写的表，重新访问可 reopen。
-#[compio::test]
-async fn max_open_tables_evicts_lru_and_reloads() {
-  let root = TempRoot::new("store_compio_tables");
-  let io = CompioStore::new(
-    root.path().to_path_buf(),
-    512,
-    fkv_types::DEFAULT_PAGES_PER_FILE_SHIFT,
-  );
-  let mut store = Store::new(io, 512, 16).with_max_open_tables(1);
-  let tbl_a = TableIdent::new("demo", 1).unwrap();
-  let tbl_b = TableIdent::new("demo", 2).unwrap();
-  store
-    .put(
-      &tbl_a,
-      &[BatchEntry::upsert(b"a".to_vec(), b"A".to_vec(), 1)],
-    )
-    .await
-    .unwrap();
-  store
-    .put(
-      &tbl_b,
-      &[BatchEntry::upsert(b"b".to_vec(), b"B".to_vec(), 1)],
-    )
-    .await
-    .unwrap();
-  assert!(
-    store.mapper(&tbl_a).is_none(),
-    "oldest table must be evicted"
-  );
-  assert!(store.mapper(&tbl_b).is_some());
-
-  store.reopen(&tbl_a).await.unwrap();
-  assert_eq!(store.get(&tbl_a, b"a").await.unwrap(), Some(b"A".to_vec()));
-}

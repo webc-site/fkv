@@ -283,8 +283,6 @@ pub struct Store<I> {
   /// 与 `file_amplify_factor` 独立：segment 文件的槽位密度、搬段成本都和
   /// data 页不同，混用一个阈值无法分别调优。
   segment_file_amplify_factor: u8,
-  /// 同时驻留的 table 状态上限；0 表示不限制。超限按 FIFO 驱逐最久未写的表。
-  max_open_tables: usize,
   /// 表级 root 状态字节预算；0 表示不限制。
   ///
   /// 对齐 C++ `KvOption::root_meta_cache_size` 经 `RootMetaMgr` 实施的字节上限：

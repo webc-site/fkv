@@ -60,7 +60,7 @@ async fn drop_table_clears_whole_table_state() {
   assert!(store.open_table_li().is_empty());
 }
 
-/// 默认 `max_open_tables == 0` 不做任何驱逐，多表写入互不影响。
+/// 默认 `root_meta_cache_bytes == 0` 不做任何驱逐，多表写入互不影响。
 #[compio::test]
 async fn default_config_keeps_all_tables_open() {
   let mut store = Store::new(MemStore::new(256), 256, 4);

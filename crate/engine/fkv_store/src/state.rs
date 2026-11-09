@@ -74,13 +74,13 @@ impl<I: PageIo> Store<I> {
     self.touch_table(tbl);
   }
 
-  /// 记录 table 最近一次写 / 打开，并按表数上限与字节预算驱逐。
+  /// 记录 table 最近一次写 / 打开，并按 `root_meta_cache_size` 字节预算驱逐。
   ///
-  /// 两条上限共用同一条 `(表, 代际号)` 队列：触摸与逐出均摊 O(1)，陈旧项
-  /// 惰性跳过。两项上限都为 0 时直接返回（默认路径零开销）；字节记账在触摸
-  /// 时刷新当前表，写批次收尾再补一次（[`Self::refresh_table_bytes`]）。
+  /// 对齐 C++ `RootMetaMgr`：只有字节预算一条上限（没有「打开表个数」上限）。
+  /// 触摸与逐出均摊 O(1)，陈旧项惰性跳过；预算为 0 时直接返回（默认路径零开销）。
+  /// 字节记账在触摸时刷新当前表，写批次收尾再补一次（[`Self::refresh_table_bytes`]）。
   pub(crate) fn touch_table(&mut self, tbl: &TableIdent) {
-    if self.max_open_tables == 0 && self.root_meta_cache_bytes == 0 {
+    if self.root_meta_cache_bytes == 0 {
       return;
     }
     self.refresh_table_bytes(tbl);
@@ -89,30 +89,11 @@ impl<I: PageIo> Store<I> {
     self.touch_seq.insert(tbl.clone(), seq);
     self.table_order_li.push_back((tbl.clone(), seq));
     // 陈旧项最多占一半，队列长度保持 O(有效表数)。
-    let queue_limit = self
-      .max_open_tables
-      .max(self.touch_seq.len())
-      .saturating_mul(2)
-      + 64;
+    let queue_limit = self.touch_seq.len().saturating_mul(2) + 64;
     if self.table_order_li.len() > queue_limit {
       self
         .table_order_li
         .retain(|(item, item_seq)| self.touch_seq.get(item) == Some(item_seq));
-    }
-    while self.max_open_tables != 0 && self.touch_seq.len() > self.max_open_tables {
-      let Some((oldest, oldest_seq)) = self.table_order_li.pop_front() else {
-        break;
-      };
-      // 陈旧项 / 已驱逐项：跳过。
-      if self.touch_seq.get(&oldest) != Some(&oldest_seq) {
-        continue;
-      }
-      if &oldest == tbl {
-        // 当前表刚触摸过，不能驱逐自己；放回队尾并结束本轮。
-        self.table_order_li.push_back((oldest, oldest_seq));
-        break;
-      }
-      self.evict_table(&oldest);
     }
     self.evict_over_root_meta(tbl);
   }
