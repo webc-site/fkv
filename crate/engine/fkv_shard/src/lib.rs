@@ -43,7 +43,6 @@ pub const MAX_READ_BATCH: usize = 32;
 pub const MAX_READ_IN_FLIGHT: usize = 4 * MAX_READ_BATCH;
 
 /// 同一分区一次 envelope_li commit 合并的最大 Put 请求数。
-const MAX_PUT_GROUP_REQUESTS: usize = 64;
 
 /// 一轮最多从高优先通道收集的写请求数，用于形成 envelope_li commit 批次。
 const MAX_WRITE_COLLECT: usize = 64;

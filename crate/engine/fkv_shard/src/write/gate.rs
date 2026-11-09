@@ -15,7 +15,6 @@ use super::{
   spawn::{spawn_maintain_task, spawn_prewarm_task, spawn_put_group, spawn_put_large_task},
 };
 use crate::{
-  MAX_PUT_GROUP_REQUESTS,
   dispatch::{EnvelopeOutcome, admit, prepare_table, process_envelope},
   lifecycle::{DsShardState, ShardState},
   metrics::{op_of, record_request},
@@ -134,18 +133,13 @@ pub(crate) async fn drain_write_gate(cx: &mut DrainCx<'_>) -> bool {
       continue;
     }
     if pri == Pri::High
-      && let Some(term) = put_term(&envelope.req)
+      && let Some(_term) = put_term(&envelope.req)
     {
-      // envelope_li commit：同一分区、同一 term 的连续 Put 合并成一次 Store::put，
-      // 共享一次 manifest append + fsync。遇到非 Put 立即停止，保持 FIFO。
-      let extra =
-        cx.gate
-          .take_pending_while(&tbl, MAX_PUT_GROUP_REQUESTS - 1, |(next, next_pri)| {
-            *next_pri == Pri::High && put_term(&next.req) == Some(term)
-          });
-      let mut envelope_li = Vec::with_capacity(extra.len() + 1);
-      envelope_li.push(envelope);
-      envelope_li.extend(extra.into_iter().map(|(envelope, _)| envelope));
+      // 一次只执行一个写请求：对齐 C++ `BatchWriteTask`（每个 BatchWriteRequest
+      // 独立 Apply，各自 SyncData + AppendManifest）。Rust 侧此前把同分区连续
+      // Put 合并成一次 Store::put 共享一次 fsync，那会让多个请求的 ack 互相
+      // 耦合（延迟与组大小相关），属于 C++ 没有的机制，这里去掉。
+      let envelope_li = vec![envelope];
       // 写任务要独占目标分区 Store（`Rc` 唯一）：只排空该分区的在飞读，
       // 其它分区的读继续滑动（此前是全 shard `finish_read_li`）。
       finish_read_partition(cx.state, cx.metrics, cx.reopen_li, cx.read_flight, &tbl).await;
