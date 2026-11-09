@@ -399,7 +399,14 @@ async fn scan_core<I: PageIo, T>(
         // 与物化路径共用同一 seek / 边界 / TTL 过滤 / 叶子链推进，计数必然一致。
         if count_only {
           count += 1;
-          has = match iter.advance() {
+          // 计数不物化 key：走只解析长度 / 过期时间的推进（`advance_skip_key`），
+          // 省掉逐条 key 复制。只有 `end` 为空（全表计数 / len）时才能跳过——
+          // 带边界的计数靠 `iter.key()` 判终止，跳过 key 会让边界判定失效。
+          has = match if end.is_empty() {
+            iter.advance_skip_key()
+          } else {
+            iter.advance()
+          } {
             Ok(has) => has,
             Err(err) => {
               let _ = drain_prefetch(refill.as_mut(), refill_done.take()).await;

@@ -479,6 +479,55 @@ impl<'a> DataPageIter<'a> {
     Ok(true)
   }
 
+  /// 计数专用推进：只解析到「下一个 entry 的起点」，不拼 key、不累计时间戳。
+  ///
+  /// 全表计数（`len()`）每页几十条，逐条 `advance` 会把 key 复制进 `self.key`
+  /// 再丢弃，25M 行就是 25M 次无谓的 memcpy + Vec 截断。这里保留解码合法性检查
+  /// （长度 / 越界 / restart 推进）与 `expire_ts`（计数要过滤过期条目），只跳过
+  /// key 物化与 timestamp 累加，遍历顺序与计数结果与 [`Self::advance`] 完全一致。
+  pub fn advance_skip_key(&mut self) -> Result<bool> {
+    if self.curr_offset >= self.restart_offset {
+      self.valid = false;
+      return Ok(false);
+    }
+    let is_restart = self.curr_offset == self.restart_offset_at(self.curr_restart_idx)?;
+    let (shared, non_shared, value_len, flags, mut pos) =
+      decode_entry(self.page, self.curr_offset, self.restart_offset)?;
+    let _ = shared;
+    pos = pos.checked_add(non_shared).ok_or(KvError::Corrupted)?;
+    pos = pos.checked_add(value_len).ok_or(KvError::Corrupted)?;
+    if pos > self.restart_offset {
+      return Err(KvError::Corrupted);
+    }
+    self.overflow = flags & 1 != 0;
+    self.expire_ts = if flags & 2 != 0 {
+      let (value, read) = get_varint64(&self.page[pos..self.restart_offset])?;
+      pos += read;
+      value
+    } else {
+      0
+    };
+    // timestamp 只需要跳过：计数不看它，restart 点与增量编码对两种推进等价。
+    let (_delta, read) = get_varint64(&self.page[pos..self.restart_offset])?;
+    pos += read;
+    let _ = is_restart;
+    self.compression = if flags >> 2 == 0b11 {
+      self.large_value = true;
+      CompressionType::None
+    } else {
+      self.large_value = false;
+      CompressionType::from_bits(flags >> 2)?
+    };
+    self.curr_offset = pos;
+    if self.curr_restart_idx + 1 < self.restart_num
+      && pos >= self.restart_offset_at(self.curr_restart_idx + 1)?
+    {
+      self.curr_restart_idx += 1;
+    }
+    self.valid = true;
+    Ok(true)
+  }
+
   pub fn reset(&mut self) {
     self.curr_offset = DATA_HEADER_SIZE;
     self.curr_restart_idx = 0;
