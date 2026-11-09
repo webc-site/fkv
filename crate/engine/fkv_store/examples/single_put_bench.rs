@@ -17,12 +17,22 @@
 //! 「每批固定成本 + 每条边际成本」：固定成本随 N 摊薄，边际成本不变。
 //! `--keep` 保留库目录，便于盘面对拍（同一输入跑两次后 `cmp -r`）。
 //! `--sleep-before-puts <secs>` 用于外部采样器（`sample <pid>`）就位。
+//!
+//! 分配模式必须和 `crate/perf/fkv_bench` 对齐：默认 `Pooled`（C++
+//! `data_append_mode=false`）。`--alloc append` 复现追加写模式，两种模式的
+//! 单条成本不可直接比较（append 每批都扩数据文件，pooled 复用本批释放的页）。
+//!
+//! `--data-page-cache` 开启 data 页进页缓存（index 页恒缓存）。C++ 的
+//! `cpp/bench_ffi/bench_ffi.cpp` 显式设置 `enable_data_page_cache = true`；
+//! Rust 侧 `Store` 默认 false。不开时每次单条写都会 O_DIRECT 读回上一批写出的
+//! data 页（COW 需要旧页字节），这是两侧单条写口径的主要差异。
 
 use std::{path::PathBuf, time::Instant};
 
 use compio::runtime::Runtime;
 use fkv_btree::BatchEntry;
 use fkv_io_compio::CompioStore;
+use fkv_mapping::AllocMode;
 use fkv_store::Store;
 use fkv_types::TableIdent;
 
@@ -130,6 +140,8 @@ fn main() {
   let mut dir = PathBuf::from("/tmp/fkv-single-put-bench");
   let mut keep = false;
   let mut sleep_before_puts = 0u64;
+  let mut alloc_mode = AllocMode::Pooled;
+  let mut data_page_cache = false;
   let mut args = std::env::args().skip(1);
   while let Some(arg) = args.next() {
     let mut next = || args.next().expect("缺少参数值");
@@ -141,6 +153,14 @@ fn main() {
       "--samples" => samples = next().parse().unwrap(),
       "--dir" => dir = PathBuf::from(next()),
       "--sleep-before-puts" => sleep_before_puts = next().parse().unwrap(),
+      "--alloc" => {
+        alloc_mode = match next().as_str() {
+          "pooled" => AllocMode::Pooled,
+          "append" => AllocMode::Append,
+          other => panic!("未知分配模式 {other}（pooled|append）"),
+        }
+      }
+      "--data-page-cache" => data_page_cache = true,
       "--keep" => keep = true,
       other => panic!("未知参数 {other}"),
     }
@@ -159,7 +179,11 @@ fn main() {
     PAGE_SIZE,
     fkv_types::DEFAULT_PAGES_PER_FILE_SHIFT,
   );
-  let mut store = Store::new(io, PAGE_SIZE, 16).with_page_cache_bytes(256 << 20);
+  let mut store = Store::new(io, PAGE_SIZE, 16)
+    .with_alloc_mode(alloc_mode)
+    .with_enable_data_page_cache(data_page_cache)
+    .with_page_cache_bytes(256 << 20);
+  eprintln!("alloc_mode={alloc_mode:?} data_page_cache={data_page_cache}");
   let tbl = TableIdent::new("bench", 1).unwrap();
 
   let value = vec![b'v'; VALUE_SIZE];

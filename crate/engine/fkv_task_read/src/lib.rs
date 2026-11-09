@@ -22,6 +22,55 @@ use crate::page_buf::{PageBuf, acquire_buf, release_buf};
 
 pub mod page_buf;
 
+/// 临时读路径分段计时（`read-prof` feature）。默认编译为空模块，无开销。
+#[cfg(feature = "read-prof")]
+pub mod prof {
+  use std::{cell::Cell, time::Duration};
+
+  #[derive(Debug, Default, Clone, Copy)]
+  pub struct ReadProf {
+    pub index_steps: u64,
+    pub index_io_ns: u64,
+    pub index_cpu_ns: u64,
+    pub data_io_ns: u64,
+    pub data_seek_ns: u64,
+    pub decode_ns: u64,
+  }
+
+  thread_local! {
+    static ACC: Cell<ReadProf> = const { Cell::new(ReadProf {
+      index_steps: 0,
+      index_io_ns: 0,
+      index_cpu_ns: 0,
+      data_io_ns: 0,
+      data_seek_ns: 0,
+      decode_ns: 0,
+    }) };
+  }
+
+  pub fn add(update: impl FnOnce(&mut ReadProf)) {
+    let _ = ACC.try_with(|acc| {
+      let mut value = acc.get();
+      update(&mut value);
+      acc.set(value);
+    });
+  }
+
+  pub fn nanos(duration: Duration) -> u64 {
+    u64::try_from(duration.as_nanos()).unwrap_or(u64::MAX)
+  }
+
+  pub fn take() -> ReadProf {
+    ACC
+      .try_with(|acc| acc.replace(ReadProf::default()))
+      .unwrap_or_default()
+  }
+
+  pub fn current() -> ReadProf {
+    ACC.try_with(Cell::get).unwrap_or_default()
+  }
+}
+
 /// 廉价 CPU 循环的让出检查步长：每 N 次迭代读一次时钟，摊薄 `Instant::now`。
 pub const YIELD_CHECK_STRIDE: usize = 256;
 
@@ -259,16 +308,32 @@ pub async fn descend_step<'a, I: PageIo>(
   buf: &'a mut Vec<u8>,
 ) -> Result<Descend<'a>> {
   let file_page_id = snapshot.data_tbl().file_page_id(page_id)?;
+  #[cfg(feature = "read-prof")]
+  let io_start = Instant::now();
   let page = io.read_page_ref(tbl, file_page_id, buf).await?;
+  #[cfg(feature = "read-prof")]
+  let io_ns = prof::nanos(io_start.elapsed());
   match page_type(&page)? {
-    PageType::Data => Ok(Descend::Data(page)),
+    PageType::Data => {
+      #[cfg(feature = "read-prof")]
+      prof::add(|p| p.data_io_ns += io_ns);
+      Ok(Descend::Data(page))
+    }
     PageType::LeafIndex | PageType::NonLeafIndex => {
+      #[cfg(feature = "read-prof")]
+      let cpu_start = Instant::now();
       let mut iter = IndexPageIter::new(&page)?;
       let child = if iter.seek_floor(key)? {
         iter.page_id()
       } else {
         IndexPage::new(&page)?.leftmost_ptr()?
       };
+      #[cfg(feature = "read-prof")]
+      prof::add(|p| {
+        p.index_steps += 1;
+        p.index_io_ns += io_ns;
+        p.index_cpu_ns += prof::nanos(cpu_start.elapsed());
+      });
       descend_child(child, page_id)
     }
     PageType::Overflow | PageType::Deleted => Err(KvError::Corrupted),
@@ -302,14 +367,23 @@ pub async fn read_entry<I: PageIo>(
   for _ in 0..MAX_TREE_DEPTH {
     match descend_step(io, tbl, snapshot, page_id, key, page_buf.as_mut_vec()).await? {
       Descend::Data(page) => {
+        #[cfg(feature = "read-prof")]
+        let seek_start = Instant::now();
         let mut iter = DataPageIter::new(&page)?;
-        if iter.seek(key)? && iter.key() == key {
+        let found = iter.seek(key)?;
+        #[cfg(feature = "read-prof")]
+        prof::add(|p| p.data_seek_ns += prof::nanos(seek_start.elapsed()));
+        if found && iter.key() == key {
           // 过期判定只依赖 entry 头，必须先于 overflow / 解压做掉，
           // 否则过期大 value 会白付整条 IO 链。
           if expired(ctx, iter.expire_ts()) {
             return Ok(None);
           }
+          #[cfg(feature = "read-prof")]
+          let decode_start = Instant::now();
           let value = iter_value(io, tbl, snapshot, page_size, &iter, ctx).await?;
+          #[cfg(feature = "read-prof")]
+          prof::add(|p| p.decode_ns += prof::nanos(decode_start.elapsed()));
           return Ok(Some(ReadEntry {
             value,
             timestamp: iter.timestamp(),

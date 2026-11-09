@@ -349,7 +349,9 @@ impl<I: PageIo> Store<I> {
   /// 原地刷新该表的 branch 元数据：以恢复出来的元数据为基线，保留父分支 /
   /// 旧 term 的 `file_range_li` 历史链，末尾同 (branch, term) 区间原地合并。
   pub(crate) fn refresh_branch_metadata(&mut self, tbl: &TableIdent) {
-    let branch_name = self.branch_name.clone();
+    // 热路径（同 branch / term 的连续写）只需要原地更新末尾区间，不能先克隆
+    // branch 名：单条写每次都会走到这里，两次 `String` 分配是纯粹的固定成本。
+    let branch_name = self.branch_name.as_str();
     let term = self.term;
     let page_shift = self.pages_per_file_shift;
     let segment_shift = self.segment_shift();
@@ -367,24 +369,21 @@ impl<I: PageIo> Store<I> {
       .segment_mapper
       .as_ref()
       .map_or(0, |mapper| mapper.max_fp_id() >> segment_shift);
-    let range = BranchFileRange {
-      branch_name: branch_name.clone().into(),
-      term,
-      max_file_id,
-      max_segment_file_id,
-    };
     // 只在写 manifest 时借出引用，不再整条克隆回写。
     let metadata = state
       .branch_metadata
       .get_or_insert_with(|| BranchManifestMetadata::new(branch_name, term));
     match metadata.file_range_li.last_mut() {
-      Some(last)
-        if last.branch_name.as_ref() == range.branch_name.as_ref() && last.term == range.term =>
-      {
-        last.max_file_id = last.max_file_id.max(range.max_file_id);
-        last.max_segment_file_id = last.max_segment_file_id.max(range.max_segment_file_id);
+      Some(last) if last.branch_name.as_ref() == branch_name && last.term == term => {
+        last.max_file_id = last.max_file_id.max(max_file_id);
+        last.max_segment_file_id = last.max_segment_file_id.max(max_segment_file_id);
       }
-      _ => metadata.file_range_li.push(range),
+      _ => metadata.file_range_li.push(BranchFileRange {
+        branch_name: branch_name.into(),
+        term,
+        max_file_id,
+        max_segment_file_id,
+      }),
     }
   }
 

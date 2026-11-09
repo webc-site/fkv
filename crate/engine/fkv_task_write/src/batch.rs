@@ -516,9 +516,16 @@ pub async fn write_batch<I: PageIo>(io: &I, args: WriteArg<'_>) -> Result<PageId
   }
   let mut group_li: Vec<WriteGroup<'_>> = Vec::new();
   for (entry_idx, entry) in entry_li.iter().enumerate() {
-    let page_id = route
-      .page_for(io, tbl, mapper, layout.data.page_size, &entry.key)
-      .await?;
+    let page_id = if entry_idx + 1 == entry_li.len() {
+      // 最后一个 key 不会再被相邻命中缓存使用：跳过 bound 复制 / 分配。
+      route
+        .page_for_last(io, tbl, mapper, layout.data.page_size, &entry.key)
+        .await?
+    } else {
+      route
+        .page_for(io, tbl, mapper, layout.data.page_size, &entry.key)
+        .await?
+    };
     // 升序批次中 data 页只会单调推进：与当前组同页即续到区间末尾，否则开新组。
     // 因此不需要 `page_id → 组` 的哈希表，也不会为非连续的同页条目回填。
     match group_li.last_mut() {
@@ -721,30 +728,41 @@ impl RouteCursor {
     };
     let page_id = self.path_li[lvl].page_id;
     let idx = self.path_li[lvl].idx;
-    let own_next = self
+    // 复用上一次的 bound `Vec` 容量：单条写每次都要刷新缓存，重复分配一个
+    // 分隔键缓冲是纯固定成本。
+    let mut bound = self.fast_route.take().and_then(|(_, bound)| bound);
+    if let Some(buf) = bound.as_mut() {
+      buf.clear();
+    }
+    let mut found = false;
+    if let Some((key, _)) = self
       .frame_map
       .get(&page_id)
       .ok_or(KvError::Corrupted)?
       .child_li
       .child(idx + 1)
-      .map(|(key, _)| key.to_vec());
-    let bound = match own_next {
-      Some(key) => Some(key),
-      None => {
-        let mut found = None;
-        for up in (0..lvl).rev() {
-          let frame = self
-            .frame_map
-            .get(&self.path_li[up].page_id)
-            .ok_or(KvError::Corrupted)?;
-          if let Some((key, _)) = frame.child_li.child(self.path_li[up].idx + 1) {
-            found = Some(key.to_vec());
-            break;
-          }
-        }
-        found
+    {
+      match bound.as_mut() {
+        Some(buf) => buf.extend_from_slice(key),
+        None => bound = Some(key.to_vec()),
       }
-    };
+      found = true;
+    }
+    if !found {
+      for up in (0..lvl).rev() {
+        let frame = self
+          .frame_map
+          .get(&self.path_li[up].page_id)
+          .ok_or(KvError::Corrupted)?;
+        if let Some((key, _)) = frame.child_li.child(self.path_li[up].idx + 1) {
+          match bound.as_mut() {
+            Some(buf) => buf.extend_from_slice(key),
+            None => bound = Some(key.to_vec()),
+          }
+          break;
+        }
+      }
+    }
     self.fast_route = Some((child_page_id, bound));
     Ok(())
   }
@@ -796,7 +814,8 @@ impl RouteCursor {
   ) -> Result<Self> {
     let mut cursor = Self {
       path_li: RouteStack::new(),
-      frame_map: HashMap::default(),
+      // 路径深度上界是编译期常量：一次性预留，避免单条写每层 insert 触发扩容。
+      frame_map: HashMap::with_capacity_and_hasher(MAX_TREE_DEPTH, Default::default()),
       data_page: NULL_PAGE,
       fast_route: None,
     };
@@ -844,6 +863,35 @@ impl RouteCursor {
     page_size: usize,
     key: &[u8],
   ) -> Result<PageId> {
+    self
+      .page_for_inner(io, tbl, mapper, page_size, key, true)
+      .await
+  }
+
+  /// 批次最后一个 key 的路由：之后不会再有 key 用到相邻命中缓存，可以省掉
+  /// [`Self::refresh_fast`] 的分隔键复制 / 分配（单条写批恒走这条）。
+  pub(crate) async fn page_for_last<I: PageIo>(
+    &mut self,
+    io: &I,
+    tbl: &TableIdent,
+    mapper: &PageMapper,
+    page_size: usize,
+    key: &[u8],
+  ) -> Result<PageId> {
+    self
+      .page_for_inner(io, tbl, mapper, page_size, key, false)
+      .await
+  }
+
+  async fn page_for_inner<I: PageIo>(
+    &mut self,
+    io: &I,
+    tbl: &TableIdent,
+    mapper: &PageMapper,
+    page_size: usize,
+    key: &[u8],
+    refresh: bool,
+  ) -> Result<PageId> {
     if self.path_li.is_empty() {
       return Ok(self.data_page);
     }
@@ -880,7 +928,11 @@ impl RouteCursor {
         let idx = last_child_le_from(&frame.child_li, key, self.path_li[lvl].idx)?;
         let child_page_id = frame.child_li.page_id(idx).ok_or(KvError::Corrupted)?;
         self.path_li[lvl].idx = idx;
-        self.refresh_fast(child_page_id)?;
+        if refresh {
+          self.refresh_fast(child_page_id)?;
+        } else {
+          self.invalidate_fast();
+        }
         return Ok(child_page_id);
       }
       // key 超出当前子树：回溯到能覆盖它的祖先，再向左下降。

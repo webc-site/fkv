@@ -17,6 +17,10 @@ workspace = true
 [package.publish]
 workspace = true
 
+[features]
+# 仅用于 `read_profile` 采样的临时开关：读路径分段计时，默认关闭、无运行时开销。
+read-prof = []
+
 [dependencies.fkv_btree]
 version = "0.1.0"
 path = "../../core/fkv_btree"

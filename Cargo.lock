@@ -1267,6 +1267,7 @@ dependencies = [
  "fkv_task_write",
  "fkv_testkit",
  "fkv_types",
+ "futures",
  "gxhash",
  "log",
  "pollster",

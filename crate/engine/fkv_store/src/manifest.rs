@@ -212,6 +212,8 @@ impl<I: PageIo + ManifestIo> Store<I> {
           .as_ref()
           .ok_or(KvError::ResourceMissing)?,
       )?;
+      // 普通表（无大 value）恒写 4 字节零长度；不要为此每次分配一个 Vec。
+      let empty_segment_len = 0u32.to_le_bytes();
       let segment_entries = if let Some(segment_mapper) = state.segment_mapper.as_ref() {
         let mut bytes = Vec::new();
         for (seq, &(page_id, log_value)) in segment_mapper.dirty_page_li().iter().enumerate() {
@@ -223,10 +225,14 @@ impl<I: PageIo + ManifestIo> Store<I> {
       } else {
         Vec::new()
       };
-      let mut segment_delta = Vec::with_capacity(4 + segment_entries.len());
-      segment_delta.extend_from_slice(&(segment_entries.len() as u32).to_le_bytes());
-      segment_delta.extend_from_slice(&segment_entries);
-      builder.append_segment_mapping(&segment_delta);
+      if segment_entries.is_empty() {
+        builder.append_segment_mapping(&empty_segment_len);
+      } else {
+        let mut segment_delta = Vec::with_capacity(4 + segment_entries.len());
+        segment_delta.extend_from_slice(&(segment_entries.len() as u32).to_le_bytes());
+        segment_delta.extend_from_slice(&segment_entries);
+        builder.append_segment_mapping(&segment_delta);
+      }
       builder.finalize(root_id, ttl_root_id)?
     };
     let (current_size, dict_dirty) = self.table_map.get(tbl).map_or((0, false), |state| {

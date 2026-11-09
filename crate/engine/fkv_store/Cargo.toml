@@ -17,6 +17,10 @@ workspace = true
 [package.publish]
 workspace = true
 
+[features]
+# 仅用于 `read_profile` 采样：把读路径分段计时透传给 fkv_task_read。
+read-prof = ["fkv_task_read/read-prof"]
+
 [dependencies.fkv_btree]
 version = "0.1.0"
 path = "../../core/fkv_btree"
@@ -118,6 +122,9 @@ version = "0.1.0"
 [dev-dependencies.fkv_io_sim]
 path = "../../io/fkv_io_sim"
 version = "0.1.0"
+
+[dev-dependencies.futures]
+workspace = true
 
 [dev-dependencies.fkv_testkit]
 path = "../../facade/fkv_testkit"
