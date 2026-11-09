@@ -18,11 +18,15 @@
 
 | fkv | C++ EloqStore | 说明 |
 |---|---|---|
-| `page_cache_bytes`（index / data 同池，`PageCache`） | `buffer_pool_size`（`PageManager`，同池） | 唯一的一份页缓存，读写共用 |
+| `page_cache_bytes`（`PageCache`） | `buffer_pool_size`（`PageManager`） | 唯一的一份页缓存 |
+| `enable_data_page_cache`（默认 false） | `enable_data_page_cache`（默认 false） | 关闭时数据页**不进**页缓存（直读直写），index 页始终缓存 |
 | `root_meta_cache_bytes` | `root_meta_cache_size` | 映射 / 字典 / 页缓存合计的表级预算 |
 | `max_open_tables` | `KvOptions::max_open_tables` 之类的表驱逐 | 超限按 FIFO 驱逐整表状态 |
 
-除这三项之外，引擎里**没有**额外的热点缓存层：快照（`SnapshotRegistry`）只是
+数据页缓存开关按 C++ 语义实现：`false`（默认）时数据页直接读写、不查缓存也不回填，
+与 C++ `LoadDataPage` 走 `LoadDataPageStorage` 等价；`true` 时与 index 页共用同一份池。
+
+除此之外，引擎里**没有**额外的热点缓存层：快照（`SnapshotRegistry`）只是
 登记活跃读视图用于 GC retained set，不做数据缓存；`PageIo::read_page_ref` 是零拷贝
 借用而不是缓存；写路径的 `RouteCursor` 只是批内相邻 key 的路由游标（C++ 的写任务
 同样在同一次下降里推进）。压测驱动里的 `--read-window` 属于客户端并发窗口，不是
@@ -44,6 +48,7 @@
 | 阶段 | fkv | C++ EloqStore |
 |---|---|---|
 | 点读 | `--readers N` 驱动 N 个客户端线程；引擎侧线程数 = `min(N, 4)`，缓存总量按线程平分，每线程 `FuturesUnordered` 保持 16 个在飞 | `num_threads` 个 shard 线程 + N 个客户端读线程（单分区时 `num_threads=1`，并发由客户端提供） |
+| 全表扫描 / len | 沿 index 栈预取后续 6 个叶子页并批量提交（`kDefaultScanPrefetchPageCount = 6`）；`end` 非空时不预取 | `ScanIterator::PrefetchFromStack` 同样 6 页批量 `ReadPages` |
 | 范围读 / len / 删除 / 写 | 单线程顺序提交 | 单线程顺序提交 |
 
 `--fkv-driver runtime` 是「部署形态」对照：一个进程 N 个 shard 线程、请求按 key
